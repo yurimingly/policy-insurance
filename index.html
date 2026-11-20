@@ -506,7 +506,7 @@ BIND['d-paydata']=function(){$$('[data-pd]').forEach(function(b){b.onclick=funct
 
 /* ================= v1.6 · 내 농장 등록 (직접 입력 → 맞춤 분석) ================= */
 var REG_ITEMS={apple:['🍎','과수(사과·배 등)','10a','apple'],rice:['🌾','벼·논작물','10a','rice'],house:['🏠','시설원예(딸기·채소)','동','farm'],hanwoo:['🐂','한우','두','hanwoo'],pig:['🐖','양돈','두','pig']};
-var REG={owner:'김농협',sigun:'장수군',emd:'장계면',item:'apple',variety:'홍로',qty:'12',ins:{crop:true,mach:false,wind:false,live:false},spec:{},self:20,busy:0,err:''};
+var REG={owner:'김농협',sigun:'장수군',emd:'장계면',item:'apple',variety:'사과',qty:'12',ins:{crop:true,mach:false,wind:false,live:false},spec:{},self:20,busy:0,err:''};
 function regLoad(){if(S.mine){var p=S.mine.prof;REG.owner=p.owner;REG.sigun=p.sigun;REG.emd=p.emd||'';REG.item=p.item;REG.variety=p.variety||'';REG.qty=p.qty;REG.ins=p.ins;REG.spec=p.spec||{};REG.self=p.self}}
 function regPage(){
  regLoad();var it=REG_ITEMS[REG.item],insOpts=[['crop','🌾 농작물재해보험'],['live','🐄 가축재해보험'],['mach','🚜 농기계종합보험'],['wind','🌪 풍수해·지진재해']];
@@ -521,7 +521,7 @@ function regPage(){
  '<p class="xs mut" style="text-align:center">입력 정보는 이 기기에만 저장돼요</p>'}
 function regRead(){REG.owner=$('#rgO').value.trim();REG.sigun=$('#rgS').value.trim();REG.emd=$('#rgE').value.trim();REG.variety=$('#rgV').value.trim();REG.qty=$('#rgQ').value.replace(/[^0-9.]/g,'');REG.self=+$('#rgF').value}
 function bindReg(){
- $$('[data-ri]').forEach(function(b){b.onclick=function(){regRead();REG.item=b.getAttribute('data-ri');var k=REG.item,SM={apple:['홍로','12'],rice:['신동진','30'],house:['설향','8'],hanwoo:['거세우','40'],pig:['삼원교잡','1200']};REG.variety=SM[k][0];REG.qty=SM[k][1];REG.ins.crop=(k==='apple'||k==='rice'||k==='house')?REG.ins.crop:false;if(k==='hanwoo'||k==='pig')REG.ins.live=true;else REG.ins.live=false;render()}});
+ $$('[data-ri]').forEach(function(b){b.onclick=function(){regRead();REG.item=b.getAttribute('data-ri');var k=REG.item,SM={apple:['사과','12'],rice:['신동진','30'],house:['설향','8'],hanwoo:['거세우','40'],pig:['삼원교잡','1200']};REG.variety=SM[k][0];REG.qty=SM[k][1];REG.ins.crop=(k==='apple'||k==='rice'||k==='house')?REG.ins.crop:false;if(k==='hanwoo'||k==='pig')REG.ins.live=true;else REG.ins.live=false;render()}});
  $$('[data-rsp]').forEach(function(b){b.onclick=function(){regRead();var k=b.getAttribute('data-rsp');REG.spec[k]=!REG.spec[k];render()}});
  $$('[data-rin]').forEach(function(b){b.onclick=function(){regRead();var k=b.getAttribute('data-rin');REG.ins[k]=!REG.ins[k];render()}});
  $('#rgMic').onclick=function(){startVoice(function(t){var m=t.match(/[가-힣]+(시|군|구)/);regRead();REG.sigun=m?m[0]:t.replace(/[^가-힣]/g,'');render()},null)};
