@@ -21,6 +21,9 @@ body{font-family:"Noto Sans KR","Apple SD Gothic Neo","Malgun Gothic",system-ui,
 .subw{background:#fff;border-bottom:1px solid var(--line)}.navtog{width:100%;display:flex;justify-content:space-between;border:0;background:#fff;padding:12px 16px;font:inherit;font-weight:700;font-size:14px;color:var(--g);cursor:pointer}
 .tsh{width:100%;display:flex;align-items:center;gap:6px;text-align:left;border:0!important;background:none!important;border-radius:0!important;font-weight:800;font-size:14px!important;color:var(--g)!important;padding:10px 2px!important}.tsh small{color:var(--mut);font-weight:600}.tsh .car{width:14px}.tch{flex-wrap:wrap;gap:6px;padding:2px 0 10px 14px;margin-left:6px;border-left:2px solid var(--line)}.tsec+.tsec{border-top:1px solid var(--line)}
 .page{scroll-margin-top:84px}
+.viBox{display:flex;gap:10px;align-items:stretch}.viBox textarea{flex:1;min-height:92px;border:1.5px solid var(--line);border-radius:14px;padding:12px 14px;font:inherit;font-size:15px;line-height:1.5;background:#fff;resize:none;box-sizing:border-box;outline:none}.viBox textarea:focus{border-color:var(--g);box-shadow:0 0 0 3px rgba(11,107,58,.12)}.viBox textarea::placeholder{color:#a3aaa0}
+.viMic{flex:none;width:76px;border:0;border-radius:14px;background:var(--g);color:#fff;font-size:26px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;cursor:pointer}.viMic span{font-size:12px;font-weight:700}
+.nmap{display:grid;grid-template-columns:repeat(10,1fr);gap:3px;margin:8px 0}.nmap i{aspect-ratio:1;border-radius:5px;display:flex;align-items:center;justify-content:center;font-style:normal;font-size:9px;color:#fff;font-weight:700}.nmap i.me{outline:3px solid #111;outline-offset:1px;z-index:1}.nmap i.na{background:repeating-linear-gradient(45deg,#e5e8e3,#e5e8e3 4px,#f2f4f0 4px,#f2f4f0 8px);color:#9aa396}
 .sub{padding:4px 14px 6px;background:#fff;border-bottom:1px solid var(--line)}
 .sub .sec{display:flex;gap:6px;align-items:flex-start;margin:0 0 6px}.sub .sl{flex:none;width:46px;font-size:11px;font-weight:700;color:var(--mut);padding-top:8px}.sub .ch{display:flex;flex-wrap:wrap;gap:6px;flex:1}
 .sub button{flex:none;border:1px solid var(--line);background:#fff;border-radius:99px;padding:6px 11px;font:inherit;font-size:12.5px;cursor:pointer;color:var(--mut)}
@@ -1049,7 +1052,7 @@ function aiIntake(t,f){var cause=[[/냉해|서리|저온|얼었|동해|한파/,'
  return{when:wh,item:f.item,cause:cs,size:sz?sz[0]:'확인 필요',raw:t}}
 function voiceIntake(f){var r=VI.res;
  return '<div class="card"><h3>🎤 말로 사고 접수</h3><p class="xs mut" style="margin:0 0 8px">버튼을 누르고 “어제 서리 맞아서 사과 꽃이 얼었어요”처럼 말씀해 보세요. AI가 접수 내용으로 정리해 드려요.</p>'+
-  '<div class="row" style="gap:8px"><button class="btn" id="viMic" style="flex:1">🎤 말하기</button></div><textarea id="viText" rows="2" placeholder="직접 입력해도 돼요" style="margin-top:8px">'+esc(VI.text)+'</textarea><button class="btn ghost full" id="viGo" style="margin-top:6px">AI로 정리하기</button>'+
+  '<div class="viBox"><textarea id="viText" rows="3" placeholder="예) 어제 서리 맞아서 사과 꽃이 얼었어요">'+esc(VI.text)+'</textarea><button class="viMic" id="viMic" aria-label="말하기">🎤<span>말하기</span></button></div><button class="btn full" id="viGo" style="margin-top:8px">AI로 정리하기</button>'+
   (r?'<table style="margin-top:10px;width:100%"><tr><th align="left">사고일시</th><td>'+r.when+'</td></tr><tr><th align="left">피해작목</th><td>'+esc(r.item)+'</td></tr><tr><th align="left">원인</th><td>'+r.cause+'</td></tr><tr><th align="left">피해 규모</th><td>'+r.size+'</td></tr></table><div class="note">접수 원문과 요약이 함께 저장돼 구두 전달 누락·오기 분쟁을 줄여요. “확인 필요” 항목은 담당자가 전화로 확인해요.</div><button class="btn full" id="viSend" style="margin-top:8px">이 내용으로 접수</button>':'')+'</div>'}
 PAGES['f-claim']=function(){
  var f=F(),c=f.claim,st=S.claimStep[S.farm]||0,r=claimCalc();
@@ -1235,6 +1238,18 @@ function cropCard(){return '<div class="card"><h3>🌱 지급데이터 분석 ·
  [['콩 · 문경시','호우 71% · 가뭄 26%','침수·배수 특화 대비'],['콩 · 상주시','가뭄 46% · 호우 44%','가뭄 집중 대비'],['벼 · 나주시','깨씨무늬병 67% · 호우 22%','기본 보장으로 병충해·수해 포괄 안내'],['벼 · 아산시','호우 44% · 목도열병 24%','배수로 정비 등 호우 대비'],['돼지 · 경기','폭염 85% · 화재 5%','가축+축사 동시 가입'],['돼지 · 경남','폭염 89% · 화재 3%','축사 건물 담보 필수']].map(function(r){return '<tr><td class="sm">'+r[0]+'</td><td class="xs">'+r[1]+'</td><td class="xs">'+r[2]+'</td></tr>'}).join('')+'</table><div class="note">콩 실제 자부담 보험료 평균 11% · 벼 16.3%(정부 83.7% 지원) → 자기부담 10~15%형 가입 유도. 한우는 사고 시 가입액의 약 50%(200만 원대) 실질 보상으로 보험료 불신 해소.</div></div>'}
 var _pd=PAGES['d-paydata'];PAGES['d-paydata']=function(){return _pd()+cropCard()};
 ['u','c','h'].forEach(function(r){PAGES[r+'-paydata']=PAGES['d-paydata']});
+
+function nbrMap(f){
+ var key=S.farm,h=function(a,b){var x=Math.sin((a*131+b*71+key.length*17+(key.charCodeAt(0)||1))*12.9898)*43758.5453;return x-Math.floor(x)},W=10,H=7,mr=3,mc=5,cells='',sum=0,n=0,myv=0;
+ var ad=[];try{ad=prodRecs(f).addons}catch(e){}var nm=(ad[0]&&ad[0].n)||((f.riders||[]).filter(function(r){return!r[1]})[0]||[])[0]||'핵심 특약';
+ for(var r=0;r<H;r++)for(var c=0;c<W;c++){var d=Math.abs(r-mr)+Math.abs(c-mc),v=Math.round(22+h(r,c)*38+Math.max(0,12-d*2)),isMe=r===mr&&c===mc,na=!isMe&&h(c,r)<.16;
+  if(na){cells+='<i class="na">·</i>';continue}
+  if(isMe)myv=v;sum+=v;n++;var bg=v>=55?'#2e9e5b':v>=40?'#d9a21b':'#e0662a';cells+='<i class="'+(isMe?'me':'')+'" style="background:'+bg+'">'+v+'</i>'}
+ var avg=Math.round(sum/n);
+ return '<div class="card"><div class="hd"><h3 style="margin:0">🗺 인근 유사 농가 비교 지도</h3><span class="tag gr">시연 예시</span></div><p class="xs mut" style="margin:6px 0 0">같은 작목 농가의 <b>'+nm.replace(/ 특약| 추가보장/g,'')+'</b> 가입률(%)이에요. 개별 농가는 표시하지 않고, <b>500m 격자·5농가 이상</b>만 보여줘요.</p>'+
+ '<div class="nmap">'+cells+'</div><div class="row sp xs mut"><span>■ 55%↑ 높음</span><span style="color:#d9a21b">■ 40~54%</span><span style="color:#e0662a">■ 40%↓ 낮음</span><span>▨ 5농가 미만</span></div>'+
+ '<div class="callout" style="margin-top:8px">⬛ 테두리 칸이 <b>내 농장 격자</b>예요. 내 격자 가입률 <b>'+myv+'%</b> · 주변 평균 <b>'+avg+'%</b>'+(myv<avg?' — 주변보다 낮아요.':' — 주변보다 높아요.')+'</div></div>'}
+var _cv3=PAGES['f-cover'];PAGES['f-cover']=function(){var h=_cv3(),i=h.indexOf('<h3>📎 특약 구성 진단'),j;if(i>=0)j=h.indexOf('<div class="card">',i);else{var k=h.indexOf('💸 미가입 시 예상 손실');j=k<0?-1:h.lastIndexOf('<div class="card">',k)}return j<0?h+nbrMap(F()):h.slice(0,j)+nbrMap(F())+h.slice(j)};
 </script>
 </body>
 </html>
