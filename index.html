@@ -506,7 +506,7 @@ BIND['d-paydata']=function(){$$('[data-pd]').forEach(function(b){b.onclick=funct
 
 /* ================= v1.6 · 내 농장 등록 (직접 입력 → 맞춤 분석) ================= */
 var REG_ITEMS={apple:['🍎','과수(사과·배 등)','10a','apple'],rice:['🌾','벼·논작물','10a','rice'],house:['🏠','시설원예(딸기·채소)','동','farm'],hanwoo:['🐂','한우','두','hanwoo'],pig:['🐖','양돈','두','pig']};
-var REG={owner:'',sigun:'',emd:'',item:'apple',variety:'',qty:'',ins:{crop:true,mach:false,wind:false,live:false},spec:{},self:20,busy:0,err:''};
+var REG={owner:'김농협',sigun:'장수군',emd:'장계면',item:'apple',variety:'홍로',qty:'12',ins:{crop:true,mach:false,wind:false,live:false},spec:{},self:20,busy:0,err:''};
 function regLoad(){if(S.mine){var p=S.mine.prof;REG.owner=p.owner;REG.sigun=p.sigun;REG.emd=p.emd||'';REG.item=p.item;REG.variety=p.variety||'';REG.qty=p.qty;REG.ins=p.ins;REG.spec=p.spec||{};REG.self=p.self}}
 function regPage(){
  regLoad();var it=REG_ITEMS[REG.item],insOpts=[['crop','🌾 농작물재해보험'],['live','🐄 가축재해보험'],['mach','🚜 농기계종합보험'],['wind','🌪 풍수해·지진재해']];
