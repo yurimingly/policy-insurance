@@ -168,7 +168,7 @@ pre{background:#1e2622;color:#cde8d6;border-radius:10px;padding:10px;font-size:1
 .vbox b{font-size:19px;display:block}
 .vbox .vtx{min-height:44px;margin:10px 0 14px;font-size:15px;color:var(--ink)}
 .vheard{background:#eef6f1;border-radius:12px;padding:12px;font-size:15px;margin-bottom:8px}
-</style>
+.nmap2{position:relative;aspect-ratio:10/7;overflow:hidden;border-radius:10px;background:#dfe8d8;margin:8px 0}.nmap2 img{position:absolute;max-width:none;display:block}.nmap2 .nmap{position:absolute;inset:0;margin:0;gap:2px;grid-template-rows:repeat(7,1fr)}.nmap2 .nmap i{aspect-ratio:auto;opacity:.8}.nmap2 .nmap i.na{opacity:.55}.nmap2 .attr{position:absolute;right:4px;bottom:2px;font-size:9px;background:rgba(255,255,255,.8);padding:0 4px;border-radius:3px;color:#444;z-index:2}</style>
 </head>
 <body>
 <div id="app"></div>
@@ -1239,6 +1239,10 @@ function cropCard(){return '<div class="card"><h3>🌱 지급데이터 분석 ·
 var _pd=PAGES['d-paydata'];PAGES['d-paydata']=function(){return _pd()+cropCard()};
 ['u','c','h'].forEach(function(r){PAGES[r+'-paydata']=PAGES['d-paydata']});
 
+function mapTiles(f){var P=null,sg=f.sigun||'',k;for(k in LIVE_PLACES){var q=LIVE_PLACES[k];if(sg.indexOf(k)>=0||q[2].indexOf(sg)>=0&&sg){P=q;break}}if(!P)P=LIVE_PLACES['홍천'];
+ var z=14,n=Math.pow(2,z),la=P[0]*Math.PI/180,px=(P[1]+180)/360*n*256,py=(1-Math.log(Math.tan(la)+1/Math.cos(la))/Math.PI)/2*n*256,mpp=156543.03*Math.cos(la)/n,cp=500/mpp,W=cp*10,H=cp*7,ox=px-cp*5.5,oy=py-cp*3.5,h='';
+ for(var tx=Math.floor(ox/256);tx<=Math.floor((ox+W)/256);tx++)for(var ty=Math.floor(oy/256);ty<=Math.floor((oy+H)/256);ty++)h+='<img loading="lazy" alt="" src="https://tile.openstreetmap.org/'+z+'/'+tx+'/'+ty+'.png" style="left:'+((tx*256-ox)/W*100).toFixed(3)+'%;top:'+((ty*256-oy)/H*100).toFixed(3)+'%;width:'+(256/W*100).toFixed(3)+'%">';
+ return h+'<span class="attr">© OpenStreetMap · '+P[2]+' 일대</span>'}
 function nbrMap(f){
  var key=S.farm,h=function(a,b){var x=Math.sin((a*131+b*71+key.length*17+(key.charCodeAt(0)||1))*12.9898)*43758.5453;return x-Math.floor(x)},W=10,H=7,mr=3,mc=5,cells='',sum=0,n=0,myv=0;
  var ad=[];try{ad=prodRecs(f).addons}catch(e){}var nm=(ad[0]&&ad[0].n)||((f.riders||[]).filter(function(r){return!r[1]})[0]||[])[0]||'핵심 특약';
@@ -1246,8 +1250,8 @@ function nbrMap(f){
   if(na){cells+='<i class="na">·</i>';continue}
   if(isMe)myv=v;sum+=v;n++;var bg=v>=55?'#2e9e5b':v>=40?'#d9a21b':'#e0662a';cells+='<i class="'+(isMe?'me':'')+'" style="background:'+bg+'">'+v+'</i>'}
  var avg=Math.round(sum/n);
- return '<div class="card"><div class="hd"><h3 style="margin:0">🗺 인근 유사 농가 비교 지도</h3><span class="tag gr">시연 예시</span></div><p class="xs mut" style="margin:6px 0 0">같은 작목 농가의 <b>'+nm.replace(/ 특약| 추가보장/g,'')+'</b> 가입률(%)이에요. 개별 농가는 표시하지 않고, <b>500m 격자·5농가 이상</b>만 보여줘요.</p>'+
- '<div class="nmap">'+cells+'</div><div class="row sp xs mut"><span>■ 55%↑ 높음</span><span style="color:#d9a21b">■ 40~54%</span><span style="color:#e0662a">■ 40%↓ 낮음</span><span>▨ 5농가 미만</span></div>'+
+ return '<div class="card"><div class="hd"><h3 style="margin:0">🗺 인근 유사 농가 비교 지도</h3><span class="tag gr">시연 예시</span></div><p class="xs mut" style="margin:6px 0 0">같은 작목 농가의 <b>'+nm.replace(/ 특약| 추가보장/g,'')+'</b> 가입률(%)이에요. 실제 지도 위에 <b>500m 격자·5농가 이상</b>만 보여줘요(개별 농가 비공개). 가입률 값은 시연 예시예요.</p>'+
+ '<div class="nmap2">'+mapTiles(f)+'<div class="nmap">'+cells+'</div></div><div class="row sp xs mut"><span>■ 55%↑ 높음</span><span style="color:#d9a21b">■ 40~54%</span><span style="color:#e0662a">■ 40%↓ 낮음</span><span>▨ 5농가 미만</span></div>'+
  '<div class="callout" style="margin-top:8px">⬛ 테두리 칸이 <b>내 농장 격자</b>예요. 내 격자 가입률 <b>'+myv+'%</b> · 주변 평균 <b>'+avg+'%</b>'+(myv<avg?' — 주변보다 낮아요.':' — 주변보다 높아요.')+'</div></div>'}
 var _cv3=PAGES['f-cover'];PAGES['f-cover']=function(){var h=_cv3(),i=h.indexOf('<h3>📎 특약 구성 진단'),j;if(i>=0)j=h.indexOf('<div class="card">',i);else{var k=h.indexOf('💸 미가입 시 예상 손실');j=k<0?-1:h.lastIndexOf('<div class="card">',k)}return j<0?h+nbrMap(F()):h.slice(0,j)+nbrMap(F())+h.slice(j)};
 </script>
