@@ -20,6 +20,7 @@ body{font-family:"Noto Sans KR","Apple SD Gothic Neo","Malgun Gothic",system-ui,
 .roles button.on{color:#fff;border-color:#ffd84d}
 .subw{background:#fff;border-bottom:1px solid var(--line)}.navtog{width:100%;display:flex;justify-content:space-between;border:0;background:#fff;padding:12px 16px;font:inherit;font-weight:700;font-size:14px;color:var(--g);cursor:pointer}
 .tsh{width:100%;display:flex;align-items:center;gap:6px;text-align:left;border:0!important;background:none!important;border-radius:0!important;font-weight:800;font-size:14px!important;color:var(--g)!important;padding:10px 2px!important}.tsh small{color:var(--mut);font-weight:600}.tsh .car{width:14px}.tch{flex-wrap:wrap;gap:6px;padding:2px 0 10px 14px;margin-left:6px;border-left:2px solid var(--line)}.tsec+.tsec{border-top:1px solid var(--line)}
+.page{scroll-margin-top:84px}
 .sub{padding:4px 14px 6px;background:#fff;border-bottom:1px solid var(--line)}
 .sub .sec{display:flex;gap:6px;align-items:flex-start;margin:0 0 6px}.sub .sl{flex:none;width:46px;font-size:11px;font-weight:700;color:var(--mut);padding-top:8px}.sub .ch{display:flex;flex-wrap:wrap;gap:6px;flex:1}
 .sub button{flex:none;border:1px solid var(--line);background:#fff;border-radius:99px;padding:6px 11px;font:inherit;font-size:12.5px;cursor:pointer;color:var(--mut)}
@@ -244,7 +245,11 @@ function audit(act){if(!S.user)return;S.audit.unshift({at:Date.now(),who:S.user.
 function maskN(n){n=String(n||'고객');return n.charAt(0)+'○○'}
 function ago(t){var m=Math.round((Date.now()-t)/60000);return m<1?'방금':m<60?m+'분 전':m<1440?Math.round(m/60)+'시간 전':Math.round(m/1440)+'일 전'}
 function go(h){if(location.hash==='#'+h)render();else location.hash=h}
-window.addEventListener('hashchange',render);
+var SKIP=0;window.addEventListener('hashchange',function(){if(SKIP){SKIP=0;return}render()});
+function swapTab(h){if(location.hash!=='#'+h){SKIP=1;location.hash=h}var r=route(),role=r[0],tab=r[1],R=ROLES[role],pg=$('.page');if(!R||!pg||!S.user||role!==S.user.role){go(h);return}
+ var ok=R.tabs.some(function(t){return t[0]===tab}),fn=PAGES[role+'-'+tab];pg.innerHTML=ok&&fn?fn():deny(role,tab);bindTop();if(ok)(BIND[role+'-'+tab]||function(){})();
+ $$('.tch button[data-go]').forEach(function(b){b.className=b.getAttribute('data-go')===h?'on':''});var nm='';R.tabs.forEach(function(t){if(t[0]===tab)nm=t[1]});var sp=$('#navTog span');if(sp)sp.textContent='📂 '+nm;
+ try{pg.scrollIntoView({behavior:'smooth',block:'start'})}catch(e){}}
 function route(){var h=location.hash.replace('#','');if(!S.onb)return['onb'];if(h==='login'||!S.user)return['login'];if(!h){var r0=S.user.role;return r0==='f'?(S.mine?['f','home']:['reg']):[r0,ROLES[r0].tabs[0][0]]}var p=h.split('-');if(p[0]==='d')p[0]=DMAP[p[1]]||'u';var _r=S.user&&S.user.role;if((_r==='u'||_r==='c')&&p[1]!=='queue'&&ROLES[_r].tabs.some(function(t){return t[0]===p[1]}))p[0]=_r;if(S.user.role==='h'&&(p[0]==='u'||p[0]==='c')){if(p[1]==='queue'&&p[0]==='u')p[1]='uqueue';p[0]='h'}return p}
 
 function lockedChips(role){if(role==='h')return[];var seen={},out=[];['u','c','h','g'].forEach(function(k){if(k===role)return;ROLES[k].tabs.forEach(function(t){var nm=t[1];if(ROLES[role].tabs.some(function(x){return x[0]===t[0]&&x[1]===nm}))return;if(seen[nm]||out.length>=3)return;seen[nm]=1;out.push([k,nm])})});return out}
@@ -268,7 +273,7 @@ function render(){
 function topBar(role){var u=S.user,rr=role&&ROLES[role]?role:(u?u.role:'f');
  return '<div class="top"><div class="t1"><div><b style="font-size:13px;line-height:1.25;display:block">All for One,<br>One for All</b><small>'+(u&&u.role!=='f'?'<span style="font-size:16px;font-weight:800;opacity:1">'+ROLES[u.role].n+'</span>':'정책보험 · 농민을 위한 하나의 플랫폼')+'</small></div><div class="row">'+(u&&u.role==='f'?'<button class="iconbtn bell" data-go="f-inbox">🔔'+(unread()?'<em>'+unread()+'</em>':'')+'</button>':'')+'<button class="iconbtn" data-go="about">소개</button>'+(u?'<button class="iconbtn" id="topOut">로그아웃</button>':'')+'<button class="iconbtn" data-go="set">🔒</button></div></div></div>';
 }
-function bindTop(){bindOut();$$('[data-ts]').forEach(function(h){h.onclick=function(){var c=h.nextElementSibling,o=c.style.display==='none';c.style.display=o?'flex':'none';h.querySelector('.car').textContent=o?'▾':'▸'}});var nt=$('#navTog');if(nt)nt.onclick=function(){var b=$('#subBody');b.style.display=b.style.display==='none'?'block':'none'};$$('[data-go]').forEach(function(b){b.onclick=function(){go(b.getAttribute('data-go'))}})}
+function bindTop(){bindOut();$$('[data-ts]').forEach(function(h){h.onclick=function(){var c=h.nextElementSibling,o=c.style.display==='none';c.style.display=o?'flex':'none';h.querySelector('.car').textContent=o?'▾':'▸'}});var nt=$('#navTog');if(nt)nt.onclick=function(){var b=$('#subBody');b.style.display=b.style.display==='none'?'block':'none'};$$('[data-go]').forEach(function(b){b.onclick=function(){var h=b.getAttribute('data-go');if(b.closest&&b.closest('.tch'))swapTab(h);else go(h)}})}
 
 /* ---------------- 온보딩 · 동의 (슬라이드 22-③) ---------------- */
 function onb(){
