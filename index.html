@@ -1,0 +1,1181 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<title>All for One, One for All 정책보험</title>
+<style>
+:root{--g:#0b6b3a;--g7:#0e8448;--g1:#e8f4ec;--ink:#1c2420;--mut:#6b7671;--line:#e1e7e3;--bg:#f3f6f4;--card:#fff;
+--r1:#2e9e5b;--r2:#e0b11f;--r3:#ef7d22;--r4:#d43c33;--blue:#2d6cdf}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;background:#dfe5e1}
+body{font-family:"Noto Sans KR","Apple SD Gothic Neo","Malgun Gothic",system-ui,sans-serif;color:var(--ink);font-size:14px;line-height:1.5}
+#app{max-width:480px;margin:0 auto;min-height:100vh;background:var(--bg);position:relative;padding-bottom:70px}
+.top{position:sticky;top:0;z-index:20;background:var(--g);color:#fff;padding:10px 14px 10px}
+.top .t1{display:flex;align-items:center;justify-content:space-between}
+.top b{font-size:16px}.top small{opacity:.75;font-size:11px;display:block}
+.iconbtn{background:rgba(255,255,255,.15);border:0;color:#fff;border-radius:8px;padding:6px 8px;font:inherit;font-size:12px;white-space:nowrap;cursor:pointer}
+.roles{display:flex;margin-top:10px}
+.roles button{flex:1;border:0;background:none;color:rgba(255,255,255,.7);font:inherit;font-weight:700;padding:9px 0;border-bottom:3px solid transparent;cursor:pointer}
+.roles button.on{color:#fff;border-color:#ffd84d}
+.subw{background:#fff;border-bottom:1px solid var(--line)}.navtog{width:100%;display:flex;justify-content:space-between;border:0;background:#fff;padding:12px 16px;font:inherit;font-weight:700;font-size:14px;color:var(--g);cursor:pointer}
+.sub{padding:4px 14px 6px;background:#fff;border-bottom:1px solid var(--line)}
+.sub .sec{display:flex;gap:6px;align-items:flex-start;margin:0 0 6px}.sub .sl{flex:none;width:46px;font-size:11px;font-weight:700;color:var(--mut);padding-top:8px}.sub .ch{display:flex;flex-wrap:wrap;gap:6px;flex:1}
+.sub button{flex:none;border:1px solid var(--line);background:#fff;border-radius:99px;padding:6px 11px;font:inherit;font-size:12.5px;cursor:pointer;color:var(--mut)}
+.sub button.lk{opacity:.55;border-style:dashed}
+.sub button.on{background:var(--g);border-color:var(--g);color:#fff;font-weight:700}
+.page{padding:14px}
+.card{background:var(--card);border-radius:14px;padding:14px;margin-bottom:12px;box-shadow:0 1px 2px rgba(0,0,0,.04)}
+.card h3{margin:0 0 8px;font-size:15px}
+.card h4{margin:10px 0 6px;font-size:13px;color:var(--mut);font-weight:500}
+.hd{display:flex;justify-content:space-between;align-items:center;gap:8px}
+.mut{color:var(--mut)}.sm{font-size:12px}.xs{font-size:11px}.b{font-weight:700}
+.tag{display:inline-block;font-size:11px;font-weight:700;padding:2px 7px;border-radius:5px;background:var(--g1);color:var(--g);white-space:nowrap}
+.tag.y{background:#fdf3d4;color:#8a6a00}.tag.o{background:#fdeadb;color:#b4560f}.tag.r{background:#fbe2e0;color:#b02a22}.tag.b{background:#e3ecfc;color:#1d4fae}.tag.gr{background:#eceff1;color:#555}
+.btn{display:inline-block;background:var(--g);color:#fff;border:0;border-radius:10px;padding:11px 16px;font:inherit;font-weight:700;cursor:pointer;text-align:center}
+.btn.full{width:100%}.btn.ghost{background:#fff;color:var(--g);border:1px solid var(--g)}.btn.sm{padding:7px 11px;font-size:13px}
+.btn:disabled{opacity:.4}
+.row{display:flex;gap:8px;align-items:center}.wrap{flex-wrap:wrap}.sp{justify-content:space-between}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.kpi{background:var(--bg);border-radius:10px;padding:10px 6px;text-align:center}
+.kpi b{display:block;font-size:18px}.kpi small{font-size:11px;color:var(--mut)}
+.list{list-style:none;margin:0;padding:0}
+.list li{padding:9px 0;border-top:1px solid var(--line);display:flex;justify-content:space-between;gap:8px;align-items:center}
+.list li:first-child{border-top:0}
+.gauge{position:relative;width:132px;height:132px;flex:none}
+.gauge svg{transform:rotate(-90deg)}
+.gauge .c{position:absolute;inset:0;display:grid;place-items:center;text-align:center}
+.gauge .c b{font-size:34px;line-height:1;display:block}
+.fc{display:flex;gap:6px;overflow-x:auto;padding-bottom:4px}
+.fc .d{flex:none;width:58px;border-radius:10px;background:var(--bg);text-align:center;padding:7px 2px;cursor:pointer;border:2px solid transparent;font-size:11px}
+.fc .d.sel{border-color:var(--g)}
+.fc .d .ic{font-size:20px;line-height:1.3}
+.fc .d .lv{height:5px;border-radius:3px;margin:4px 6px 0}
+.bar{height:8px;background:var(--line);border-radius:4px;overflow:hidden}
+.bar i{display:block;height:100%;border-radius:4px}
+.hbar{display:flex;align-items:center;gap:8px;margin:6px 0;font-size:13px}
+.hbar span:first-child{width:62px;flex:none}
+.hbar .bar{flex:1}
+.hbar span:last-child{width:44px;text-align:right;flex:none;font-weight:700}
+.rrow{background:var(--bg);border-radius:12px;padding:11px;margin-top:8px}
+.rrow{background:var(--bg);border-radius:12px;padding:11px;margin-top:8px}
+.vbars{display:flex;align-items:flex-end;gap:5px;height:110px}
+.vbars div{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;font-size:10px;color:var(--mut);height:100%}
+.vbars.sc{overflow-x:auto;height:120px}.vbars.sc div{flex:none;min-width:28px}
+.vbars i{display:block;width:100%;border-radius:4px 4px 0 0}
+.chk{display:flex;gap:10px;align-items:flex-start;padding:8px 0;border-top:1px solid var(--line);cursor:pointer}
+.chk:first-child{border-top:0}
+.chk .bx{flex:none;width:20px;height:20px;border-radius:6px;border:2px solid var(--line);display:grid;place-items:center;color:#fff;font-size:12px;margin-top:1px}
+.chk.on .bx{background:var(--g);border-color:var(--g)}
+.chk.on .tx{color:var(--mut);text-decoration:line-through}
+.note{font-size:12px;color:var(--mut);background:var(--bg);border-radius:10px;padding:9px 11px;margin-top:10px}
+.callout{border-left:4px solid var(--g);background:var(--g1);padding:10px 12px;border-radius:0 10px 10px 0;font-size:13px}
+.callout.warn{border-color:var(--r3);background:#fff4ea}
+.callout.bad{border-color:var(--r4);background:#fdeeed}
+input[type=text],select{width:100%;padding:11px 12px;border:1px solid var(--line);border-radius:10px;font:inherit;background:#fff}
+input[type=range]{width:100%;accent-color:var(--g)}
+.chips{display:flex;flex-wrap:wrap;gap:6px}
+.chip{border:1px solid var(--line);background:#fff;border-radius:99px;padding:5px 10px;font:inherit;font-size:12px;cursor:pointer}
+.chip.on{background:var(--g);color:#fff;border-color:var(--g)}
+.bottom{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:480px;background:#fff;border-top:1px solid var(--line);display:flex;z-index:20}
+.bottom button{flex:1;border:0;background:none;padding:7px 0 9px;font:inherit;font-size:11px;color:var(--mut);cursor:pointer}
+.bottom button .i{display:block;font-size:20px;line-height:1.3}
+.bottom button.on{color:var(--g);font-weight:700}
+.toast{position:fixed;left:50%;bottom:84px;transform:translateX(-50%);background:#222;color:#fff;padding:10px 16px;border-radius:99px;font-size:13px;z-index:50;opacity:0;transition:.25s;pointer-events:none;max-width:90%;text-align:center}
+.toast.on{opacity:1}
+.toggle{position:relative;width:46px;height:26px;flex:none;border-radius:99px;background:#cfd6d2;cursor:pointer;transition:.2s;border:0}
+.toggle::after{content:"";position:absolute;top:3px;left:3px;width:20px;height:20px;border-radius:50%;background:#fff;transition:.2s}
+.toggle.on{background:var(--g)}.toggle.on::after{left:23px}
+.flow{display:flex;flex-direction:column;gap:6px;align-items:stretch}
+.flow .n{background:var(--bg);border-radius:10px;padding:10px;text-align:center}
+.flow .n.ai{background:var(--g);color:#fff}
+.flow .ar{text-align:center;color:var(--mut);font-size:16px;line-height:1}
+.heat{display:grid;gap:5px}
+.cell{border-radius:8px;padding:8px 2px;color:#fff;font-weight:700;font-size:11px;text-align:center;cursor:pointer;border:2px solid transparent}
+.cell em{display:block;font-style:normal;font-size:16px}
+.cell.sel{border-color:var(--ink)}
+.px{display:grid;grid-template-columns:repeat(12,1fr);gap:2px}
+.px i{aspect-ratio:1;border-radius:2px;display:block}
+.px i.me{outline:3px solid var(--ink);outline-offset:-1px}
+table{width:100%;border-collapse:collapse;font-size:12px}
+th,td{padding:7px 5px;border-bottom:1px solid var(--line);text-align:left;vertical-align:top}
+th{color:var(--mut);font-weight:500;background:var(--bg)}
+pre{background:#1e2622;color:#cde8d6;border-radius:10px;padding:10px;font-size:11px;overflow-x:auto;margin:8px 0 0}
+.step{display:flex;gap:10px;padding:10px 0;border-top:1px dashed var(--line)}
+.step:first-child{border-top:0}
+.num{flex:none;width:24px;height:24px;border-radius:50%;background:var(--g);color:#fff;font-weight:700;display:grid;place-items:center;font-size:12px}
+.num.dim{background:#cfd6d2}
+.drop{border:2px dashed var(--line);border-radius:12px;padding:18px;text-align:center;color:var(--mut);cursor:pointer}
+.hero{background:linear-gradient(135deg,#0b6b3a,#13915a);color:#fff;border-radius:16px;padding:18px}
+.hero h2{margin:0 0 6px;font-size:19px}
+.lock{text-align:center;padding:18px 8px;color:var(--mut)}
+.lock b{display:block;color:var(--ink);margin-bottom:4px}
+.ok{color:var(--r1);font-weight:700}.ng{color:var(--r4);font-weight:700}.pd{color:var(--r3);font-weight:700}
+.sep{height:1px;background:var(--line);margin:10px 0}
+.badge30{display:inline-block;background:#1d4fae;color:#fff;border-radius:6px;font-size:10px;padding:1px 6px;font-weight:700}
+.onb{padding:22px 18px}
+.onb h1{font-size:22px;margin:8px 0}
+.cons{display:flex;gap:10px;align-items:center;padding:12px 0;border-top:1px solid var(--line)}
+.cons:first-child{border-top:0}
+.cons div{flex:1}
+.qgrid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;text-align:center}
+.qgrid button{border:0;background:var(--bg);border-radius:12px;padding:10px 2px;font:inherit;font-size:11px;cursor:pointer;color:var(--ink)}
+.qgrid button span{display:block;font-size:22px;line-height:1.4}
+.bell{position:relative}
+.bell em{position:absolute;top:-5px;right:-5px;background:#ff5a4e;color:#fff;font-style:normal;font-size:10px;font-weight:700;border-radius:99px;min-width:16px;height:16px;line-height:16px;padding:0 4px}
+.pol{display:flex;gap:10px;align-items:flex-start;padding:10px 0;border-top:1px solid var(--line)}
+.pol:first-child{border-top:0}
+.pol .pi{flex:none;width:38px;height:38px;border-radius:10px;display:grid;place-items:center;font-size:20px;background:var(--g1)}
+.pol.no .pi{background:#fdeadb}.pol.na .pi{background:#eceff1;filter:grayscale(1)}
+.tl{position:relative;padding-left:22px}
+.tl>div{position:relative;padding:0 0 14px}
+.tl>div::before{content:"";position:absolute;left:-17px;top:4px;width:10px;height:10px;border-radius:50%;background:#cfd6d2}
+.tl>div::after{content:"";position:absolute;left:-13px;top:16px;width:2px;bottom:0;background:#e1e7e3}
+.tl>div:last-child::after{display:none}
+.tl>div.done::before{background:var(--g)}.tl>div.now::before{background:var(--r3);box-shadow:0 0 0 4px #fdeadb}
+.chat{display:flex;flex-direction:column;gap:8px;min-height:50vh;padding-bottom:120px}
+.msg{max-width:85%;padding:9px 12px;border-radius:14px;font-size:13px;white-space:pre-line}
+.msg.u{align-self:flex-end;background:var(--g);color:#fff;border-bottom-right-radius:4px}
+.msg.a{align-self:flex-start;background:#fff;border-bottom-left-radius:4px;box-shadow:0 1px 2px rgba(0,0,0,.05)}
+.msg.a .row{margin-top:8px}
+.chatbar{position:fixed;bottom:62px;left:50%;transform:translateX(-50%);width:100%;max-width:480px;background:var(--bg);padding:8px 10px;border-top:1px solid var(--line);z-index:19}
+.chatbar .chips{flex-wrap:nowrap;overflow-x:auto;margin-bottom:6px}
+.chatbar .chip{flex:none}
+.chatbar input{flex:1;min-width:0}
+.chatbar .btn{flex:none;white-space:nowrap}
+.inbox li{align-items:flex-start;justify-content:flex-start;cursor:pointer}
+.inbox .dot{flex:none;width:8px;height:8px;border-radius:50%;background:#ff5a4e;margin-top:7px}
+.inbox .dot.read{background:transparent}
+.photo{width:100%;aspect-ratio:4/3;border-radius:12px;background:linear-gradient(135deg,#7da36b,#4f7a3e);position:relative;overflow:hidden}
+.photo i{position:absolute;border:2px solid #ffd84d;border-radius:6px;background:rgba(255,216,77,.15)}
+.photo span{position:absolute;left:8px;bottom:8px;background:rgba(0,0,0,.6);color:#fff;font-size:11px;padding:2px 8px;border-radius:6px}
+.micbtn{display:flex;align-items:center;justify-content:center;gap:10px;width:100%;border:0;border-radius:16px;padding:16px;background:var(--g);color:#fff;font:inherit;font-size:18px;font-weight:700;cursor:pointer;box-shadow:0 4px 12px rgba(11,107,58,.25)}
+.micbtn span{font-size:28px;line-height:1}
+.micsm{flex:none;width:46px;height:46px;border-radius:50%;border:0;background:var(--g);color:#fff;font-size:20px;cursor:pointer}
+.or{display:flex;align-items:center;gap:8px;color:var(--mut);font-size:12px;margin:10px 0}
+.or::before,.or::after{content:"";flex:1;height:1px;background:var(--line)}
+.vov{position:fixed;inset:0;background:rgba(10,30,20,.55);z-index:60;display:none;align-items:flex-end;justify-content:center}
+.vov.on{display:flex}
+.vbox{background:#fff;width:100%;max-width:480px;border-radius:22px 22px 0 0;padding:26px 20px 30px;text-align:center}
+.vmic{width:92px;height:92px;border-radius:50%;background:var(--g);color:#fff;font-size:42px;display:grid;place-items:center;margin:0 auto 14px;animation:vp 1.4s ease-out infinite}
+@keyframes vp{0%{box-shadow:0 0 0 0 rgba(11,107,58,.45)}100%{box-shadow:0 0 0 26px rgba(11,107,58,0)}}
+.vbox b{font-size:19px;display:block}
+.vbox .vtx{min-height:44px;margin:10px 0 14px;font-size:15px;color:var(--ink)}
+.vheard{background:#eef6f1;border-radius:12px;padding:12px;font-size:15px;margin-bottom:8px}
+</style>
+</head>
+<body>
+<div id="app"></div>
+<div class="toast" id="toast"></div>
+<div class="vov" id="vov"><div class="vbox" id="vbox"></div></div>
+<script>
+/* =========================================================
+   정책보험 AI 프로토타입 · 모든 수치는 가상(데모) 데이터
+   ========================================================= */
+var S={farm:'apple',consent:{svc:true,pers:false,myd:false},checks:{},sel:{day:2,sigun:9,region:4,level:'macro',dkw:'',ocrStep:0,simArea:12,simSc:1}};
+try{var sv=JSON.parse(localStorage.getItem('pai')||'null');if(sv){S.farm=sv.farm||S.farm;S.consent=sv.consent||S.consent;S.checks=sv.checks||{};S.onb=sv.onb;S.mine=sv.mine||null;S.user=sv.user||null;S.cases=sv.cases||[];S.rules=sv.rules||[];S.audit=sv.audit||[];S.claimSent=sv.claimSent||{};if(S.mine)S.farm=sv.farm||'mine'}}catch(e){}
+function save(){try{localStorage.setItem('pai',JSON.stringify({farm:S.farm,consent:S.consent,checks:S.checks,onb:S.onb,mine:S.mine,user:S.user,cases:S.cases,rules:S.rules,audit:S.audit,claimSent:S.claimSent}))}catch(e){}}
+function $(s){return document.querySelector(s)}function $$(s){return Array.prototype.slice.call(document.querySelectorAll(s))}
+function won(v){return v>=10000?(v/10000).toFixed(v%10000?1:0)+'억 원':Math.round(v).toLocaleString()+'만 원'}
+function col(v){return v>=80?'var(--r4)':v>=65?'var(--r3)':v>=45?'var(--r2)':'var(--r1)'}
+function lvl(v){return v>=80?'심각':v>=65?'경계':v>=45?'주의':'관심'}
+function tcls(v){return v>=80?'r':v>=65?'o':v>=45?'y':''}
+function toast(m){var t=$('#toast');t.textContent=m;t.classList.add('on');clearTimeout(t._t);t._t=setTimeout(function(){t.classList.remove('on')},2200)}
+
+/* ---------------- 데모 농가 데이터 ---------------- */
+var FARMS={
+ apple:{name:'김○○ 농가',region:'전북 장수군 장계면',emd:'장계면',sigun:'장수군',item:'사과(홍로) 1.2ha',icon:'🍎',score:74,
+  stage:'개화기',plot:'필지 30×30m · 해발 520m 저지대',
+  fc:[{d:'월',i:'⛅',tn:3,tx:17,r:0,k:38},{d:'화',i:'☀️',tn:1,tx:19,r:0,k:52},{d:'수',i:'🥶',tn:-1.5,tx:15,r:0,k:86,hz:'저온·서리'},{d:'목',i:'🌤',tn:2,tx:18,r:0,k:58},{d:'금',i:'🌧',tn:6,tx:14,r:22,k:44},{d:'토',i:'🌨',tn:0,tx:9,r:8,k:71,hz:'우박 가능'},{d:'일',i:'⛅',tn:4,tx:16,r:0,k:40},{d:'월',i:'☀️',tn:5,tx:20,r:0,k:30},{d:'화',i:'☀️',tn:6,tx:22,r:0,k:28}],
+  alerts:{2:{t:'D+3 새벽 저온 −1.5℃ (개화기 냉해)',prod:'농작물재해보험',past:'과거 유사 기상(개화기 최저 −1℃ 이하) 시 장계면 사과 지급 37건, 평균 피해율 24%',cover:{ok:false,txt:'봄동상해 추가보장 특약 미가입 → 개화기 동상해는 보장 제한'},act:['D+2 저녁 방상팬 작동 점검','새벽 3~6시 미세살수장치 가동','연소법 사용 시 화재 주의','피해 발생 시 7일 내 사고 접수 (사진 촬영)']},
+          5:{t:'D+6 우박 가능 (대기 불안정)',prod:'농작물재해보험',past:'최근 3년 장계면 1위 사고원인 우박 · 평균 지급 1,250만 원',cover:{ok:true,txt:'적과전 종합위험 기본 보장 (우박 포함)'},act:['방조망·방풍망 고정 상태 점검','우박 직후 과실 피해 사진 기록','농축협 손해평가 일정 신청']}},
+  assets:[{k:'작물',n:'사과 1.2ha',ins:'농작물재해보험 (적과전 종합위험)',ok:true},{k:'농기계',n:'트랙터 55마력',ins:'농기계종합보험',ok:true},{k:'농기계',n:'SS기(방제기)',ins:null,ok:false},{k:'시설',n:'저온저장고 66㎡',ins:null,ok:false},{k:'인적',n:'경영주 본인 (68세)',ins:null,ok:false}],
+  riders:[['봄동상해 추가보장',false,'개화기 냉해 반복 지역'],['일소피해 특약',false,'여름 폭염일수 증가'],['나무손해 특약',true,''],['수확감소 추가보장',true,'']],
+  self:{me:20,peer:'10~15%',peerShare:68},
+  hist:[{y:2023,c:'우박',p:640,m:'6월'},{y:2024,c:'저온(개화기)',p:1120,m:'4월'},{y:2025,c:'태풍 낙과',p:430,m:'9월'}],
+  repeat:'4월 개화기 저온 피해가 3년 중 2회 발생 — 매년 4월 둘째~셋째 주 선제 점검 대상',
+  local:{top:[['우박',38],['저온',31],['태풍 낙과',17],['일소',14]],avg:1250,farms:42,ins:61},
+  sim:{price:3200,base:12,sc:[['평년 수준',8],['인근 평균(3년)',24],['최악 연도',52]]},
+  trend:[1,2]},
+ pig:{name:'이○○ 농장',region:'충남 홍성군 은하면',emd:'은하면',sigun:'홍성군',item:'양돈 비육돈 2,350두 · 무창돈사',icon:'🐖',score:81,
+  stage:'혹서기',plot:'축사 3동 · 배전설비 10년 경과',
+  fc:[{d:'월',i:'☀️',tn:24,tx:32,r:0,k:58},{d:'화',i:'🔥',tn:26,tx:35,r:0,k:84,hz:'폭염'},{d:'수',i:'🔥',tn:27,tx:36,r:0,k:91,hz:'폭염 경보'},{d:'목',i:'⛈',tn:25,tx:31,r:45,k:66,hz:'낙뢰·정전'},{d:'금',i:'🌤',tn:24,tx:31,r:0,k:55},{d:'토',i:'☀️',tn:25,tx:33,r:0,k:70,hz:'폭염'},{d:'일',i:'☀️',tn:25,tx:33,r:0,k:69},{d:'월',i:'⛅',tn:23,tx:30,r:0,k:48},{d:'화',i:'🌧',tn:22,tx:27,r:30,k:40}],
+  alerts:{2:{t:'D+3 최고 36℃ 폭염 경보',prod:'가축재해보험',past:'홍성군 양돈 폭염 폐사 지급: 최고기온 35℃ 이상 3일 연속 시 평균 폐사율 1.8%',cover:{ok:false,txt:'폭염재해 보장 특약 미가입 → 폭염 폐사 보상 불가'},act:['냉방기·쿨링패드 가동 점검','환기팬 벨트·모터 이상 확인','비상발전기 시험 가동 (30분)','음수량 확보·급이 시간 조정']},
+          3:{t:'D+4 낙뢰·정전 위험',prod:'가축재해보험',past:'무창돈사 정전 시 환기 중단 → 집단폐사 사고 지급 평균 4,800만 원',cover:{ok:false,txt:'전기적장치 위험보장 특약 미가입'},act:['정전 경보장치 작동 테스트','자동 전환 스위치(ATS) 확인','배전반 누전 점검 의뢰']}},
+  assets:[{k:'가축',n:'비육돈 2,350두',ins:'가축재해보험 (주계약)',ok:true},{k:'시설',n:'무창돈사 3동',ins:'가축재해보험 (축사)',ok:true},{k:'설비',n:'배전·환기·냉방 설비',ins:null,ok:false},{k:'설비',n:'비상발전기',ins:null,ok:false},{k:'인적',n:'외국인 근로자 3명',ins:null,ok:false}],
+  riders:[['폭염재해 보장',false,'폭염일수 증가 지역'],['전기적장치 위험보장',false,'노후 배전설비'],['축사 부착물 가입금액 상향',false,'화재 복구비 대비 과소'],['질병위험 보장',true,'']],
+  self:{me:20,peer:'10%',peerShare:57},
+  hist:[{y:2023,c:'폭염 폐사',p:2100,m:'8월'},{y:2024,c:'전기 화재(일부)',p:6800,m:'1월'},{y:2025,c:'폭염 폐사',p:1650,m:'7월'}],
+  repeat:'7~8월 폭염 폐사 3년 중 2회 — 매년 7월 초 냉방·발전기 일제 점검 대상',
+  local:{top:[['폭염 폐사',44],['화재',27],['질병',18],['정전',11]],avg:3400,farms:118,ins:83},
+  sim:{price:38,base:2350,sc:[['평년 수준',0.5],['인근 평균(3년)',1.8],['최악 연도',6]],unit:'두'},
+  trend:[0,1]},
+ farm:{name:'박○○ 스마트팜',region:'전북 김제시 백구면',emd:'백구면',sigun:'김제시',item:'딸기 ICT 온실 3,300㎡',icon:'🍓',score:62,
+  stage:'정식 후 생육기',plot:'연동 비닐온실 · 복합환경제어기',
+  fc:[{d:'월',i:'⛅',tn:2,tx:12,r:0,k:35},{d:'화',i:'🌬',tn:1,tx:9,r:0,w:14,k:66,hz:'강풍'},{d:'수',i:'🌨',tn:-4,tx:3,r:12,k:78,hz:'대설'},{d:'목',i:'🥶',tn:-8,tx:1,r:0,k:72,hz:'한파'},{d:'금',i:'⛅',tn:-3,tx:5,r:0,k:44},{d:'토',i:'☀️',tn:-2,tx:7,r:0,k:33},{d:'일',i:'☀️',tn:0,tx:9,r:0,k:30},{d:'월',i:'🌧',tn:3,tx:10,r:15,k:38},{d:'화',i:'⛅',tn:1,tx:9,r:0,k:34}],
+  alerts:{2:{t:'D+3 대설 12cm (하우스 붕괴 위험)',prod:'농업용시설물(풍수해)',past:'김제 연동온실 적설 10cm 이상 시 파손 지급 21건 · 평균 860만 원',cover:{ok:true,txt:'농업용시설물 기본 보장 가입'},act:['보온커튼 열고 난방 가동해 눈 녹이기','지주·보강대 설치','제설 장비 사전 준비']},
+          3:{t:'D+4 한파 −8℃ (난방기 고장 시 동해)',prod:'농작물재해보험',past:'난방기 정지로 인한 동사 피해 평균 지급 1,900만 원',cover:{ok:false,txt:'부대시설(ICT·난방기) 특약 미가입'},act:['난방기·보일러 연료 확보','정전 알림(스마트폰) 연동 확인','이중 보온커튼 점검']}},
+  assets:[{k:'작물',n:'딸기 3,300㎡',ins:'농작물재해보험 (시설작물)',ok:true},{k:'시설',n:'연동 비닐온실',ins:'농업용시설물',ok:true},{k:'설비',n:'ICT 복합환경제어기',ins:null,ok:false},{k:'설비',n:'온풍난방기 2대',ins:null,ok:false},{k:'인적',n:'경영주 본인 (34세 · 귀농 2년차)',ins:'농업인안전보험',ok:true}],
+  riders:[['부대시설(ICT·난방기)',false,'고가 제어설비 보유'],['재조달가액 보장',false,'시설 노후 감가 대비'],['화재위험 보장',true,'']],
+  self:{me:10,peer:'10%',peerShare:74},
+  hist:[{y:2024,c:'강풍 피복 파손',p:310,m:'3월'},{y:2025,c:'대설 일부 파손',p:540,m:'1월'}],
+  repeat:'1~3월 강풍·대설 피해 2년 연속 — 매년 12월 말 구조 보강 점검 대상',
+  local:{top:[['대설 파손',35],['강풍',29],['한파 동해',22],['침수',14]],avg:640,farms:57,ins:72},
+  sim:{price:1500,base:0.33,sc:[['평년 수준',5],['인근 평균(3년)',18],['최악 연도',45]]},
+  trend:[0,2]}
+};
+var TRENDS=[
+ {t:'스마트팜·시설원예 확대',w:'첨단 온실·ICT 설비 농가',why:'고가 제어설비·정전·태풍 파손 지급 급증',rec:'농업용시설물 + 부대시설(ICT·난방기) 특약',ic:'🏭'},
+ {t:'고령화·기계화 영농 가속',w:'1인 고령 농가·농기계 보유층',why:'농번기 전복·상해 사고 및 대인배상 수요 증가',rec:'농기계종합(대인·자손) + 농업인안전보험',ic:'🚜'},
+ {t:'기후변화·신소득 작목 전환',w:'북상 과수·신규 귀농인',why:'재배 적지 이동에 따른 돌발 한파·일소·병충해',rec:'종합위험 농작물재해 + 병충해·일소 특약',ic:'🌡'}
+];
+
+/* ---------------- 라우팅 ---------------- */
+var ROLES={f:{n:'👨‍🌾 농가',sc:'본인 계약·농장',tabs:[['home','🏠','홈'],['live','📡','위험'],['cover','🛡','보험'],['claim','📸','접수·민원']]},
+ u:{n:'📝 인수팀',sc:'인수 + 지자체 통계',tabs:[['queue','가입 상담함'],['analyze','AI 보장분석'],['ocr','OCR 인수심사'],['reco','AI 추천'],['live','실시간 조회'],['macro','전국 관제'],['meso','시군·읍면'],['micro','격자(500m)'],['matrix','연계 매트릭스'],['engine','AI 엔진·API'],['loop','환류']]},
+ c:{n:'🧾 보상팀',sc:'보상 + 지자체 통계',tabs:[['queue','접수함'],['claim','AI 지급심사'],['paydata','지급데이터'],['loss','미가입 손실'],['kpi','기대효과'],['perm','권한·감사'],['macro','전국 관제'],['meso','시군·읍면'],['micro','격자(500m)'],['matrix','연계 매트릭스'],['engine','AI 엔진·API'],['loop','환류']]},
+ h:{n:'🏢 본사',sc:'인수팀+보상팀 권한 통합',tabs:[['uqueue','가입 상담함'],['queue','접수함'],['analyze','AI 보장분석'],['ocr','OCR 인수심사'],['reco','AI 추천'],['live','실시간 조회'],['claim','AI 지급심사'],['paydata','지급데이터'],['loss','미가입 손실'],['loop','환류·개선'],['macro','전국 관제'],['kpi','기대효과'],['perm','권한·감사']]},
+ g:{n:'🏛 지자체',sc:'집계 통계·위험지수',tabs:[['macro','전국'],['meso','시군·읍면'],['micro','격자(500m)'],['matrix','연계 매트릭스'],['engine','AI 엔진·API'],['loop','민원 통계']]}};
+var DMAP={analyze:'u',ocr:'u',reco:'u',live:'u',claim:'c',paydata:'c',loss:'c',kpi:'h'};
+var RPERM={f:'본인 계약·농장 · 동의한 범위만',u:'가입 심사·OCR·보장분석 + 지자체 통계 · 보상 화면은 잠금 · 이름·지번 마스킹',c:'사고·지급·민원 처리 + 지자체 통계 · 인수 화면은 잠금 · 상세 열람 시 사유 기록',h:'본사 통합 · 인수팀과 보상팀 권한을 모두 가짐 · 개인정보는 동일하게 마스킹·열람 기록',g:'외부 기관 · 집계 통계(5농가 이상·500m 격자)·위험지수만 · 개인정보 열람 불가'};
+function audit(act){if(!S.user)return;S.audit.unshift({at:Date.now(),who:S.user.role,name:S.user.name,act:act});S.audit=S.audit.slice(0,40);save()}
+function maskN(n){n=String(n||'고객');return n.charAt(0)+'○○'}
+function ago(t){var m=Math.round((Date.now()-t)/60000);return m<1?'방금':m<60?m+'분 전':m<1440?Math.round(m/60)+'시간 전':Math.round(m/1440)+'일 전'}
+function go(h){if(location.hash==='#'+h)render();else location.hash=h}
+window.addEventListener('hashchange',render);
+function route(){var h=location.hash.replace('#','');if(!S.onb)return['onb'];if(h==='login'||!S.user)return['login'];if(!h){var r0=S.user.role;return r0==='f'?(S.mine?['f','home']:['reg']):[r0,ROLES[r0].tabs[0][0]]}var p=h.split('-');if(p[0]==='d')p[0]=DMAP[p[1]]||'u';var _r=S.user&&S.user.role;if((_r==='u'||_r==='c')&&p[1]!=='queue'&&ROLES[_r].tabs.some(function(t){return t[0]===p[1]}))p[0]=_r;if(S.user.role==='h'&&(p[0]==='u'||p[0]==='c')){if(p[1]==='queue'&&p[0]==='u')p[1]='uqueue';p[0]='h'}return p}
+
+function lockedChips(role){if(role==='h')return[];var seen={},out=[];['u','c','h','g'].forEach(function(k){if(k===role)return;ROLES[k].tabs.forEach(function(t){var nm=t[1];if(ROLES[role].tabs.some(function(x){return x[0]===t[0]&&x[1]===nm}))return;if(seen[nm]||out.length>=3)return;seen[nm]=1;out.push([k,nm])})});return out}
+function deny(role,tab){audit('접근 거부: '+role+'-'+tab);return '<div class="card" style="text-align:center;padding:28px 18px"><div style="font-size:38px">🔒</div><h3>접근 권한이 없어요</h3><p class="sm mut">이 화면은 <b>'+(ROLES[role]?ROLES[role].n:'다른 역할')+'</b> 전용이에요.<br>현재 로그인: '+ROLES[S.user.role].n+'</p><button class="btn" data-go="login">역할 전환</button></div>'}
+function render(){
+ var r=route(),role=r[0],tab=r[1];var a=$('#app');
+ if(role==='onb'){a.innerHTML=onb();bindOnb();return}
+ if(role==='login'){a.innerHTML=loginPage();bindLogin();window.scrollTo(0,0);return}
+ if(role==='reg'){a.innerHTML=topBar(null)+'<div class="page">'+regPage()+'</div>';bindTop();bindReg();window.scrollTo(0,0);return}
+ if(role==='set'||role==='about'){a.innerHTML=topBar(null)+'<div class="page">'+(role==='set'?setPage():aboutPage())+'</div>';bindTop();bindSet();return}
+ if(!ROLES[role])role=S.user.role;var R=ROLES[role];if(!tab)tab=R.tabs[0][0];
+ var html=topBar(role),ok=(role===S.user.role)&&(role==='f'||R.tabs.some(function(t){return t[0]===tab}));
+ if(role!=='f'&&role===S.user.role){var SEC={uqueue:'인수',analyze:'인수',ocr:'인수',reco:'인수',live:'인수',cqueue:'보상',claim:'보상',paydata:'보상',loss:'보상',kpi:'본사',perm:'본사',macro:'통계',meso:'통계',micro:'통계',matrix:'통계',engine:'통계',loop:'환류'},ORD=['인수','보상','본사','통계','환류'],gp={};R.tabs.forEach(function(t){var sc=SEC[t[0]]||(t[0]==='queue'?(role==='u'?'인수':'보상'):'기타');(gp[sc]=gp[sc]||[]).push(t)});
+  var LK={u:['보상','c','보상팀',['접수함','AI 지급심사','지급데이터','미가입 손실']],c:['인수','u','인수팀',['가입 상담함','AI 보장분석','OCR 인수심사','AI 추천','실시간 조회']]}[role],curN='';R.tabs.forEach(function(t){if(t[0]===tab)curN=t[1]});
+  html+='<div class="subw"><button class="navtog" id="navTog"><span>📂 '+curN+'</span><span>메뉴 ▾</span></button><div class="sub" id="subBody" style="display:none">'+ORD.concat(['보상','인수']).filter(function(k,i,a){return a.indexOf(k)===i&&(gp[k]||(LK&&LK[0]===k))}).map(function(k){return '<div class="sec"><span class="sl">'+k+'</span><div class="ch">'+(gp[k]||[]).map(function(t){return '<button data-go="'+role+'-'+t[0]+'" class="'+(t[0]===tab?'on':'')+'">'+t[1]+'</button>'}).join('')+(LK&&LK[0]===k?LK[3].map(function(n){return '<button class="lk" data-lock="'+LK[1]+'">🔒 '+n+'</button>'}).join(''):'')+'</div></div>'}).join('')+'</div></div>'}
+ var fn=PAGES[role+'-'+tab]||PAGES['f-home'];
+ html+='<div class="page">'+(ok?fn():deny(role,tab))+'</div>';
+ if(role==='f'&&ok)html+='<nav class="bottom">'+R.tabs.map(function(t){return '<button data-go="f-'+t[0]+'" class="'+(t[0]===tab?'on':'')+'"><span class="i">'+t[1]+'</span>'+t[2]+'</button>'}).join('')+'</nav>';
+ a.innerHTML=html;bindTop();$$('[data-lock]').forEach(function(b){b.onclick=function(){audit('접근 거부(잠금 탭): '+b.textContent);toast(ROLES[b.getAttribute('data-lock')].n+' 전용 화면이에요 · 권한이 필요해요')}});if(ok)(BIND[role+'-'+tab]||function(){})();window.scrollTo(0,0);
+}
+function topBar(role){var u=S.user,rr=role&&ROLES[role]?role:(u?u.role:'f');
+ return '<div class="top"><div class="t1"><div><b style="font-size:13px;line-height:1.25;display:block">All for One,<br>One for All</b><small>'+(u&&u.role!=='f'?'<span style="font-size:16px;font-weight:800;opacity:1">'+ROLES[u.role].n+'</span>':'정책보험 · 농민을 위한 하나의 플랫폼')+'</small></div><div class="row">'+(u&&u.role==='f'?'<button class="iconbtn bell" data-go="f-inbox">🔔'+(unread()?'<em>'+unread()+'</em>':'')+'</button>':'')+'<button class="iconbtn" data-go="about">소개</button>'+(u?'<button class="iconbtn" id="topOut">로그아웃</button>':'')+'<button class="iconbtn" data-go="set">🔒</button></div></div></div>';
+}
+function bindTop(){bindOut();var nt=$('#navTog');if(nt)nt.onclick=function(){var b=$('#subBody');b.style.display=b.style.display==='none'?'block':'none'};$$('[data-go]').forEach(function(b){b.onclick=function(){go(b.getAttribute('data-go'))}})}
+
+/* ---------------- 온보딩 · 동의 (슬라이드 22-③) ---------------- */
+function onb(){
+ return '<div class="onb"><div style="font-size:42px">🌾</div><h1 style="line-height:1.25">All for One,<br>One for All<br><span style="color:var(--g)">정책보험</span></h1><p class="mut">농작물·가축·농기계·풍수해 정책보험 데이터와 농진청 기상조기경보를 결합해 <b>내 농장 위험</b>과 <b>보장 공백</b>을 미리 알려드려요.</p>'+
+ '<div class="card" style="margin-top:16px">'+consRows()+'</div>'+
+ '<div class="note">🔒 동의하지 않아도 기상·재해 경보와 대응요령은 받을 수 있어요. 보장 공백·계약 이력 분석은 본인 동의 시에만 제공됩니다. 설정에서 언제든 바꿀 수 있어요.</div>'+
+ '<button class="btn full" id="startBtn" style="margin-top:16px">시작하기</button><p class="xs mut" style="text-align:center">내 농장 정보를 입력하면 실시간 기상으로 맞춤 분석을 해드려요</p></div>';
+}
+function consRows(){
+ var c=[['svc','[필수] 서비스 이용 및 위치(필지) 기반 기상경보','농진청 조기경보 API · 30×30m 필지 단위',true],['pers','[선택] 보험계약·사고·지급 이력 활용','계약자별 보장 공백·재발 방지 안내에 사용',false],['myd','[선택] 공공 마이데이터 전송요구','농업경영체·가축사육업 정보 자동 연동 (가입 서류 생략)',false]];
+ return c.map(function(x){return '<div class="cons"><div><div class="b sm">'+x[1]+'</div><div class="xs mut">'+x[2]+'</div></div><button class="toggle '+(S.consent[x[0]]?'on':'')+'" data-cons="'+x[0]+'" '+(x[3]?'data-req="1"':'')+'></button></div>'}).join('');
+}
+function bindCons(){$$('[data-cons]').forEach(function(b){b.onclick=function(){var k=b.getAttribute('data-cons');if(b.getAttribute('data-req')){toast('필수 항목입니다');return}S.consent[k]=!S.consent[k];b.classList.toggle('on',S.consent[k]);save()}})}
+function bindOnb(){bindCons();$('#startBtn').onclick=function(){S.onb=1;save();location.replace('#login');render()}}
+
+/* ---------------- 공통 조각 ---------------- */
+function F(){if(S.farm==='mine'&&!FARMS.mine)rebuildMine();return FARMS[S.farm]||FARMS[Object.keys(FARMS)[0]]}
+function farmPicker(){
+ var pre='<div class="chips" style="margin-bottom:10px">';
+ var dm=Object.keys(FARMS).filter(function(k){return k!=='mine'}).map(function(k){var f=FARMS[k];return '<button class="chip '+(k===S.farm?'on':'')+'" data-farm="'+k+'">'+f.icon+' '+f.sigun+' '+f.item.split(' ')[0]+'</button>'}).join('');
+ if(!S.mine)return pre+'<button class="chip on" data-go="reg">＋ 내 농장 등록</button>'+(S.demo?dm:'')+'<button class="chip" data-demo="1">'+(S.demo?'예시 접기':'예시 농가 보기')+'</button></div>';
+ return pre+'<button class="chip '+(S.farm==='mine'?'on':'')+'" data-farm="mine">🌱 '+S.mine.prof.owner+' 농가 · '+S.mine.prof.sigun+'</button><button class="chip" data-go="reg">✏️ 수정</button>'+(S.demo?dm:'')+'<button class="chip" data-demo="1">'+(S.demo?'예시 접기':'예시 농가')+'</button></div>'}
+function bindFarm(){$$('[data-demo]').forEach(function(b){b.onclick=function(){S.demo=!S.demo;if(!S.demo&&S.mine)S.farm='mine';render()}});$$('[data-farm]').forEach(function(b){b.onclick=function(){S.farm=b.getAttribute('data-farm');S.sel.day=2;save();render()}})}
+function gauge(v,sz){sz=sz||132;var r=sz/2-10,c=2*Math.PI*r;return '<div class="gauge" style="width:'+sz+'px;height:'+sz+'px"><svg width="'+sz+'" height="'+sz+'"><circle cx="'+sz/2+'" cy="'+sz/2+'" r="'+r+'" fill="none" stroke="#e6ebe8" stroke-width="12"/><circle cx="'+sz/2+'" cy="'+sz/2+'" r="'+r+'" fill="none" stroke="'+col(v)+'" stroke-width="12" stroke-linecap="round" stroke-dasharray="'+(c*v/100)+' '+c+'"/></svg><div class="c"><div><b style="color:'+col(v)+'">'+v+'</b><span class="xs mut">/ 100</span></div></div></div>'}
+function locked(what){return '<div class="lock">🔒<b>'+what+'은(는) 본인 동의 후 볼 수 있어요</b><span class="sm">보험계약·지급 이력 활용 동의가 필요합니다</span><br><button class="btn sm" style="margin-top:10px" data-go="set">동의 설정</button></div>'}
+function grade(v){return v>=80?'2등급 · 경계':v>=65?'3등급 · 주의':v>=45?'4등급 · 관심':'5등급 · 안전'}
+function chkList(key,items){return items.map(function(t,i){var id=key+'_'+i,on=S.checks[id];return '<div class="chk '+(on?'on':'')+'" data-chk="'+id+'"><span class="bx">'+(on?'✓':'')+'</span><span class="tx">'+t+'</span></div>'}).join('')}
+function bindChk(){$$('[data-chk]').forEach(function(el){el.onclick=function(){var id=el.getAttribute('data-chk');S.checks[id]=!S.checks[id];save();el.classList.toggle('on');el.querySelector('.bx').textContent=S.checks[id]?'✓':''}})}
+
+var PAGES={},BIND={};
+
+/* ================= 농가 · 홈 (슬라이드 19 대시보드) ================= */
+PAGES['f-home']=function(){
+ var f=F(),pol=f.pol.filter(function(x){return x.st==='ok'}),peak=f.fc.reduce(function(m,x,i){return x.k>f.fc[m].k?i:m},0),pk=f.fc[peak],al=f.alerts[peak]||f.alerts[2];
+ var gaps=f.riders.filter(function(r){return!r[1]});
+ return farmPicker()+homeTop()+
+ '<div class="card"><div class="hd"><div><div class="b">'+f.icon+' '+f.name+'</div><div class="sm mut">'+f.region+'</div><div class="sm mut">'+f.item+'</div>'+(f.mine?'':'<span class="badge30">30×30m 필지</span> ')+'<span class="tag gr">'+f.stage+'</span></div>'+gauge(f.score,112)+'</div>'+
+ '<div class="row sp" style="margin-top:6px"><span class="sm mut">종합 위험도 지수</span><span class="tag '+tcls(f.score)+'">'+grade(f.score)+'</span></div></div>'+
+ '<div class="card" style="border:2px solid '+col(pk.k)+'"><div class="hd"><h3 style="margin:0">⚠️ 향후 9일 최대 위험</h3><span class="tag '+tcls(pk.k)+'">D+'+(peak+1)+' '+lvl(pk.k)+'</span></div><p style="margin:8px 0 4px" class="b">'+al.t+'</p><p class="sm mut" style="margin:0">'+al.past+'</p>'+
+ '<div class="callout '+(al.cover.ok?'':'warn')+'" style="margin-top:10px">'+(al.cover.ok?'✅ ':'❗ ')+al.cover.txt+'</div>'+
+ '<div class="row" style="margin-top:10px"><button class="btn sm" data-go="f-alert">대응요령 보기</button>'+(al.cover.ok?'':'<button class="btn sm ghost" data-go="f-cover">보장 공백 확인</button>')+'</div></div>'+
+ '<div class="card"><h3>9일 위험 추이</h3><div class="vbars">'+f.fc.map(function(x,i){return '<div><span>'+x.k+'</span><i style="height:'+x.k+'%;background:'+col(x.k)+'"></i>D+'+(i+1)+'</div>'}).join('')+'</div></div>'+
+ '<div class="grid2"><div class="card" style="margin:0"><div class="xs mut">보장 현황</div><div class="b" style="font-size:20px">'+f.assets.filter(function(a){return a.ok}).length+'/'+f.assets.length+'</div><div class="xs mut">영농자산 가입</div></div>'+
+ '<div class="card" style="margin:0"><div class="xs mut">미가입 특약</div><div class="b" style="font-size:20px;color:var(--r3)">'+gaps.length+'건</div><div class="xs mut">'+(gaps[0]?gaps[0][0]:'없음')+'</div></div></div>'+
+ (f.mine?'':'<div class="card" style="margin-top:12px"><h3>📍 '+f.emd+' 인근 농가 통계</h3><div class="grid3"><div class="kpi"><b>'+f.local.top[0][0]+'</b><small>최다 사고원인</small></div><div class="kpi"><b>'+won(f.local.avg)+'</b><small>3년 평균 지급</small></div><div class="kpi"><b>'+f.local.ins+'%</b><small>가입률</small></div></div></div>')+
+ quickMenu()+
+ '<div class="card"><h3>🎯 오늘의 맞춤 액션</h3>'+chkList('home_'+S.farm,al.act.slice(0,3))+'</div>'+
+ '<p class="xs mut" style="text-align:center">기상 데이터: Open-Meteo 실시간 예보 · 위험지수는 참고용 추정</p>';
+};
+BIND['f-home']=function(){bindFarm();bindChk()};
+
+/* ================= 농가 · 경보 (슬라이드 9~14) ================= */
+PAGES['f-alert']=function(){
+ var f=F(),d=S.sel.day,x=f.fc[d],al=f.alerts[d];
+ return farmPicker()+
+ '<div class="card"><div class="hd"><h3 style="margin:0">농업기상재해 조기경보</h3>'+(f.mine?'':'<span class="badge30">30m 격자</span>')+'</div><p class="xs mut" style="margin:2px 0 10px">'+(f.mine?'실시간 예보(9일) · '+f.plot:'농진청 조기경보(최대 9일) × 정책보험 지급데이터 · '+f.plot)+'</p>'+
+ '<div class="fc">'+f.fc.map(function(y,i){return '<div class="d '+(i===d?'sel':'')+'" data-day="'+i+'"><div class="b">D+'+(i+1)+'</div><div class="mut">'+y.d+'</div><div class="ic">'+y.i+'</div><div>'+y.tn+'° / '+y.tx+'°</div><div class="lv" style="background:'+col(y.k)+'"></div></div>'}).join('')+'</div></div>'+
+ '<div class="card"><div class="hd"><h3 style="margin:0">D+'+(d+1)+' ('+x.d+') 상세</h3><span class="tag '+tcls(x.k)+'">위험 '+x.k+' · '+lvl(x.k)+'</span></div>'+
+ '<div class="grid3" style="margin-top:10px"><div class="kpi"><b>'+x.tn+'℃</b><small>최저기온</small></div><div class="kpi"><b>'+x.tx+'℃</b><small>최고기온</small></div><div class="kpi"><b>'+(x.w?x.w+'m/s':x.r+'mm')+'</b><small>'+(x.w?'순간풍속':'강수량')+'</small></div></div>'+
+ (al?
+  '<div class="sep"></div><div class="b">'+al.t+'</div><span class="tag b">'+al.prod+'</span>'+
+  '<h4>'+(f.mine?'🤖 AI 보장 점검':'🤖 AI 재해피해 예측 (과거 지급 패턴 결합)')+'</h4><div class="callout '+(f.mine&&al.cover.ok?'':'bad')+'">'+al.past+'</div>'+
+  '<h4>🛡 내 보장 확인</h4><div class="callout '+(al.cover.ok?'':'warn')+'">'+(al.cover.ok?'✅ ':'❗ ')+al.cover.txt+'</div>'+
+  '<h4>📋 농진청 대응지침 · 사전 점검</h4>'+chkList('al_'+S.farm+'_'+d,al.act)
+ :(x.hz?'<div class="callout warn" style="margin-top:10px">'+x.hz+' 예보 — 지급 이력상 피해 임계치 미만, 관심 단계 모니터링</div>':'<div class="note">특별한 재해 위험이 없습니다. 평상시 영농관리를 유지하세요.</div>'))+'</div>'+
+ (f.mine?'':'<div class="card"><h3>상품별 경보 연계</h3>'+prodLinks()+'</div>');
+};
+function prodLinks(){
+ var L=[['🌾','농작물재해보험','개화기 저온·수확기 태풍 낙과 지급이력 학습 → 임계치 도달 시 핀셋 경보, 봄동상해·일소 특약 즉시 안내'],['🐄','가축재해보험','폭염 폐사 지급데이터 × 최고기온 예보, 대설 시 노후 축사 붕괴 이력 지역 집중 경보'],['🚜','농기계종합보험','집중호우 침수 지급데이터 기반 저지대 보관 경고, 농번기 강우·안개 시 전복 주의보'],['🏠','풍수해·지진재해','하우스·온실 강풍·폭설 파손 이력 기반 취약시설 경보, 결박·제설 사전 안내']];
+ return '<ul class="list">'+L.map(function(l){return '<li style="align-items:flex-start;justify-content:flex-start"><span style="font-size:22px">'+l[0]+'</span><div><div class="b sm">'+l[1]+'</div><div class="xs mut">'+l[2]+'</div></div></li>'}).join('')+'</ul>';
+}
+BIND['f-alert']=function(){bindFarm();bindChk();$$('[data-day]').forEach(function(b){b.onclick=function(){S.sel.day=+b.getAttribute('data-day');render()}})};
+
+/* ================= 농가 · 내 보장 (슬라이드 4, 16) ================= */
+PAGES['f-cover']=function(){
+ var f=F();
+ var assets='<div class="card"><h3>🧾 영농자산 대비 보장 공백 (Gap)</h3><ul class="list">'+f.assets.map(function(a){return '<li><div><span class="tag gr">'+a.k+'</span> <span class="sm b">'+a.n+'</span><div class="xs mut">'+(a.ins||'미가입')+'</div></div>'+(a.ok?'<span class="ok">가입</span>':'<span class="ng">공백</span>')+'</li>'}).join('')+'</ul></div>';
+ if(!S.consent.pers)return farmPicker()+polCard()+assets+'<div class="card">'+locked('특약 공백·과거 사고 이력 분석')+'</div>'+simCard();
+ return farmPicker()+polCard()+assets+
+ '<div class="card"><h3>📎 특약 구성 진단</h3><ul class="list">'+f.riders.map(function(r){return '<li><div><div class="sm b">'+r[0]+'</div>'+(r[2]?'<div class="xs mut">근거: '+r[2]+'</div>':'')+'</div>'+(r[1]?'<span class="ok">가입</span>':'<span class="tag o">추천</span>')+'</li>'}).join('')+'</ul>'+
+ '<h4>인근 유사 농가와 비교</h4><div class="callout">내 자기부담비율 <b>'+f.self.me+'%</b> · 인근 유사 농가 '+f.self.peerShare+'%가 <b>'+f.self.peer+'</b>형 선택</div></div>'+
+ (f.mine?'<div class="card"><h3>📊 나의 과거 사고·지급 리포트</h3><p class="sm mut">계약·사고 이력은 농협손보 계약 데이터 연동(마이데이터 동의) 후 표시돼요.</p></div>'+simCard():'<div class="card"><h3>📊 나의 과거 사고·지급 리포트</h3><table><tr><th>연도</th><th>시기</th><th>사고원인</th><th>지급액</th></tr>'+f.hist.map(function(h){return '<tr><td>'+h.y+'</td><td>'+h.m+'</td><td>'+h.c+'</td><td class="b">'+won(h.p)+'</td></tr>'}).join('')+'</table>'+
+ '<div class="callout warn" style="margin-top:10px">🔁 '+f.repeat+'</div></div>'+simCard());
+};
+function simCard(){
+ var f=F(),s=f.sim,unit=s.unit;
+ return '<div class="card"><h3>💸 미가입 시 예상 손실 시뮬레이션</h3><p class="xs mut" style="margin:0 0 8px">타사 "미보장 시 평균 손해액 제시" 모델을 정책보험에 적용</p>'+
+ '<div class="row sp sm"><span>'+(unit?'사육 규모':'재배 면적')+'</span><b id="simAv"></b></div><input type="range" id="simA" min="'+(s.min||(unit?500:3))+'" max="'+(s.max||(unit?5000:40))+'" step="'+(s.step||(unit?50:1))+'" value="'+(unit?s.base:Math.round((S.farm==='farm'?s.base*100:s.base)))+'">'+
+ '<div class="chips" style="margin:8px 0">'+s.sc.map(function(c,i){return '<button class="chip '+(i===S.sel.simSc?'on':'')+'" data-sc="'+i+'">'+c[0]+'</button>'}).join('')+'</div><div id="simOut"></div></div>';
+}
+function simCalc(){
+ var f=F(),s=f.sim,a=+$('#simA').value,sc=s.sc[S.sel.simSc],unit=s.unit,val,lab;
+ if(unit){val=a*s.price;lab=a.toLocaleString()+'두'}else if(S.farm==='farm'){lab=(a*100).toLocaleString()+'㎡';val=a*s.price/10}else{val=a/10*s.price;lab=(a/10).toFixed(1)+'ha'}
+ var rate=sc[1]/100,loss=val*rate,self=f.self.me/100,pay=unit?loss*(1-self):Math.max(0,val*(rate-self)),prem=val*0.012,net=loss-pay+prem;
+ $('#simAv').textContent=lab;
+ var mx=Math.max(loss,1);
+ $('#simOut').innerHTML='<div class="sm mut">보험가입금액(추정) '+won(val)+' · 피해율 '+sc[1]+'%</div>'+
+ '<div class="hbar"><span>미가입</span><div class="bar"><i style="width:100%;background:var(--r4)"></i></div><span style="width:70px">'+won(loss)+'</span></div>'+
+ '<div class="hbar"><span>가입 시</span><div class="bar"><i style="width:'+Math.max(2,net/mx*100)+'%;background:var(--r1)"></i></div><span style="width:70px">'+won(net)+'</span></div>'+
+ '<div class="callout" style="margin-top:8px">가입 시 보험금 약 <b>'+won(pay)+'</b> 수령 → 실제 부담 <b>'+won(net)+'</b> (자기부담 '+f.self.me+'%, 농가부담 보험료 추정 포함)</div><p class="xs mut">※ 정부·지자체 보험료 지원(약 50~80%) 반영 가정, 데모 계산식</p>';
+}
+BIND['f-cover']=function(){bindFarm();var r=$('#simA');if(r){r.oninput=simCalc;$$('[data-sc]').forEach(function(b){b.onclick=function(){S.sel.simSc=+b.getAttribute('data-sc');$$('[data-sc]').forEach(function(x){x.classList.toggle('on',x===b)});simCalc()}});simCalc()}};
+
+/* ================= 농가 · 추천 (슬라이드 17~18) ================= */
+PAGES['f-reco']=function(){
+ var f=F(),gaps=f.riders.filter(function(r){return!r[1]}),ag=f.assets.filter(function(a){return!a.ok});
+ return farmPicker()+
+ '<div class="card"><h3>✨ AI 맞춤 상품 추천 엔진</h3><div class="flow"><div class="n"><b class="sm">당사 인수·지급 빅데이터</b><div class="xs mut">자산 규모 · 기가입 내역 · 사고 빈도</div></div><div class="ar">＋</div><div class="n"><b class="sm">최신 농업·기후 트렌드</b><div class="xs mut">스마트팜 확산 · 아열대 전환 · 고령화</div></div><div class="ar">↓</div><div class="n ai"><b class="sm">초개인화 상품 번들</b><div class="xs">농가 생애주기별 정책보험 조합</div></div></div></div>'+
+ '<div class="card" style="border:2px solid var(--g)"><div class="hd"><h3 style="margin:0">'+f.icon+' '+f.name+' 추천 패키지</h3><span class="tag">적합도 '+(88-(S.farm==='farm'?4:0))+'%</span></div>'+
+ '<ul class="list" style="margin-top:6px">'+gaps.map(function(g){return '<li><div><div class="sm b">＋ '+g[0]+'</div><div class="xs mut">'+g[2]+'</div></div><span class="tag o">특약</span></li>'}).join('')+
+ ag.map(function(a){return '<li><div><div class="sm b">＋ '+(a.k==='인적'?'농업인안전보험':a.k==='농기계'?'농기계종합보험 (기종 추가)':a.k==='설비'?'부대설비 보장 특약':'농업용시설물 보험')+'</div><div class="xs mut">미가입 자산: '+a.n+'</div></div><span class="tag b">'+a.k+'</span></li>'}).join('')+'</ul>'+
+ '<button class="btn full" id="bookBtn" style="margin-top:10px">농축협 상담 예약 (데모)</button></div>'+
+ '<h3 style="margin:16px 2px 8px;font-size:15px">최신 농업 트렌드별 추천 사례</h3>'+
+ TRENDS.map(function(t,i){var mine=f.trend.indexOf(i)>=0;return '<div class="card" '+(mine?'style="border:1px solid var(--g)"':'')+'><div class="hd"><div class="b">'+t.ic+' 트렌드 '+(i+1)+' · '+t.t+'</div>'+(mine?'<span class="tag">내 농장 해당</span>':'')+'</div><div class="sm mut" style="margin-top:4px">대상: '+t.w+'</div><div class="sm">'+t.why+'</div><div class="callout" style="margin-top:8px">추천: <b>'+t.rec+'</b></div></div>'}).join('');
+};
+BIND['f-reco']=function(){bindFarm();$('#bookBtn').onclick=function(){toast('상담 예약 요청을 보냈어요 (데모)')}};
+
+/* ================= 농가 · 우리동네 (슬라이드 15) ================= */
+PAGES['f-local']=function(){
+ var f=F();if(f.mine)return farmPicker()+'<div class="card"><h3>📍 '+f.sigun+' 우리동네 통계</h3><p class="sm mut">시·군별 사고 원인·평균 지급액은 농협손보 지급통계와 연동되면 제공돼요. 지금은 <b>실시간 기상 위험</b>을 확인하세요.</p><button class="btn sm" data-go="f-live">📡 실시간 위험 보기</button></div>';var L=f.local,mx=L.top[0][1];
+ return farmPicker()+
+ '<div class="card"><h3>📍 '+f.sigun+' '+f.emd+' · '+f.item.split(' ')[0]+' 농가</h3><div class="callout">“'+f.emd+' '+f.item.split(' ')[0]+' 농가의 최근 3년 주요 피해는 <b>'+L.top[0][0]+'·'+L.top[1][0]+'</b>이며, 평균 지급액은 <b>'+won(L.avg)+'</b>입니다.”</div>'+
+ '<h4>우리 동네 다발 사고원인 (지급 건수 비중)</h4>'+L.top.map(function(t){return '<div class="hbar"><span>'+t[0]+'</span><div class="bar"><i style="width:'+t[1]/mx*100+'%;background:var(--g7)"></i></div><span>'+t[1]+'%</span></div>'}).join('')+'</div>'+
+ '<div class="card"><h3>인근 농가 평균 피해 규모</h3><div class="grid3"><div class="kpi"><b>'+L.farms+'</b><small>동일 작목 농가</small></div><div class="kpi"><b>'+L.ins+'%</b><small>정책보험 가입률</small></div><div class="kpi"><b>'+won(L.avg)+'</b><small>건당 평균 지급</small></div></div>'+
+ '<div class="vbars" style="margin-top:12px;height:90px">'+[2021,2022,2023,2024,2025].map(function(y,i){var v=[52,61,70,88,76][i];return '<div><span>'+v+'%</span><i style="height:'+v+'%;background:var(--g7)"></i>'+y+'</div>'}).join('')+'</div><div class="xs mut" style="text-align:center">연도별 손해율 추이</div></div>'+
+ '<div class="card"><h3>📣 미가입 이웃에게 알리기</h3><p class="sm">지역 특화 위험을 근거로 가입 필요성을 안내해요.</p><div class="callout warn">미가입 농가가 '+f.emd+'에서 '+L.top[0][0]+' 피해를 입으면 평균 <b>'+won(L.avg)+'</b>을 자부담하게 됩니다.</div><button class="btn sm ghost" id="shareBtn" style="margin-top:10px">안내문 복사</button></div>'+
+ '<div class="note">🔒 지역 통계는 최소 5농가 이상 집계값만 표시합니다 (k-익명성). 5농가 미만 읍면은 시군 단위로 합산됩니다.</div>';
+};
+BIND['f-local']=function(){bindFarm();$('#shareBtn').onclick=function(){var f=F();var t='['+f.emd+' 농가 안내] 최근 3년 주요 피해는 '+f.local.top[0][0]+'·'+f.local.top[1][0]+', 평균 지급액 '+won(f.local.avg)+'. 정책보험 가입은 가까운 농축협에서 상담하세요.';try{navigator.clipboard.writeText(t).then(function(){toast('복사했어요')},function(){toast('복사 실패')})}catch(e){toast('복사 실패')}}};
+
+/* ================= 창구 · AI 보장분석 (슬라이드 6~8) ================= */
+var DESK={
+ rice:{kw:'전남 나주 벼 병충해 침수우려',tags:['#전남_나주시','#논작물_벼 (일반답)','#방제시설','#집중호우시설'],title:'전남 나주시 · 논작물(벼) 일반답',prod:'농작물재해보험 (벼)',score:78,
+  dist:[['깨씨무늬병',67],['호우',22],['기타',11]],
+  steps:[['AI 지역 위험 진단 및 병충해 특약 포착',['나주시 사고 1위 깨씨무늬병(67%) · 2위 호우(22%) 집중','→ <b>‘병충해 보장특약’</b> 필수 추가 추천']],
+         ['적정 가입조건 및 실제 자부담비율 제안',['보험료 83.7% 지원(실부담 16.3%)으로 부담 최소화','→ 소액 피해도 확실히 보장받는 <b>자기부담 10~15%형</b> 선택 추천']],
+         ['깨씨무늬병 방제시설 및 침수 대비 시설 구축 안내',['방제 및 집중호우 대비 시설 모두 미비','→ 나주 핵심 위험인 <b>깨씨무늬병 방제시설</b>과 <b>배수·침수 예방 시설</b> 동시 구축 권고']]],
+  s3:[['농업경영체 등록 논 면적 대조','ok'],['방제·배수 시설 설치 여부','pd'],['최근 3년 호우 침수 사고 이력','pd']],src:['나주시 벼 지급데이터 (사고원인 비중)','정부·지자체 보험료 지원율 83.7%','경영체 DB 재배면적']},
+ hanwoo:{kw:'경기도 한우 질병폐사 긴급도축 우려',tags:['#경기도_축산농가','#가축_한우 (번식·비육우)','#질병방역_관리미비','#축사화재_예방시설'],title:'경기도 · 한우 (번식·비육우)',prod:'가축재해보험 (소)',score:72,
+  dist:[['질병폐사',68],['절박도살',32]],
+  steps:[['AI 지역·축종 위험 진단 및 핵심 담보 포착',['경기도 한우 사고 1위 질병폐사(68%) · 2위 절박도살(32%) 집중','→ <b>‘질병폐사·긴급도축 보장’</b> 필수 구성 추천']],
+         ['대형 화재 피해 분석 및 화재 예방시설 구축 권고',['화재 발생 시 가축 평균 2억 원 · 건물(축사) 1,483만 원 대형 보험금 발생','→ <b>축사 화재 대비</b> 및 소방·전기안전 시설 구축 권고']],
+         ['적정 가입금액 제안 (일부보험 방지)',['경기도 한우 평균 가입액 473만 원 · 사고 시 평균 241만 원(51%) 지급','→ 지역 평균 가입액을 기준으로 <b>시세에 맞는 한도</b> 설정']]],
+  s3:[['가축사육업 허가(등록) 확인','ok'],['축사·개체 이력제(귀표) 대조','ok'],['소방·전기안전 시설 점검','pd']],src:['경기도 한우 지급데이터 (사고원인 비중)','화재 사고 평균 지급액','가축사육업 허가 DB · 이력제']},
+ apple:{kw:'장수 사과 홍로 개화기 저지대 방상팬미설치',tags:['#전북_장수군 (산간 분지)','#사과_홍로 (개화기 진입)','#저지대_과수원','#방상팬_미설치'],title:'전북 장수군 · 사과(홍로) 과수원',prod:'농작물재해보험 (적과전 종합위험)',score:74,
+  s1:['산간 저지대 냉기류 정체로 봄철 냉해 빈발','→ <b>봄동상해 추가보장</b> 특약 필수 추천'],s2:['최근 3년 인근 평균 피해율 24% 반영','→ 자기부담비율 <b>10~15%형</b> 선택 유리'],
+  s3:[['농업경영체등록확인서 과수 면적 대조','ok'],['방재시설(방상팬) 미설치 → 할인 미적용','pd'],['가입금액 표준수확량 범위 내','ok'],['과거 3년 손해율 할증 대상 여부','ok']],src:['기상청·농진청 30m 격자 저온 빈도','장수군 사과 지급 3년치 (37건)','경영체 DB 재배면적']},
+ pig:{kw:'홍성 양돈 비육돈 무창돈사 노후배전',tags:['#충남_홍성군 (밀집 사육지)','#양돈_비육돈','#무창돈사','#설비_10년경과'],title:'충남 홍성군 · 양돈(비육돈) 무창돈사',prod:'가축재해보험',score:81,
+  s1:['밀폐형 무창돈사 정전·환기 중단 시 집단 폐사 고위험','→ <b>폭염·전기적장치 특약</b> 필수'],s2:['노후 배전설비 화재 지급데이터 기반','→ <b>축사 건물·부착물 가입금액 상향</b> 권고'],
+  s3:[['가축사육업허가증 사육두수 자동 연동','ok'],['비상발전기 구비 여부','pd'],['정전·고온 경보장치 설치','ng'],['전기안전점검 확인서 (1년 이내)','pd']],src:['홍성군 양돈 화재·폭염 지급 (112건)','가축사육업 허가 DB','기상청 폭염일수 전망']},
+ farm:{kw:'김제 스마트팜 딸기 ICT온실 난방기',tags:['#전북_김제시','#딸기_시설재배','#ICT_연동온실','#온풍난방기'],title:'전북 김제시 · 딸기 ICT 온실',prod:'농업용시설물 + 농작물재해보험',score:62,
+  s1:['고가 복합환경제어기·난방기 고장 시 동해 위험','→ <b>부대시설(ICT·난방기)</b> 특약 추천'],s2:['적설 10cm 이상 연동온실 파손 지급 21건','→ <b>재조달가액</b> 보장 및 내재해형 규격 확인'],
+  s3:[['내재해형 시설 규격 등록 여부','ok'],['ICT 설비 가액 증빙 (세금계산서)','pd'],['경영체 시설면적 대조','ok']],src:['김제 시설원예 지급 3년치','내재해형 시설 등록 DB','농진청 대설 예보']},
+ mach:{kw:'해남 트랙터 콤바인 저지대창고 고령',tags:['#전남_해남군','#트랙터·콤바인','#저지대_보관창고','#경영주_72세'],title:'전남 해남군 · 농기계 보유 고령 농가',prod:'농기계종합보험',score:69,
+  s1:['집중호우 시 저지대 창고 침수 지급 반복 지역','→ <b>침수 손해</b> 보장 확인 + 고지대 보관 안내'],s2:['고령 1인 운전 · 농로 전복 사고 빈발','→ <b>대인·자기신체(자손)</b> + 농업인안전보험 결합'],
+  s3:[['농기계 등록(형식·연식) 자동 조회','ok'],['운전자 연령 · 안전교육 이수','pd'],['보관 장소 침수 이력 지역','ng']],src:['해남군 농기계 침수 지급','농기계 등록 DB','도로·농로 사고 통계']}
+};
+PAGES['d-analyze']=function(){
+ return '<div class="card"><h3>핵심 키워드 입력만으로 AI 인수·보장분석</h3><p class="xs mut" style="margin:0 0 10px">글자 입력이 어려우면 <b>말로</b> 하세요. 평소 말투 그대로 말해도 AI가 지역·품목·시설 키워드를 뽑아냅니다</p>'+
+ '<button class="micbtn" id="dMic"><span>🎤</span>말로 입력하기</button><p class="xs mut" style="text-align:center;margin:6px 0 0">예) “나주에서 벼농사 짓는데 깨씨무늬병이 걱정되고 비 오면 논이 잠겨요”</p><div class="or">또는 직접 입력</div>'+
+ '<div class="chips" style="margin-bottom:8px">'+Object.keys(DESK).map(function(k){return '<button class="chip" data-pre="'+k+'">'+DESK[k].kw.split(' ').slice(0,2).join(' ')+'</button>'}).join('')+'<button class="chip" id="dSay">🗣 말투 예시</button></div>'+
+ '<input type="text" id="dkw" placeholder="예) 전남 나주 벼 병충해 침수우려" value="'+S.sel.dkw+'"><button class="btn full" id="dRun" style="margin-top:8px">AI 분석 실행</button></div>'+
+ '<div class="card"><div class="row sp xs mut"><span>① 최소 키워드 입력</span><span>② 위험 매칭</span><span>③ 리포트</span></div></div><div id="dOut"></div>';
+};
+function deskSteps(p){return p.steps||[['AI 위험 진단 · 보장 공백 포착',p.s1],['적정 가입조건 · 한도 제안',p.s2]]}
+function distBars(d){var mx=Math.max.apply(null,d.map(function(x){return x[1]}));return d.map(function(x,i){return '<div class="hbar"><span>'+x[0]+'</span><div class="bar"><i style="width:'+(x[1]/mx*100)+'%;background:'+(i?'#9bbfaa':'var(--g7)')+'"></i></div><span>'+x[1]+'%</span></div>'}).join('')}
+function pickDesk(t){var C=[['rice',/벼|논농사|쌀농사|일반답|깨씨무늬|도열병|논작물/g],['hanwoo',/한우|번식우|비육우|육우|젖소|송아지|긴급 ?도축|절박 ?도살/g],['apple',/사과|홍로|부사|과수|복숭아|신고배|배 ?(농사|과수원|나무)|#배\b/g],['pig',/돼지|양돈|돈사|비육돈/g],['farm',/스마트팜|온실|딸기|하우스|시설_온실/g],['mach',/트랙터|콤바인|농기계|이앙기/g]];
+ var best=null,bs=0;C.forEach(function(c){var n=(t.match(c[1])||[]).length;if(c[0]==='mach'&&best)n=0;if(n>bs){bs=n;best=c[0]}});return best}
+function runDesk(){
+ var t=$('#dkw').value;S.sel.dkw=t;var kw=speechToKw(t),k=pickDesk(t+' '+kw.join(' ')),o=$('#dOut');
+ var heard=isSpeechLike(t)?'<div class="card"><div class="xs mut">🎙 말씀하신 내용</div><div class="vheard">“'+esc(t)+'”</div><div class="xs mut">AI가 뽑은 키워드</div><div class="chips" style="margin-top:6px">'+(kw.length?kw.map(function(x){return '<span class="tag">'+x+'</span>'}).join(''):'<span class="tag gr">인식된 키워드 없음</span>')+'</div></div>':'';
+ if(!k){o.innerHTML=heard+'<div class="card lock">어떤 작목·가축인지 알아듣지 못했어요.<br>“벼”, “한우”, “사과”, “돼지”, “딸기 하우스”, “트랙터”처럼 품목을 함께 말씀해 주세요</div>';return}
+ var p=DESK[k];o.innerHTML='<div class="card lock">🤖 공공데이터 · 기상 · 지급이력 교차 분석 중…</div>';
+ setTimeout(function(){
+  if(!document.body.contains(o))return;
+  o.innerHTML=heard+'<div class="card"><div class="hd"><div><div class="b">'+p.title+'</div><div class="xs mut">'+p.prod+'</div></div>'+gauge(p.score,90)+'</div>'+
+  '<div class="chips" style="margin:6px 0">'+p.tags.map(function(x){return '<span class="tag gr">'+x+'</span>'}).join('')+'</div>'+
+  (p.dist?'<div class="xs mut" style="margin-top:4px">지역 지급데이터 · 사고원인 비중</div>'+distBars(p.dist):'')+
+  deskSteps(p).map(function(st,i){return '<div class="step"><div class="num">'+(i+1)+'</div><div><b class="sm">'+st[0]+'</b>'+st[1].map(function(l){return '<div class="sm">'+l+'</div>'}).join('')+'</div></div>'}).join('')+
+  '<div class="step"><div class="num">'+(deskSteps(p).length+1)+'</div><div style="flex:1"><b class="sm">인수 심사 자동 체크포인트</b><ul class="list">'+p.s3.map(function(c){return '<li><span class="sm">'+c[0]+'</span><span class="'+c[1]+'">'+(c[1]==='ok'?'적합':c[1]==='ng'?'부적합':'확인필요')+'</span></li>'}).join('')+'</ul></div></div>'+
+  '<div class="note">분석 근거: '+p.src.join(' · ')+'</div>'+
+  '<div class="row" style="margin-top:10px"><button class="btn sm" id="dCopy">상담 요약 복사</button><button class="btn sm ghost" data-go="d-ocr">서류 심사로 →</button></div></div>';
+  bindTop();o.querySelector('#dCopy').onclick=function(){var s='[AI 보장분석] '+p.title+'\n위험도 '+p.score+'점\n'+deskSteps(p).map(function(st){return '· '+st[0]+': '+st[1][1].replace(/<[^>]+>/g,'').replace(/^→ ?/,'')}).join('\n');try{navigator.clipboard.writeText(s).then(function(){toast('복사했어요')},function(){toast('복사 실패')})}catch(e){toast('복사 실패')}};
+ },800);
+}
+BIND['d-analyze']=function(){$('#dRun').onclick=runDesk;$('#dMic').onclick=function(){startVoice(function(t){$('#dkw').value=t;runDesk()},'#dkw')};$('#dSay').onclick=function(){$('#dkw').value=SAY[(SAY.i=(SAY.i||0)+1)%SAY.length];runDesk()};$$('[data-pre]').forEach(function(b){b.onclick=function(){$('#dkw').value=DESK[b.getAttribute('data-pre')].kw;runDesk()}});if(S.sel.dkw)runDesk()};
+
+
+/* ================= 창구 · 지급데이터 분석 및 손해 대비 안내 (PPT 05 · AI 프로세스 혁신 II) ================= */
+var PAYD={
+ pig:{n:'🐖 돼지',head:'폭염 다발 + 화재 치명타',badge:'가축+축사 동시 필수',grp:'live',regs:[
+   {r:'경기도',dist:[['폭염',85],['화재',5],['기타',10]],amt:'화재 시 가축 2.0억 + 축사 1,500만 원',rec:'잦은 폭염 대비와 막대한 손해를 막는 화재 담보 필수'},
+   {r:'경상남도',dist:[['폭염',89],['화재',3],['기타',8]],amt:'화재 시 가축 2.5억 + 축사 6,400만 원',rec:'타 지역 대비 축사 지급보험금이 높으므로 건물 담보 필수 가입'}]},
+ hanwoo:{n:'🐄 한우',head:'사고 시 가입액 약 50% 보상',badge:'실질 보상 체감 최고',grp:'live',regs:[
+   {r:'경기도',ins:473,paid:241,dist:[['질병폐사',68],['절박도살',32]],rec:'폐사 집중 방어'},
+   {r:'경상남도',ins:458,paid:202,dist:[['질병폐사',51],['절박도살',49]],rec:'긴급도축 대비 필수'}]},
+ soy:{n:'🫘 콩',head:'실제 자부담 보험료 단 11%',badge:'저부담 · 고보장',grp:'crop',regs:[
+   {r:'문경시',dist:[['호우',71],['가뭄',26],['기타',3]],rec:'침수·배수 특화 대비'},
+   {r:'상주시',dist:[['가뭄',46],['호우',44],['기타',10]],rec:'가뭄 집중 대비'}]},
+ rice:{n:'🌾 벼',head:'실제 자부담 보험료 16.3%',badge:'병충해 특약 핵심',grp:'crop',regs:[
+   {r:'나주시',dist:[['깨씨무늬병',67],['호우',22],['기타',11]],rec:'병충해 특약 필수'},
+   {r:'아산시',ins:461,paid:68.0,dist:[['호우',44],['목도열병',24],['기타',32]],rec:'수해 관련 특약 필수'}]}
+};
+var PSTRAT={live:['체감 효용 입증으로 불신 해소 및 적정 가입금액 유도',[['체감 효용 어필','사고 시 보험가입금액 절반(약 50%) · 200만 원대 실질 보상으로 보험료 불신 해소'],['가입 설계 시 (일부보험 방지)','지역 평균 가입액(약 450만 원) 벤치마크 제시로 우량 시세 기준 한도 설정']]],
+ crop:['특화 담보 및 적정 자부담 비율 안내',[['특화 담보 안내','특정 지역의 과거 지급건을 바탕으로 특화 담보 안내'],['적정 자부담비율 안내','실제 자부담 보험료가 약 15%로 자기부담비율 10~15%형 가입 유도']]]};
+S.sel.pd='hanwoo';S.sel.pdr=0;S.sel.hw=380;
+PAGES['d-paydata']=function(){
+ var g=PAYD[S.sel.pd],st=PSTRAT[g.grp];
+ var h='<div class="card"><h3>지급데이터 분석 및 손해 대비 안내</h3><p class="xs mut" style="margin:0 0 8px">다발 사고부터 대형 재해까지 — 지역별 과거 지급 패턴으로 맞춤 담보 설계</p><div class="chips">'+
+  Object.keys(PAYD).map(function(k){return '<button class="chip '+(k===S.sel.pd?'on':'')+'" data-pd="'+k+'">'+PAYD[k].n+'</button>'}).join('')+'</div></div>'+
+  '<div class="card"><div class="hd"><h3 style="margin:0">'+g.n+' · '+g.head+'</h3><span class="tag o">'+g.badge+'</span></div>'+
+  g.regs.map(function(r,i){return '<div style="background:var(--bg);border-radius:12px;padding:12px;margin-top:10px"><div class="row sp"><b>'+r.r+'</b>'+(r.ins?'<span class="xs mut">평균 가입 '+r.ins+'만 원 / 지급 '+r.paid+'만 원'+(g.grp==='live'?' ('+Math.round(r.paid/r.ins*100)+'%)':'')+'</span>':'')+'</div>'+
+   distBars(r.dist)+(r.amt?'<div class="xs" style="color:#b4560f">🔥 '+r.amt+'</div>':'')+'<div class="sm b" style="margin-top:4px;color:var(--g)">→ '+r.rec+'</div></div>'}).join('')+'</div>';
+ if(S.sel.pd==='hanwoo'){var v=S.sel.hw,avg=473,pay=Math.round(v*0.51);
+  h+='<div class="card"><h3>🧮 두당 가입금액 점검 (일부보험 방지)</h3><div class="row sp sm"><span>고객 두당 가입금액</span><b>'+v+'만 원</b></div><input type="range" id="hwA" min="200" max="700" step="10" value="'+v+'">'+
+   '<div class="grid2" style="margin-top:8px"><div class="kpi"><b>'+avg+'만</b><small>경기 평균 가입액</small></div><div class="kpi"><b style="color:var(--g)">약 '+pay+'만</b><small>사고 시 예상 지급 (51%)</small></div></div>'+
+   (v<avg*0.9?'<div class="callout warn" style="margin-top:8px">지역 평균보다 <b>'+(avg-v)+'만 원</b> 낮아요 → 시세 대비 일부보험 우려, 한도 상향 권장</div>':'<div class="callout" style="margin-top:8px">지역 평균 수준으로 적정해요</div>')+'</div>'}
+ h+='<div class="card" style="background:#0f291e;color:#fff"><div class="xs" style="color:#fde68a;font-weight:700">지급 데이터 활용 전략</div><div class="b" style="font-size:16px;margin:4px 0 10px">'+st[0]+'</div>'+
+  st[1].map(function(x,i){return '<div style="background:rgba(255,255,255,.08);border-radius:10px;padding:10px;margin-top:6px"><div class="sm b" style="color:#fde68a">'+(i+1)+'. '+x[0]+'</div><div class="xs" style="color:#cbd5e1">'+x[1]+'</div></div>'}).join('')+'</div>'+
+  '<button class="btn full" id="pdCopy">고객 안내문 복사</button><p class="xs mut" style="text-align:center">PPT 05 · AI 프로세스 혁신 II 자료 기준</p>';
+ return h};
+BIND['d-paydata']=function(){$$('[data-pd]').forEach(function(b){b.onclick=function(){S.sel.pd=b.getAttribute('data-pd');render()}});
+ var r=$('#hwA');if(r)r.onchange=function(){S.sel.hw=+r.value;render()};if(r)r.oninput=function(){r.previousElementSibling.lastChild.textContent=r.value+'만 원'};
+ $('#pdCopy').onclick=function(){var g=PAYD[S.sel.pd];var t='[농협손보 지급데이터 안내] '+g.n.replace(/^\S+ /,'')+'\n'+g.regs.map(function(r){return '· '+r.r+': 사고 1위 '+r.dist[0][0]+'('+r.dist[0][1]+'%)'+(r.ins?' / 평균 지급 '+r.paid+'만 원':'')+' → '+r.rec}).join('\n');try{navigator.clipboard.writeText(t).then(function(){toast('복사했어요')},function(){toast('복사 실패')})}catch(e){toast('복사 실패')}}};
+
+
+
+/* ================= v1.6 · 내 농장 등록 (직접 입력 → 맞춤 분석) ================= */
+var REG_ITEMS={apple:['🍎','과수(사과·배 등)','10a','apple'],rice:['🌾','벼·논작물','10a','rice'],house:['🏠','시설원예(딸기·채소)','동','farm'],hanwoo:['🐂','한우','두','hanwoo'],pig:['🐖','양돈','두','pig']};
+var REG={owner:'',sigun:'',emd:'',item:'apple',variety:'',qty:'',ins:{crop:true,mach:false,wind:false,live:false},spec:{},self:20,busy:0,err:''};
+function regLoad(){if(S.mine){var p=S.mine.prof;REG.owner=p.owner;REG.sigun=p.sigun;REG.emd=p.emd||'';REG.item=p.item;REG.variety=p.variety||'';REG.qty=p.qty;REG.ins=p.ins;REG.spec=p.spec||{};REG.self=p.self}}
+function regPage(){
+ regLoad();var it=REG_ITEMS[REG.item],insOpts=[['crop','🌾 농작물재해보험'],['live','🐄 가축재해보험'],['mach','🚜 농기계종합보험'],['wind','🌪 풍수해·지진재해']];
+ return '<div class="card"><h3>🌱 내 농장 등록</h3><p class="xs mut" style="margin:0 0 10px">한 번만 입력하면 이 정보와 <b>실시간 기상</b>으로 위험·보장 공백을 맞춤 분석해요.</p>'+
+ '<div class="xs mut">이름 (성함)</div><input type="text" id="rgO" value="'+esc(REG.owner)+'" placeholder="예: 김영수">'+
+ '<div class="grid2" style="margin-top:8px"><div><div class="xs mut">시·군 <span style="color:var(--r3)">*</span></div><div class="row" style="gap:4px"><input type="text" id="rgS" value="'+esc(REG.sigun)+'" placeholder="예: 장수군" style="flex:1;min-width:0"><button class="btn sm ghost" id="rgMic">🎤</button></div></div><div><div class="xs mut">읍·면 (선택)</div><input type="text" id="rgE" value="'+esc(REG.emd)+'" placeholder="예: 장계면"></div></div>'+
+ '<div class="xs mut" style="margin-top:8px">품목</div><div class="chips">'+Object.keys(REG_ITEMS).map(function(k){return '<button class="chip '+(k===REG.item?'on':'')+'" data-ri="'+k+'">'+REG_ITEMS[k][0]+' '+REG_ITEMS[k][1]+'</button>'}).join('')+'</div>'+
+ '<div class="grid2" style="margin-top:8px"><div><div class="xs mut">품종·상세 (선택)</div><input type="text" id="rgV" value="'+esc(REG.variety)+'" placeholder="예: 홍로"></div><div><div class="xs mut">규모 ('+it[2]+') <span style="color:var(--r3)">*</span></div><input type="text" inputmode="decimal" id="rgQ" value="'+esc(REG.qty)+'" placeholder="예: 12"></div></div>'+
+ '<div class="callout" style="margin-top:10px">📋 가입 중인 보험은 등록 후 <b>계약 정보에서 자동으로 불러와요</b>. 직접 고르지 않아도 돼요.</div>'+'<div class="xs mut" style="margin-top:8px">자기부담비율</div><select id="rgF">'+[10,20,30,40].map(function(x){return '<option value="'+x+'"'+(REG.self==x?' selected':'')+'>'+x+'%</option>'}).join('')+'</select>'+
+ (REG.err?'<div class="callout warn" style="margin-top:8px">'+REG.err+'</div>':'')+
+ '<button class="btn full" id="rgGo" style="margin-top:12px"'+(REG.busy?' disabled':'')+'>'+(REG.busy?'⏳ 실시간 기상 불러오는 중…':'등록하고 내 농장 보기')+'</button>'+(S.mine?'<button class="btn full ghost" id="rgDel" style="margin-top:8px">등록 정보 삭제</button>':'')+'</div>'+
+ '<p class="xs mut" style="text-align:center">입력 정보는 이 기기에만 저장돼요</p>'}
+function regRead(){REG.owner=$('#rgO').value.trim();REG.sigun=$('#rgS').value.trim();REG.emd=$('#rgE').value.trim();REG.variety=$('#rgV').value.trim();REG.qty=$('#rgQ').value.replace(/[^0-9.]/g,'');REG.self=+$('#rgF').value}
+function bindReg(){
+ $$('[data-ri]').forEach(function(b){b.onclick=function(){regRead();REG.item=b.getAttribute('data-ri');var k=REG.item;REG.ins.crop=(k==='apple'||k==='rice'||k==='house')?REG.ins.crop:false;if(k==='hanwoo'||k==='pig')REG.ins.live=true;else REG.ins.live=false;render()}});
+ $$('[data-rsp]').forEach(function(b){b.onclick=function(){regRead();var k=b.getAttribute('data-rsp');REG.spec[k]=!REG.spec[k];render()}});
+ $$('[data-rin]').forEach(function(b){b.onclick=function(){regRead();var k=b.getAttribute('data-rin');REG.ins[k]=!REG.ins[k];render()}});
+ $('#rgMic').onclick=function(){startVoice(function(t){var m=t.match(/[가-힣]+(시|군|구)/);regRead();REG.sigun=m?m[0]:t.replace(/[^가-힣]/g,'');render()},null)};
+ var d=$('#rgDel');if(d)d.onclick=function(){S.mine=null;delete FARMS.mine;S.farm='apple';save();location.hash='#f-home';render()};
+ $('#rgGo').onclick=function(){regRead();if(!REG.sigun){REG.err='시·군을 입력해 주세요 (예: 장수군)';render();return}if(!(+REG.qty>0)){REG.err='규모를 입력해 주세요';render();return}
+  REG.err='';REG.busy=1;render();
+  var prof={owner:REG.owner||'내',sigun:REG.sigun,emd:REG.emd,item:REG.item,variety:REG.variety,qty:+REG.qty,ins:(function(){var lv=REG.item==='hanwoo'||REG.item==='pig';return{crop:!lv,live:lv,mach:false,wind:false}})(),spec:{},self:REG.self};
+  fetchMine(prof).then(function(){REG.busy=0;S.farm='mine';save();LV.q=prof.sigun.replace(/(시|군)$/,'');LV.item=(prof.item==='pig'?'pig':prof.item);LV.qty=prof.qty;LV.val=LIVE_ITEMS[LV.item].v;LV.ins=(prof.ins.crop||prof.ins.live)?'y':'n';LV.self=prof.self;LV.res=null;location.hash='#f-home';render()})
+  .catch(function(e){REG.busy=0;REG.err=(e&&e.message==='nf')?'"'+prof.sigun+'"을(를) 찾지 못했어요. 시·군 이름을 확인해 주세요.':'기상 정보를 불러오지 못했어요. 인터넷 연결을 확인해 주세요. (웹 미리보기에서는 외부 호출이 막힐 수 있어요)';render()})}
+}
+function fetchMine(prof){
+ var q=prof.sigun+(prof.emd?' '+prof.emd:'');
+ var tryGeo=function(n){return lvGeo(n)};
+ return tryGeo(q).catch(function(){return tryGeo(prof.sigun)}).then(function(g){return lvWx(g).then(function(j){S.mine={prof:prof,geo:g,daily:j.daily,at:Date.now()};rebuildMine()})})}
+function refreshMine(){if(!S.mine)return;var m=S.mine;lvWx(m.geo).then(function(j){m.daily=j.daily;m.at=Date.now();rebuildMine();save();render()}).catch(function(){})}
+function rebuildMine(){if(S.mine)FARMS.mine=buildMine(S.mine)}
+var WD=['일','월','화','수','목','금','토'];
+function buildMine(m){
+ var p=m.prof,ri=REG_ITEMS[p.item],tpl=JSON.parse(JSON.stringify(FARMS[ri[3]])),lw=LIVE_ITEMS[p.item]||LIVE_ITEMS.house,w=(p.item==='house'?LIVE_ITEMS.house:lw).w;
+ var d=m.daily,T=14,cl=function(v){return Math.max(0,Math.min(100,v))};
+ var live=p.item==='hanwoo'||p.item==='pig',mo=new Date().getMonth()+1;
+ var stage=live?(mo>=6&&mo<=9?'혹서기':(mo===12||mo<=2)?'혹한기':'일반 사육기'):p.item==='apple'?({3:'발아기',4:'개화기',5:'착과기',9:'수확기',10:'수확기'}[mo]||((mo>=6&&mo<=8)?'과실비대기':'휴면기')):p.item==='rice'?({5:'이앙기',6:'분얼기',7:'분얼기',8:'출수기',9:'등숙기',10:'수확기'}[mo]||'휴경기'):((mo===12||mo<=2)?'동절기 가온':'재배기');
+ var fc=[],info=[],hzMax={};
+ for(var i=0;i<9;i++){var tx=d.temperature_2m_max[T+i],tn=d.temperature_2m_min[T+i],pr=d.precipitation_sum[T+i]||0,gu=d.wind_gusts_10m_max[T+i]||0,dt=new Date(d.time[T+i]);
+  var sc={heat:cl((tx-30)*22),rain:cl(pr/80*100),wind:cl((gu-40)/50*100),frost:cl(tn<=2?(2-tn)*16+30:0)},top='heat',tv=-1;Object.keys(sc).forEach(function(h){if(sc[h]>(hzMax[h]||0))hzMax[h]=sc[h]});
+  Object.keys(sc).forEach(function(k){var v=sc[k]*(w[k]||0);if(v>tv){tv=v;top=k}});
+  var k=Math.round(15+tv*.85),desc={heat:'최고 '+tx.toFixed(0)+'℃ 폭염',rain:'일강수 '+Math.round(pr)+'mm 호우',wind:'순간풍속 '+Math.round(gu)+'km/h 강풍',frost:'새벽 저온 '+tn.toFixed(1)+'℃ 냉해·서리'}[top],lab={heat:'폭염',rain:'호우',wind:'강풍',frost:'저온·서리'}[top];
+  fc.push({d:WD[dt.getDay()],i:pr>=20?'🌧':tx>=33?'🔥':tn<=0?'🥶':gu>=60?'🌪':tx>=26?'☀️':'⛅',tn:Math.round(tn*10)/10,tx:Math.round(tx),r:Math.round(pr),k:k,hz:k>=60?lab:undefined});info.push({top:top,desc:desc,k:k})}
+ var ord=info.map(function(x,i){return i}).sort(function(a,b){return info[b].k-info[a].k}).slice(0,3),alerts={};
+ var rel=live?'live':'crop',prod=live?'가축재해보험':p.item==='house'?'농업용 시설물·농작물재해보험':'농작물재해보험';
+ var LI=LIVE_ITEMS[p.item]||LIVE_ITEMS.house,ev=(p.qty||0)*LI.v,recs=recsMine(m,w,hzMax,ev);
+ ord.forEach(function(i){var x=info[i],rl=recs.filter(function(r){return r.base||(r.hz&&r.hz.indexOf(x.top)>=0)}).slice(0,2),ok=!rl.length;
+  alerts[i]={t:'D+'+(i+1)+' '+x.desc,prod:prod,past:ok?'이 위험에 대한 보장은 갖춰져 있어요. 세부 한도는 증권에서 확인하세요.':'부족한 보장: '+rl.map(function(r){return r.n}).join(' · ')+' — 추가 가입을 추천해요',cover:{ok:ok,txt:ok?'가입하신 '+prod+' 보장 범위 내예요':'위험 대비 보장 부족 — 홈의 추천 상품을 확인하세요'},act:lvAct(x.top,{h:{[x.top]:{d:i,v:x.desc}},days:d.time.slice(T)},LI).slice(0,4)}});
+ var ks=fc.map(function(x){return x.k}),score=Math.round(Math.max.apply(null,ks)*.6+ks.reduce(function(a,b){return a+b},0)/ks.length*.4);
+ var unit=ri[2],itemTxt={apple:'과수',rice:'벼',house:'시설원예',hanwoo:'한우',pig:'양돈'}[p.item];
+ var itemStr=(p.variety?(itemTxt==='과수'?'':itemTxt)+(itemTxt==='과수'?'':'(')+p.variety+(itemTxt==='과수'?'':')'):itemTxt)+' '+(unit==='10a'?(p.qty*10)+'a (약 '+(p.qty/10).toFixed(1)+'ha)':p.qty+unit);
+ var pol=[{p:'농작물재해보험',ic:'🌾',sub:live?'재배 작물 없음':itemTxt,st:live?'na':(p.ins.crop?'ok':'no'),why:'작물 피해(냉해·폭염·호우) 시 본인 전액 부담',until:'',tot:0,me:0,amt:0},
+  {p:'농기계종합보험',ic:'🚜',sub:'보유 농기계',st:p.ins.mach?'ok':'no',why:'농기계 사고 시 수리·배상 본인 부담',until:'',tot:0,me:0,amt:0},
+  {p:'풍수해·지진재해',ic:'🌪',sub:'시설·창고',st:p.ins.wind?'ok':'no',why:'시설·창고 풍수해 피해는 별도 보장 필요',until:'',tot:0,me:0,amt:0},
+  {p:'가축재해보험',ic:'🐄',sub:live?itemTxt:'사육 가축 없음',st:live?(p.ins.live?'ok':'no'):'na',why:'가축 폐사·축사 피해 본인 부담',until:'',tot:0,me:0,amt:0}];
+ var assets=[{k:live?'가축':'작물',n:itemStr,ins:prod,ok:!!p.ins[rel]},{k:'농기계',n:'보유 농기계',ins:p.ins.mach?'농기계종합보험':null,ok:!!p.ins.mach},{k:'시설',n:live?'축사·시설':'시설·창고',ins:p.ins.wind?'풍수해·지진재해':null,ok:!!p.ins.wind}];
+ var f=tpl;f.mine=1;f.recs=recs;f.name=p.owner+' 농가';f.region=m.geo.name+(p.emd?' '+p.emd:'');f.emd=p.emd||p.sigun;f.sigun=p.sigun;f.item=itemStr;f.icon=ri[0];f.score=score;f.stage=stage;f.plot=m.geo.name+' 기준';f.fc=fc;f.alerts=alerts;f.pol=pol;f.assets=assets;f.hist=[];f.repeat='';f.riders=[];f.self={me:p.self,peer:'10~15%',peerShare:60};
+ return f}
+function mineAge(){return S.mine?lvAgo(S.mine.at):''}
+
+
+/* ================= v2.0 · 역할별 로그인 · 권한 · 민원 환류 ================= */
+var LG={role:null,id:''};
+function loginPage(){
+ var one=function(k){var r=ROLES[k],on=LG.role===k;return '<div class="card" data-lr="'+k+'" style="cursor:pointer;margin-bottom:8px;'+(on?'border:2px solid var(--g)':'')+'"><div class="row sp"><b>'+r.n+'</b>'+(on?'<span class="tag">선택됨</span>':'')+'</div><div class="xs mut" style="margin-top:3px">'+RPERM[k]+'</div>'+(on&&k!=='f'?'<input type="text" inputmode="numeric" id="lgId" value="'+esc(LG.id)+'" placeholder="사번 4자리 이상 (시연용: 아무 숫자)" style="margin-top:8px">':'')+'</div>'};
+ var cards=one('f')+'<div class="xs mut" style="margin:10px 2px 6px;font-weight:700">농협손해보험</div>'+['u','c'].map(one).join('');
+ return '<div class="onb"><div style="font-size:38px">🔐</div><h2 style="margin:6px 0">역할을 선택하세요</h2><p class="sm mut">역할에 따라 열리는 화면과 볼 수 있는 정보가 달라져요.</p>'+cards+
+ '<button class="btn full" id="lgGo" style="margin-top:6px">'+(LG.role?ROLES[LG.role].n+'로 시작':'역할을 선택하세요')+'</button><p class="xs mut" style="text-align:center;margin-top:8px">모든 열람·거부 기록은 감사 로그에 남아요</p></div>'}
+function bindLogin(){
+ $$('[data-lr]').forEach(function(c){c.onclick=function(e){if(e.target.id==='lgId')return;LG.role=c.getAttribute('data-lr');render()}});
+ var i=$('#lgId');if(i)i.oninput=function(){LG.id=i.value.replace(/[^0-9]/g,'')};
+ $('#lgGo').onclick=function(){var k=LG.role;if(!k){toast('역할을 선택해 주세요');return}
+  if(k!=='f'&&LG.id.length<4){toast('사번을 4자리 이상 입력해 주세요');return}
+  S.user={role:k,name:k==='f'?'농가':'사번 '+LG.id.slice(-4),id:LG.id};audit('로그인');save();
+  location.hash=k==='f'?(S.mine?'f-home':'reg'):k+'-'+ROLES[k].tabs[0][0];render()}}
+
+/* ---- 민원·접수 케이스 ---- */
+var CATS={delay:['⏱','지급 지연'],amount:['💸','지급액 이견'],gap:['🛡','보장 공백(몰랐음)'],uw:['📝','가입·보험료'],etc:['💬','기타']};
+function classify(t){return /늦|지연|언제|오래|아직/.test(t)?'delay':/적|부족|이의|금액|깎|왜 .{0,6}만/.test(t)?'amount':/몰랐|안 ?된다|보장 ?안|미가입|가입 ?안/.test(t)?'gap':/가입|보험료|비싸|거절|견적|특약/.test(t)?'uw':'etc'}
+function newCase(o){var f=F();var c={id:'M-'+(new Date().getMonth()+1<10?'0':'')+(new Date().getMonth()+1)+(new Date().getDate()<10?'0':'')+new Date().getDate()+'-'+(101+S.cases.length),at:Date.now(),type:o.type,cat:o.cat||classify(o.text||''),text:o.text||'',farm:S.farm,who:S.mine&&S.farm==='mine'?S.mine.prof.owner:(f.name||'').replace(' 농가',''),sigun:f.sigun,item:f.item,status:'접수',reply:'',rule:0,extra:o.extra||''};S.cases.unshift(c);save();return c}
+function aiCase(c){var d=Math.max(0,Math.round((Date.now()-c.at)/86400000)),nm=maskN(c.who);
+ var T={delay:{why:['접수 후 경과 '+d+'일 (목표: 소액·고신뢰 건 7일 내)','AI 1차 판독·기상 교차검증 결과 확인 필요','현장조사 대기 여부에 따라 안내 문구 분기'],reply:'[농협손해보험] '+nm+' 고객님, 접수번호 '+c.id+' 건은 현재 AI 1차 판독과 기상 교차검증을 마치고 지급 심사 단계에 있습니다. 처리가 지연되어 불편을 드려 죄송합니다. 이번 주 내 진행 상황을 다시 안내드리겠습니다.',prev:'접수 후 단계별 진행 현황과 예상 처리일을 앱에 표시'},
+  amount:{why:['지급액 = 추정 손해액 × (1 − 자기부담비율)','자기부담비율·산출 근거 설명이 부족했을 가능성','손해평가 확정 전 예상 금액과 차이 발생 가능'],reply:'[농협손해보험] '+nm+' 고객님, 보험금은 손해액에서 자기부담비율만큼을 제외해 산출됩니다. 산출 근거를 상세히 안내드리고, 이의가 있으시면 재평가를 요청하실 수 있습니다.',prev:'예상 보험금 화면에 산출 근거·자기부담 설명을 함께 표시'},
+  gap:{why:['해당 위험이 가입 보장 또는 특약 범위 밖일 가능성','사전에 보장 공백 안내가 노출되었는지 확인','다음 위험 대비 추가 가입 안내 필요'],reply:'[농협손해보험] '+nm+' 고객님, 문의하신 피해는 현재 가입하신 보장 범위에 포함되지 않아 보상이 어렵습니다. 같은 피해에 대비할 수 있는 특약을 안내드리니 가입 상담을 받아보세요.',prev:'위험 알림에서 "미가입 시 전액 본인 부담"을 명확히 안내'},
+  uw:{why:['가입 조건·보험료 산출 근거 문의','정부·지자체 보조 반영 후 농가 부담액 설명 필요'],reply:'[농협손해보험] '+nm+' 고객님, 문의하신 보험의 보험료와 정부·지자체 지원 내역을 정리해 안내드립니다. 농축협 창구에서 가입 설계를 도와드리겠습니다.',prev:'보험료 산출 근거와 정부 지원 내역을 추천 화면에 표시'},
+  etc:{why:['분류 기준에 해당하지 않는 일반 문의'],reply:'[농협손해보험] '+nm+' 고객님, 문의해 주셔서 감사합니다. 확인 후 정확히 안내드리겠습니다.',prev:'유사 문의가 쌓이면 새 분류로 추가'}}[c.cat];
+ return T}
+function ruleOn(k){return S.rules.some(function(r){return r.cat===k})}
+function applyRule(k,how){if(ruleOn(k))return;S.rules.unshift({cat:k,at:Date.now(),by:S.user?S.user.name:'',txt:aiCase({cat:k,id:'',at:Date.now(),who:''}).prev});audit('개선 룰 반영: '+CATS[k][1]);save()}
+function sampleCases(){var f=F();[['complaint','gap','지난주 서리 피해가 났는데 보험이 안 된다고 하네요. 이런 특약이 있는 줄 몰랐어요.'],['claim','delay','사고 접수한 지 열흘이 넘었는데 아직 소식이 없어요. 언제 지급되나요?'],['complaint','amount','예상 보험금보다 지급액이 훨씬 적게 나왔어요. 왜 이렇게 차이가 나죠?']].forEach(function(x,i){var c=newCase({type:x[0],cat:x[1],text:x[2]});c.who=['김영수','박정자','이상철'][i];c.at-=i*86400000*3+3600000;c.extra='시연용 예시'});save()}
+
+var SEL={case:null};
+function qPage(kind){
+ var types=kind==='u'?['uw']:['claim','complaint'],list=S.cases.filter(function(c){return types.indexOf(c.type)>=0}),cur=list.filter(function(c){return c.id===SEL.case})[0]||list[0];
+ var cnt=function(st){return list.filter(function(c){return c.status===st}).length};
+ var h='<div class="card"><div class="hd"><h3 style="margin:0">'+(kind==='u'?'📝 가입 상담함':'🧾 사고·민원 접수함')+'</h3><span class="tag">'+list.length+'건</span></div><div class="grid3" style="margin-top:8px"><div class="kpi"><b>'+cnt('접수')+'</b><small>접수</small></div><div class="kpi"><b>'+cnt('검토중')+'</b><small>검토중</small></div><div class="kpi"><b style="color:var(--g)">'+cnt('답변완료')+'</b><small>답변완료</small></div></div>'+
+  '<p class="xs mut" style="margin:8px 0 0">고객 이름·지번은 마스킹되어 보여요. 상세 열람은 사유가 기록돼요.</p></div>';
+ if(!list.length)return h+'<div class="card" style="text-align:center"><p class="sm mut">아직 접수된 건이 없어요.<br>농가 계정에서 '+(kind==='u'?'추천 상품 "상담 요청"':'사고 접수·민원')+'을 남기면 여기에 쌓여요.</p><button class="btn sm ghost" id="qSample">시연용 예시 채우기</button></div>';
+ h+='<div class="card"><ul class="list">'+list.map(function(c){return '<li data-qc="'+c.id+'" style="'+(cur&&c.id===cur.id?'background:var(--bg)':'')+'"><div><b class="sm">'+CATS[c.cat][0]+' '+c.id+'</b><div class="xs mut">'+maskN(c.who)+' · '+c.sigun+' · '+ago(c.at)+'</div></div><span class="tag '+(c.status==='답변완료'?'':c.status==='검토중'?'y':'o')+'">'+c.status+'</span></li>'}).join('')+'</ul></div>';
+ var A=aiCase(cur),rv=S.cases._rv===cur.id;
+ h+='<div class="card"><div class="hd"><h3 style="margin:0">'+cur.id+' 상세</h3><span class="tag gr">'+CATS[cur.cat][1]+'</span></div>'+
+  '<ul class="list" style="margin-top:6px"><li><span class="sm">고객</span><span class="sm b">'+(rv?esc(cur.who)+' · '+esc(cur.region||cur.sigun):maskN(cur.who)+' · '+cur.sigun.charAt(0)+'○○')+'</span></li><li><span class="sm">대상</span><span class="sm">'+esc(cur.item)+'</span></li><li><span class="sm">접수</span><span class="sm">'+ago(cur.at)+(cur.extra?' · '+cur.extra:'')+'</span></li></ul>'+
+  (rv?'':S.cases._rs===cur.id?'<div class="xs mut" style="margin-top:6px">열람 사유를 선택하세요 (기록돼요)</div><div class="chips">'+['민원 처리','지급 심사','현장 확인','고객 통화'].map(function(x){return '<button class="chip" data-rs="'+x+'">'+x+'</button>'}).join('')+'</div>':'<button class="btn sm ghost" id="qReveal" style="margin-top:6px">🔓 개인정보 열람 (사유 기록)</button>')+
+  '<div class="callout" style="margin-top:8px">'+esc(cur.text||'(가입 상담 요청: '+cur.extra+')')+'</div>'+
+  '<h4>🤖 AI 분석</h4><ul class="list">'+A.why.map(function(w){return '<li><span class="sm">· '+w+'</span></li>'}).join('')+'</ul>'+
+  (cur.status==='답변완료'?'<h4>✅ 발송한 답변</h4><div class="callout">'+esc(cur.reply)+'</div>':'<h4>✏️ 답변 초안 (수정 가능)</h4><textarea id="qReply" rows="5" style="width:100%;border:1px solid var(--line);border-radius:10px;padding:8px;font:inherit;font-size:13px">'+esc(A.reply)+'</textarea>'+
+  '<label class="sm" style="display:flex;gap:8px;align-items:center;margin-top:8px"><input type="checkbox" id="qRule" '+(ruleOn(cur.cat)?'checked disabled':'')+(S.user.role==='u'?' disabled':'')+'> 재발 방지 개선 룰로 환류'+(S.user.role==='u'?' <span class="xs mut">(보상팀·본사 승인)</span>':ruleOn(cur.cat)?' <span class="xs mut">(반영됨)</span>':'')+'</label><div class="xs mut">→ '+A.prev+'</div>'+
+  '<div class="row" style="margin-top:10px;gap:8px">'+(cur.status==='접수'?'<button class="btn sm ghost" id="qStart">검토 시작</button>':'')+'<button class="btn sm" id="qSend" style="flex:1">답변 발송</button></div>')+'</div>';
+ return h}
+function qKind(){var r=route();return((r[0]==='u'&&r[1]==='queue')||(r[0]==='h'&&r[1]==='uqueue'))?'u':'c'}
+function bindQueue(){
+ var sm=$('#qSample');if(sm)sm.onclick=function(){sampleCases();render()};
+ $$('[data-qc]').forEach(function(li){li.onclick=function(){SEL.case=li.getAttribute('data-qc');S.cases._rv=null;render()}});
+ var cur=null;S.cases.forEach(function(c){if(c.id===SEL.case)cur=c});if(!cur){var u=qKind()==='u'?['uw']:['claim','complaint'];cur=S.cases.filter(function(c){return u.indexOf(c.type)>=0})[0]}
+ if(!cur)return;
+ var rv=$('#qReveal');if(rv)rv.onclick=function(){S.cases._rs=cur.id;render()};$$('[data-rs]').forEach(function(b){b.onclick=function(){audit('개인정보 열람 '+cur.id+' · '+b.getAttribute('data-rs'));S.cases._rv=cur.id;S.cases._rs=null;SEL.case=cur.id;render()}});
+ var st=$('#qStart');if(st)st.onclick=function(){cur.status='검토중';audit('검토 시작 '+cur.id);save();render()};
+ var sd=$('#qSend');if(sd)sd.onclick=function(){var t=$('#qReply').value.trim();if(!t){toast('답변을 입력해 주세요');return}cur.reply=t;cur.status='답변완료';cur.handledAt=Date.now();var rl=$('#qRule');if(rl&&rl.checked&&!rl.disabled&&S.user.role!=='u')applyRule(cur.cat);audit('답변 발송 '+cur.id);save();toast('답변을 보냈어요 · 농가 알림함에 도착');render()}}
+PAGES['u-queue']=function(){return qPage('u')};PAGES['c-queue']=function(){return qPage('c')};
+BIND['u-queue']=BIND['c-queue']=bindQueue;
+
+PAGES['u-loop']=PAGES['c-loop']=PAGES['g-loop']=function(){
+ var role=S.user.role,cs=S.cases,n=cs.length,done=cs.filter(function(c){return c.status==='답변완료'}),mx=Math.max(1,Math.max.apply(null,Object.keys(CATS).map(function(k){return cs.filter(function(c){return c.cat===k}).length})));
+ var avg=done.length?Math.round(done.reduce(function(a,c){return a+(c.handledAt-c.at)},0)/done.length/3600000):0;
+ var h='<div class="card"><h3>🔄 민원 → 개선 환류</h3><div class="flow">'+['민원·사고 접수','AI 분류','처리·답변','개선 룰 환류','농가 앱 반영'].map(function(x,i,a){return '<div class="n"><b class="sm">'+x+'</b></div>'+(i<a.length-1?'<div class="ar">→</div>':'')}).join('')+'</div><p class="xs mut" style="margin:8px 0 0">쌓인 민원을 유형별로 분류하고, 반복되는 유형은 안내 방식을 바꿔 같은 민원이 다시 생기지 않게 해요.</p></div>'+
+ '<div class="card"><h3>유형별 누적 ('+n+'건)</h3>'+(n?Object.keys(CATS).map(function(k){var v=cs.filter(function(c){return c.cat===k}).length;return '<div class="hbar"><span style="width:96px">'+CATS[k][0]+' '+CATS[k][1]+'</span><div class="bar"><i style="width:'+Math.round(v/mx*100)+'%;background:var(--g7)"></i></div><span>'+v+'</span></div>'}).join(''):'<p class="sm mut">아직 접수된 민원이 없어요.</p>')+
+ '<div class="grid3" style="margin-top:8px"><div class="kpi"><b>'+n+'</b><small>누적 접수</small></div><div class="kpi"><b>'+done.length+'</b><small>답변 완료</small></div><div class="kpi"><b>'+(avg?avg+'h':'-')+'</b><small>평균 처리</small></div></div>'+(role==='g'?'<p class="xs mut">🔒 지자체는 건수·유형 통계만 볼 수 있고, 민원 원문과 고객 정보는 열람할 수 없어요.</p>':'')+'</div>';
+ var sug=Object.keys(CATS).filter(function(k){return k!=='etc'&&cs.some(function(c){return c.cat===k})&&!ruleOn(k)});
+ if(sug.length)h+='<div class="card"><h3>💡 AI 개선 제안</h3>'+sug.map(function(k){var v=cs.filter(function(c){return c.cat===k}).length;return '<div class="rrow"><div class="row sp"><b class="sm">'+CATS[k][0]+' '+CATS[k][1]+' · '+v+'건</b>'+(role==='u'||role==='g'?'<span class="tag gr">🔒 승인 필요</span>':'<button class="btn sm" data-ar="'+k+'">룰 반영</button>')+'</div><div class="xs mut">→ '+aiCase({cat:k,id:'',at:Date.now(),who:''}).prev+'</div></div>'}).join('')+(role==='u'||role==='g'?'<p class="xs mut">룰 반영은 보상팀·본사 권한이에요.</p>':'')+'</div>';
+ h+='<div class="card"><h3>✅ 반영된 개선 룰 ('+S.rules.length+')</h3>'+(S.rules.length?'<ul class="list">'+S.rules.map(function(r){return '<li><div><b class="sm">'+CATS[r.cat][0]+' '+CATS[r.cat][1]+'</b><div class="xs mut">'+r.txt+'</div></div><span class="xs mut">'+ago(r.at)+'</span></li>'}).join('')+'</ul><p class="xs mut">농가 앱 화면에 "고객 의견으로 개선된 안내" 표시로 바로 반영돼요.</p>':'<p class="sm mut">아직 반영된 룰이 없어요.</p>')+'</div>';
+ return h};
+BIND['u-loop']=BIND['c-loop']=BIND['g-loop']=function(){$$('[data-ar]').forEach(function(b){b.onclick=function(){applyRule(b.getAttribute('data-ar'));toast('개선 룰을 반영했어요 · 농가 앱에 바로 적용');render()}})};
+
+PAGES['g-perm']=function(){
+ var cols=['f','u','c','h','g'],rows=[['본인 계약·농장 정보','●','○','○','○','○'],['가입 신청 서류(OCR)','◐','●','○','●','○'],['사고·지급 원천데이터','◐','○','●','●','○'],['민원 원문','◐','○','●','●','○'],['개인 식별정보(이름·지번)','●','◐','◐','◐','○'],['위험지수(0~100점)','●','●','●','●','●'],['집계 통계(5농가↑·500m)','◐','●','●','●','●'],['개선 룰 반영','○','◐','●','●','○']],cur=S.user.role,hl='background:var(--bg-accent,#dcfce7)';
+ return '<div class="card"><h3>🔐 역할별 데이터 접근 권한</h3><table style="width:100%;font-size:11px"><tr><th align="left">데이터</th>'+cols.map(function(k){return '<th style="'+(k===cur?hl:'')+'">'+ROLES[k].n.replace(/^\S+\s/,'')+'</th>'}).join('')+'</tr>'+rows.map(function(r){return '<tr style="border-top:1px solid var(--line)"><td style="padding:7px 0">'+r[0]+'</td>'+[1,2,3,4,5].map(function(i){return '<td align="center" style="'+(cols[i-1]===cur?hl:'')+'">'+r[i]+'</td>'}).join('')+'</tr>'}).join('')+'</table><p class="xs mut" style="margin-top:8px">● 전체 · ◐ 제한(본인 것만·마스킹·승인) · ○ 불가</p><div class="callout" style="margin-top:6px">🏢 <b>본사 권한 = 인수팀 + 보상팀 권한의 합</b>이에요. 인수팀·보상팀은 본사 소속이고, 지자체는 외부 기관이라 집계 통계만 볼 수 있어요.</div></div>'+
+ '<div class="card"><h3>🧾 감사 로그</h3>'+(S.audit.length?'<ul class="list">'+S.audit.slice(0,12).map(function(a){return '<li><div><b class="sm">'+a.act+'</b><div class="xs mut">'+(ROLES[a.who]?ROLES[a.who].n:a.who)+' · '+ago(a.at)+'</div></div></li>'}).join('')+'</ul>':'<p class="sm mut">기록이 없어요.</p>')+'<p class="xs mut">로그인·개인정보 열람·접근 거부·룰 반영이 자동으로 기록돼요.</p></div>'};
+
+/* ---- 농가: 민원·접수 현황 ---- */
+var CM={cat:'etc'};
+function cmCard(){
+ var mine=S.cases.filter(function(c){return c.farm===S.farm});
+ return '<div class="card"><h3>💬 민원·문의 남기기</h3><div class="chips" style="margin:6px 0">'+['delay','amount','gap','uw','etc'].map(function(k){return '<button class="chip '+(CM.cat===k?'on':'')+'" data-cc="'+k+'">'+CATS[k][0]+' '+CATS[k][1]+'</button>'}).join('')+'</div><div class="row" style="gap:6px;align-items:flex-start"><textarea id="cmText" rows="3" placeholder="불편하신 점이나 궁금한 점을 적어주세요" style="flex:1;border:1px solid var(--line);border-radius:10px;padding:8px;font:inherit;font-size:13px"></textarea><button class="btn sm ghost" id="cmMic">🎤</button></div><button class="btn full" id="cmSend" style="margin-top:8px">민원 접수</button></div>'+
+ (mine.length?'<div class="card"><h3>📋 내 접수 현황</h3><ul class="list">'+mine.map(function(c){return '<li style="display:block"><div class="row sp"><b class="sm">'+CATS[c.cat][0]+' '+c.id+'</b><span class="tag '+(c.status==='답변완료'?'':c.status==='검토중'?'y':'o')+'">'+c.status+'</span></div><div class="xs mut">'+esc((c.text||c.extra).slice(0,50))+' · '+ago(c.at)+'</div>'+(c.reply?'<div class="callout" style="margin-top:6px">✉️ '+esc(c.reply)+'</div>':'')+'</li>'}).join('')+'</ul></div>':'')}
+function bindCm(){
+ $$('[data-cc]').forEach(function(b){b.onclick=function(){CM.cat=b.getAttribute('data-cc');var t=$('#cmText').value;render();$('#cmText').value=t}});
+ var m=$('#cmMic');if(m)m.onclick=function(){startVoice(function(t){$('#cmText').value=t;CM.cat=classify(t);},'#cmText')};
+ var sd=$('#cmSend');if(sd)sd.onclick=function(){var t=$('#cmText').value.trim();if(!t){toast('내용을 입력해 주세요');return}var c=newCase({type:'complaint',cat:CM.cat==='etc'?classify(t):CM.cat,text:t});audit('민원 접수 '+c.id);toast('접수됐어요 · 접수번호 '+c.id);render()}}
+
+/* ================= v1.7 · 부족한 보장 알림 · 추천 상품 ================= */
+var CAT=[
+ {id:'frost',n:'봄동상해 추가보장 특약',it:['apple'],hz:['frost'],rate:1.2,lr:112,why:'개화기 저온(냉해) 피해 보장 확대'},
+ {id:'sun',n:'일소피해 특약',it:['apple'],hz:['heat'],rate:.9,lr:104,why:'폭염으로 인한 과실 일소 피해'},
+ {id:'tree',n:'나무손해보장 특약',it:['apple'],hz:['wind','rain','frost'],rate:.6,lr:82,why:'강풍·동해로 인한 나무 고사'},
+ {id:'yield',n:'수확감소 추가보장',it:['apple','rice'],hz:['heat','rain','wind','frost'],rate:1.5,lr:108,why:'수확량 감소분 추가 보전'},
+ {id:'dis',n:'병해충 보장 특약',it:['rice'],hz:['rain','heat'],rate:1,lr:88,why:'도열병·깨씨무늬병 등 병해충 피해'},
+ {id:'heatL',n:'폭염재해 보장 특약',it:['hanwoo','pig'],hz:['heat'],rate:.8,lr:96,why:'폭염으로 인한 가축 폐사 보상'},
+ {id:'elec',n:'전기적장치 위험보장',it:['pig','hanwoo'],hz:['wind','rain'],rate:.5,lr:68,why:'정전·낙뢰로 환기 중단 시 폐사'},
+ {id:'barn',n:'축사 부착물 가입금액 상향',it:['hanwoo','pig'],hz:['wind','rain'],rate:.4,lr:74,why:'화재·풍수해 복구비 부족 방지'},
+ {id:'hs',n:'시설물 풍수해 보장 특약',it:['house'],hz:['wind','rain'],rate:1,lr:78,why:'강풍·호우로 인한 시설 파손'},
+ {id:'snow',n:'대설·한파 시설 특약',it:['house'],hz:['frost'],rate:.8,lr:90,why:'한파·대설로 인한 시설·작물 피해'}];
+var HZN={heat:'폭염',rain:'호우',wind:'강풍',frost:'저온·서리',dry:'가뭄'};
+function recsMine(m,w,hzMax,ev){
+ var p=m.prof,live=p.item==='hanwoo'||p.item==='pig',it=LIVE_ITEMS[p.item]||LIVE_ITEMS.house,sum=ev*.8,sf=SELF[p.self]||1,out=[];
+ var mk=function(o){var prem=sum*o.rate/100*sf,loss=ev*it.cap*o.need/100,pay=loss*.8*(o.base?1:(o.hz&&o.hz.length?.3:.15));
+  o.prem=Math.round(prem);o.share=o.share||.25;o.mine=Math.round(prem*o.share);o.pay=Math.round(pay);o.profit=Math.round(prem*(1-o.lr/100));o.score=Math.round(o.need*.6+Math.max(0,100-o.lr)*.4);out.push(o)};
+ var baseOk=live?p.ins.live:p.ins.crop;
+ if(!baseOk)mk({n:live?'가축재해보험 (기본)':'농작물재해보험 (기본)',why:'기본 재해 보장이 없어 피해 시 전액 본인 부담',need:100,lr:live?95:114,rate:it.rate,hz:[],base:1,share:.2});
+ else CAT.filter(function(c){return c.it.indexOf(p.item)>=0&&!(p.spec||{})[c.id]}).forEach(function(c){
+  var need=Math.round(Math.max.apply(null,c.hz.map(function(h){return(hzMax[h]||0)*((it.w||{})[h]||0)}))*1.0);
+  if(need>=12)mk({id:c.id,n:c.n,why:c.why,need:Math.min(100,need),lr:c.lr,rate:c.rate,hz:c.hz})});
+ if(!p.ins.wind)mk({n:'풍수해·지진재해보험',why:'시설·창고 풍수해는 정부 보조가 커서 농가 부담이 작아요',need:Math.round(Math.max(hzMax.wind||0,hzMax.rain||0)*.7+15),lr:62,rate:.6,hz:['wind','rain'],share:.12});
+ if(!p.ins.mach)mk({n:'농기계종합보험',why:'농기계 사고·수리비 대비 (번들 가입 시 할인 가정)',need:28,lr:72,rate:.5,hz:[],share:.5});
+ return out.sort(function(a,b){return b.score-a.score})}
+function recsFor(f){
+ if(f.mine)return f.recs||[];
+ var pk=Math.max.apply(null,f.fc.map(function(x){return x.k})),sum=(f.pol[0]&&f.pol[0].amt)||3000;
+ return f.riders.filter(function(r){return!r[1]}).map(function(r){var prem=Math.round(sum*.012);return{n:r[0],why:r[2]||'보장 공백',need:pk,lr:100,hz:[],prem:prem,mine:Math.round(prem*.25),pay:Math.round(sum*.12),profit:0,score:pk}})}
+function recRow(r,i){
+ return '<div class="rrow"><div class="row sp"><b class="sm">'+(i+1)+'. '+r.n+'</b><span class="tag '+tcls(r.need)+'">필요도 '+r.need+'</span></div><div class="xs mut" style="margin:2px 0 6px">'+r.why+'</div>'+
+  '<div class="grid3"><div class="kpi"><b style="color:var(--g)">'+won(r.pay)+'</b><small>이번 위험 시 예상 보험금</small></div><div class="kpi"><b>'+won(r.prem)+'</b><small>연 보험료(추정)</small></div><div class="kpi"><b>'+won(r.mine)+'</b><small>농가 부담</small></div></div></div>'}
+var REQ={},PHOTO={};
+function prodName(p){return p==='풍수해·지진재해'?'풍수해·지진재해보험':p}
+function prodRecs(f){
+ var rc=recsFor(f),prods=[],used={},pk=Math.max.apply(null,f.fc.map(function(x){return x.k})),sumG=((f.pol.filter(function(x){return x.st==='ok'&&x.amt})[0]||{}).amt)||3000;
+ f.pol.forEach(function(x){if(x.st!=='no')return;
+  var m=rc.filter(function(r){return r.n.indexOf(x.p)===0})[0];if(m)used[m.n]=1;
+  var share=/풍수해/.test(x.p)?.12:/농기계/.test(x.p)?.5:.2,prem=m?m.prem:Math.round(sumG*(/농기계/.test(x.p)?.014:.012));
+  prods.push({n:prodName(x.p),ic:x.ic,why:x.why||(m&&m.why)||'',need:m?m.need:Math.max(35,Math.round(pk*.7)),prem:prem,mine:m?m.mine:Math.round(prem*share),pay:m?m.pay:Math.round(sumG*.1)})});
+ prods.sort(function(a,b){return b.need-a.need});
+ return{prods:prods,addons:rc.filter(function(r){return!used[r.n]})}}
+function prodRow(r,i){
+ return '<div class="rrow"><div class="row sp"><b class="sm">'+r.ic+' '+r.n+'</b><span class="tag '+tcls(r.need)+'">미가입 · 필요도 '+r.need+'</span></div><div class="xs mut" style="margin:2px 0 6px">'+r.why+'</div>'+
+  '<div class="grid3"><div class="kpi"><b style="color:var(--g)">'+won(r.pay)+'</b><small>사고 시 예상 보험금</small></div><div class="kpi"><b>'+won(r.prem)+'</b><small>연 보험료(추정)</small></div><div class="kpi"><b>'+won(r.mine)+'</b><small>농가 부담</small></div></div></div>'}
+function addonLine(ad){return ad.length?'<div class="xs" style="margin-top:8px;color:var(--mut)">➕ 가입하신 보험에 더하면 좋은 특약: <b>'+ad.slice(0,3).map(function(r){return r.n.replace(/ 특약| 추가보장| 위험보장/g,'')}).join(' · ')+'</b></div>':''}
+function myRiders(f){if(f.mine){var sp=(S.mine&&S.mine.prof&&S.mine.prof.spec)||{};return CAT.filter(function(c){return sp[c.id]}).map(function(c){return c.n})}return (f.riders||[]).filter(function(r){return r[1]}).map(function(r){return r[0]})}
+function myIns(f){var ok=f.pol.filter(function(x){return x.st==='ok'}),rd=myRiders(f);
+ return '<div class="card"><div class="hd"><h3 style="margin:0">📋 가입 중인 보험</h3><span class="tag">'+ok.length+'건</span></div>'+
+ (ok.length?ok.map(function(x,i){return '<div class="pol"><div class="pi">'+x.ic+'</div><div style="flex:1"><b class="sm">'+x.p+'</b><div class="xs mut">'+x.sub+(x.until?' · 만기 '+x.until:'')+'</div>'+(i===0&&rd.length?'<div style="margin-top:4px">'+rd.map(function(n){return '<span class="tag gr" style="margin:2px 4px 0 0">'+n+'</span>'}).join('')+'</div>':'')+'</div></div>'}).join('')+(f.mine?'<p class="xs mut" style="margin:8px 0 0">※ 시연: 계약 DB 연동 전이라 재배·사육 품목의 기본 보험만 가입한 것으로 보여드려요.</p>':''):'<p class="sm mut" style="margin:8px 0 0">아직 가입이 확인된 보험이 없어요. 아래 추천을 확인해 보세요.</p>')+'</div>'}
+function heroAlert(f){
+ var ks=f.fc.map(function(x){return x.k}),pi=ks.indexOf(Math.max.apply(null,ks)),pk=f.fc[pi],al=f.alerts[pi]||f.alerts[Object.keys(f.alerts)[0]],pr=prodRecs(f),top=pr.prods.slice(0,2);
+ return '<div class="card" style="border:2px solid '+col(pk.k)+'"><div class="hd"><h3 style="margin:0">🔔 보장 알림</h3><span class="tag '+tcls(pk.k)+'">D+'+(pi+1)+' '+lvl(pk.k)+'</span></div>'+
+  '<p class="b" style="margin:8px 0 2px">'+al.t+'</p>'+
+  (top.length?'<div class="callout warn" style="margin:8px 0">❗ 이 위험에 대비할 <b>보험이 부족해요 ('+pr.prods.length+'건)</b>. 아래 보험을 추가하면 도움이 돼요.</div>'+top.map(prodRow).join('')+addonLine(pr.addons)+
+   '<button class="btn full" id="reqBtn" style="margin-top:10px">'+(REQ[S.farm]?'✅ 상담 요청 접수됨':'📞 추가 가입 상담 요청 (농축협)')+'</button>'+(pr.prods.length>2||pr.addons.length?'<button class="btn full ghost" data-go="f-cover" style="margin-top:6px">추천 보험 전체 보기</button>':'')
+  :'<div class="callout" style="margin-top:8px">✅ 필요한 보험은 갖추셨어요.'+(pr.addons.length?' 더하면 좋은 특약이 '+pr.addons.length+'건 있어요.':' 새 위험이 생기면 바로 알려드릴게요.')+'</div>'+addonLine(pr.addons)+(pr.addons.length?'<button class="btn full ghost" data-go="f-cover" style="margin-top:6px">특약 보강 보기</button>':''))+
+  '<div class="row" style="margin-top:8px"><button class="btn sm ghost" data-go="f-alert">대응요령 보기</button></div></div>'}
+PAGES['f-home']=function(){
+ var f=F(),ks=f.fc.map(function(x){return x.k});
+ return farmPicker()+
+ '<div class="card"><div class="row sp"><div><div class="b">'+f.icon+' '+f.name+'</div><div class="xs mut">'+f.region+'</div><div class="xs mut">'+f.item+'</div><span class="tag gr" style="margin-top:4px">'+f.stage+'</span></div>'+gauge(f.score,92)+'</div></div>'+
+ myIns(f)+heroAlert(f)+
+ '<div class="card"><h3>9일 위험 추이</h3><div class="vbars">'+f.fc.map(function(x,i){return '<div><span>'+x.k+'</span><i style="height:'+x.k+'%;background:'+col(x.k)+'"></i>D+'+(i+1)+'</div>'}).join('')+'</div></div>'+
+ '<div class="card"><h3>🎯 오늘 할 일</h3>'+chkList('home_'+S.farm,(f.alerts[ks.indexOf(Math.max.apply(null,ks))]||f.alerts[Object.keys(f.alerts)[0]]).act.slice(0,3))+'</div>'+
+ '<div class="row" style="gap:8px;margin-bottom:8px"><button class="btn sm ghost" data-go="f-chat" style="flex:1">💬 AI 상담</button><button class="btn sm ghost" data-go="f-inbox" style="flex:1">🔔 알림함</button><button class="btn sm ghost" data-go="set" style="flex:1">🔒 내 정보</button></div>'+
+ '<p class="xs mut" style="text-align:center">기상: Open-Meteo 실시간 예보 · 보험료·보험금은 참고용 추정</p>'};
+BIND['f-home']=function(){bindFarm();bindChk();var b=$('#reqBtn');if(b)b.onclick=function(){REQ[S.farm]=1;b.textContent='✅ 상담 요청 접수됨';toast('농축협 담당자에게 상담 요청을 보냈어요')}};
+var _cov=PAGES['f-cover'],_covB=BIND['f-cover'];
+PAGES['f-cover']=function(){var f=F(),rc=recsFor(f),h=_cov(),pk=farmPicker();
+ var pr=prodRecs(f);var card='<div class="card"><h3>✨ 추천 추가 가입 ('+pr.prods.length+'건)</h3>'+(pr.prods.length?pr.prods.map(prodRow).join('')+'<p class="xs mut">※ 보험료·보험금은 입력 정보와 실시간 예보 기반의 참고용 추정이에요.</p>':'<p class="sm mut">필요한 보험은 모두 가입돼 있어요 👍</p>')+'</div>'+
+ (pr.addons.length?'<div class="card"><h3>➕ 가입한 보험에 더하면 좋은 특약 ('+pr.addons.length+'건)</h3>'+pr.addons.map(recRow).join('')+'</div>':'');
+ return h.indexOf(pk)===0?pk+card+h.slice(pk.length):card+h};
+BIND['f-cover']=function(){if(_covB)_covB();else bindFarm()};
+PAGES['d-reco']=function(){var f=F(),rc=recsFor(f),tp=rc.reduce(function(a,r){return a+r.prem},0),tpf=rc.reduce(function(a,r){return a+r.profit},0);
+ return farmPicker()+'<div class="card"><h3>🏢 AI 추천 (창구용)</h3><p class="xs mut" style="margin:0 0 8px">고객 필요도와 예상 손해율을 함께 반영해 우선순위를 정했어요.</p>'+
+ '<div class="grid3"><div class="kpi"><b>'+rc.length+'건</b><small>추천 상품</small></div><div class="kpi"><b>'+won(tp)+'</b><small>추가 보험료</small></div><div class="kpi"><b style="color:'+(tpf>=0?'var(--g)':'var(--r4)')+'">'+won(tpf)+'</b><small>예상 이익</small></div></div></div>'+
+ '<div class="card"><table style="width:100%;font-size:12px"><tr><th align="left">상품·특약</th><th>필요도</th><th>예상<br>손해율</th><th>예상<br>이익</th></tr>'+rc.map(function(r,i){return '<tr style="border-top:1px solid var(--line)"><td style="padding:7px 0"><b>'+(i+1)+'. '+r.n+'</b><br><span class="xs mut">보험료 '+won(r.prem)+'</span></td><td align="center"><span class="tag '+tcls(r.need)+'">'+r.need+'</span></td><td align="center" style="color:'+(r.lr>100?'var(--r4)':'var(--g)')+';font-weight:700">'+r.lr+'%</td><td align="center">'+(r.profit>=0?'+':'')+won(r.profit)+'</td></tr>'}).join('')+'</table>'+
+ '<div class="callout" style="margin-top:10px">💡 손해율 100% 미만 상품(나무손해·전기적장치·풍수해·농기계)을 <b>번들로 함께 제안</b>하면 필요도가 높은 고손해율 특약을 보완할 수 있어요.</div><p class="xs mut">※ 손해율·보험료율은 가정치예요. 실제는 당사 지급통계로 대체됩니다. (농작물재해보험 2025년 손해율 114.3%는 공개 통계)</p></div>'};
+BIND['d-reco']=function(){bindFarm()};
+/* ================= v1.5 · 실시간 데이터 조회 (입력 → 조회 → 계산) ================= */
+var LIVE_PLACES={'나주':[35.016,126.711,'전남 나주시'],'홍천':[37.697,127.888,'강원 홍천군'],'안동':[36.568,128.729,'경북 안동시'],'제주':[33.499,126.531,'제주특별자치도'],'충주':[36.991,127.926,'충북 충주시'],'예산':[36.682,126.848,'충남 예산군'],'이천':[37.272,127.435,'경기 이천시'],'평택':[36.992,127.113,'경기 평택시'],'김제':[35.803,126.881,'전북 김제시'],'영주':[36.806,128.624,'경북 영주시'],'청송':[36.436,129.057,'경북 청송군'],'함안':[35.272,128.406,'경남 함안군'],'해남':[34.573,126.599,'전남 해남군'],'상주':[36.411,128.159,'경북 상주시'],'횡성':[37.491,127.985,'강원 횡성군'],'장수':[35.647,127.52,'전북 장수군'],'서산':[36.785,126.45,'충남 서산시'],'진주':[35.18,128.108,'경남 진주시'],'춘천':[37.881,127.73,'강원 춘천시'],'수원':[37.263,127.029,'경기 수원시']};
+var LIVE_ITEMS={
+ apple:{n:'🍎 사과(과수)',u:'10a',q:12,v:1100,rate:7.5,cap:.35,w:{heat:.6,rain:.5,wind:.9,frost:.9,dry:.3},cov:'과수 4종(태풍·우박·냉해 등)'},
+ rice:{n:'🌾 벼',u:'10a',q:30,v:130,rate:2.8,cap:.4,w:{heat:.5,rain:.8,wind:.7,frost:.3,dry:.6},cov:'논작물(벼) 재해'},
+ hanwoo:{n:'🐂 한우',u:'두',q:40,v:473,rate:2.2,cap:.1,w:{heat:1,rain:.3,wind:.3,frost:.4,dry:0},cov:'가축재해(폭염 포함)'},
+ pig:{n:'🐖 양돈',u:'두',q:1000,v:40,rate:2.5,cap:.1,w:{heat:1,rain:.2,wind:.3,frost:.2,dry:0},cov:'가축재해(폭염 포함)'},
+ house:{n:'🏠 시설하우스',u:'동',q:6,v:1500,rate:1.6,cap:.3,w:{heat:.4,rain:.6,wind:1,frost:.5,dry:0},cov:'농업용 시설물·작물'}};
+var LHZ={heat:['🥵','폭염'],rain:['🌧','호우'],wind:['🌪','강풍'],frost:['🥶','냉해·서리'],dry:['🏜','가뭄']};
+var SELF={10:1,20:.85,30:.72,40:.62};
+var LV=(function(){var d={q:'나주',item:'apple',qty:12,val:1100,ins:'y',self:20,res:null,busy:0,hist:[]};try{var x=JSON.parse(localStorage.getItem('pai_live')||'null');if(x){d.q=x.q||d.q;d.item=x.item||d.item;d.hist=x.hist||[];d.last=x.last||null}}catch(e){}return d})();
+function lvSave(){try{localStorage.setItem('pai_live',JSON.stringify({q:LV.q,item:LV.item,hist:LV.hist.slice(0,8),last:LV.last}))}catch(e){}}
+function tmo(ms){return new Promise(function(_,r){setTimeout(function(){r(new Error('timeout'))},ms)})}
+function jget(u){return Promise.race([fetch(u).then(function(r){if(!r.ok)throw new Error('HTTP '+r.status);return r.json()}),tmo(9000)])}
+function lvGeo(q){
+ var k=Object.keys(LIVE_PLACES).filter(function(n){return q.indexOf(n)>=0})[0];
+ return jget('https://geocoding-api.open-meteo.com/v1/search?name='+encodeURIComponent(q)+'&count=1&language=ko&countryCode=KR')
+  .then(function(j){var r=j.results&&j.results[0];if(!r)throw new Error('nf');return{lat:r.latitude,lon:r.longitude,name:[r.admin1,r.name].filter(Boolean).join(' '),src:'Open-Meteo 지오코딩'}})
+  .catch(function(){if(k){var p=LIVE_PLACES[k];return{lat:p[0],lon:p[1],name:p[2],src:'내장 좌표표'}}throw new Error('nf')});
+}
+function lvWx(g){
+ return jget('https://api.open-meteo.com/v1/forecast?latitude='+g.lat+'&longitude='+g.lon+'&daily=temperature_2m_max,temperature_2m_min,precipitation_sum,wind_gusts_10m_max&past_days=14&forecast_days=16&timezone=Asia%2FSeoul');
+}
+function lvRisk(d){
+ var t=d.time,n=t.length,tdy=14,f=function(a){return a.slice(tdy)},
+  mx=f(d.temperature_2m_max),mn=f(d.temperature_2m_min),pr=f(d.precipitation_sum),gu=f(d.wind_gusts_10m_max),
+  pastP=d.precipitation_sum.slice(0,tdy).reduce(function(a,b){return a+(b||0)},0),
+  hotDays=mx.filter(function(x){return x>=33}).length,hotMax=Math.max.apply(null,mx),
+  pMax=Math.max.apply(null,pr),pMaxI=pr.indexOf(pMax),gMax=Math.max.apply(null,gu),gI=gu.indexOf(gMax),
+  tMin=Math.min.apply(null,mn),tI=mn.indexOf(tMin),hI=mx.indexOf(hotMax);
+ var cl=function(v){return Math.max(0,Math.min(100,Math.round(v)))};
+ var h={
+  heat:{s:cl(hotDays*14+Math.max(0,hotMax-30)*5),v:hotMax.toFixed(1)+'℃',d:hI,why:'향후 16일 최고기온 '+hotMax.toFixed(1)+'℃ · 33℃↑ '+hotDays+'일'},
+  rain:{s:cl(pMax/150*100),v:Math.round(pMax)+'mm',d:pMaxI,why:'일 최대 강수 '+Math.round(pMax)+'mm (호우주의보 기준 일 80mm)'},
+  wind:{s:cl((gMax-40)/60*100),v:Math.round(gMax)+'km/h',d:gI,why:'최대 순간풍속 '+Math.round(gMax)+'km/h'},
+  frost:{s:cl(tMin<=2?(2-tMin)*14+25:0),v:tMin.toFixed(1)+'℃',d:tI,why:'최저기온 '+tMin.toFixed(1)+'℃ (서리·냉해 기준 2℃↓)'},
+  dry:{s:cl(pastP<15&&hotMax>=27?(15-pastP)*4+30:0),v:Math.round(pastP)+'mm',d:0,why:'최근 14일 누적 강수 '+Math.round(pastP)+'mm'}};
+ return{h:h,mx:mx,mn:mn,pr:pr,days:f(t),pastP:pastP};
+}
+function lvCalc(R){
+ var it=LIVE_ITEMS[LV.item],q=+LV.qty||0,v=+LV.val||0,eval_=q*v,keep=1;
+ Object.keys(it.w).forEach(function(k){keep*=1-R.h[k].s/100*it.w[k]*it.cap});
+ var loss=1-keep,lossAmt=eval_*loss,ins=LV.ins==='y',sum=eval_*.8,self=sum*LV.self/100;
+ var pay=ins?Math.max(0,lossAmt-self):0,prem=sum*it.rate/100*SELF[LV.self],mine=prem*.25;
+ var top=Object.keys(it.w).map(function(k){return[k,R.h[k].s*it.w[k]]}).sort(function(a,b){return b[1]-a[1]})[0];
+ return{eval_:eval_,loss:loss,lossAmt:lossAmt,sum:sum,self:self,pay:pay,prem:prem,mine:mine,top:top[0],topv:top[1],gap:ins?0:lossAmt}
+}
+function lvRun(){
+ var q=LV.q.trim();if(!q){toast('지역을 입력해 주세요');return}
+ LV.busy=1;LV.err='';render();
+ lvGeo(q).then(function(g){return lvWx(g).then(function(j){return{g:g,j:j}})}).then(function(o){
+  LV.res={g:o.g,d:o.j.daily,at:Date.now(),live:1};LV.last=LV.res;
+  var R=lvRisk(o.j.daily),C=lvCalc(R);LV.hist.unshift({q:q,name:o.g.name,item:LV.item,top:C.top,s:Math.round(C.topv),at:Date.now()});LV.hist=LV.hist.slice(0,8);lvSave();LV.busy=0;render();
+ }).catch(function(e){
+  LV.busy=0;
+  if(e&&e.message==='nf'){LV.err='"'+q+'" 지역을 찾지 못했어요. 시·군 이름으로 다시 입력해 주세요 (예: 나주, 홍천)'}
+  else if(LV.last){LV.res=LV.last;LV.res.live=0;LV.err='네트워크 연결이 안 돼 마지막 조회 결과를 보여드려요.'}
+  else{LV.err='실시간 조회에 실패했어요 (인터넷 연결 확인). 웹 미리보기에서는 외부 호출이 막힐 수 있고, 설치한 앱(APK)에서는 정상 동작합니다.'}
+  render();
+ });
+}
+function lvAgo(t){var m=Math.round((Date.now()-t)/60000);return m<1?'방금':m<60?m+'분 전':Math.round(m/60)+'시간 전'}
+function lvDay(s){var d=new Date(s);return(d.getMonth()+1)+'/'+d.getDate()}
+PAGES['f-live']=function(){
+ var it=LIVE_ITEMS[LV.item],h='<div class="card"><h3>📡 내 농장 실시간 위험 조회</h3><p class="xs mut" style="margin:0 0 8px">지역과 영농 정보를 입력하면 <b>실시간 기상예보</b>를 불러와 재해 위험·예상 손실·보험금·보험료를 계산해요.</p>'+
+  '<div class="xs mut">① 지역</div><div class="row" style="gap:6px"><input type="text" id="lvQ" value="'+LV.q.replace(/"/g,'')+'" placeholder="시·군 이름 (예: 나주)" style="flex:1"><button class="btn sm ghost" id="lvMic">🎤</button></div>'+
+  '<div class="chips" style="margin:6px 0">'+['나주','홍천','안동','제주','예산','이천'].map(function(k){return '<button class="chip '+(LV.q===k?'on':'')+'" data-lq="'+k+'">'+k+'</button>'}).join('')+'</div>'+
+  '<div class="xs mut">② 품목</div><div class="chips" style="margin:4px 0 8px">'+Object.keys(LIVE_ITEMS).map(function(k){return '<button class="chip '+(k===LV.item?'on':'')+'" data-li="'+k+'">'+LIVE_ITEMS[k].n+'</button>'}).join('')+'</div>'+
+  '<div class="grid2"><div><div class="xs mut">③ 규모 ('+it.u+')</div><input type="text" inputmode="decimal" id="lvN" value="'+LV.qty+'"></div><div><div class="xs mut">④ '+it.u+'당 평가액(만 원)</div><input type="text" inputmode="decimal" id="lvV" value="'+LV.val+'"></div></div>'+
+  '<div class="grid2" style="margin-top:8px"><div><div class="xs mut">⑤ 보험 가입</div><select id="lvI"><option value="y"'+(LV.ins==='y'?' selected':'')+'>가입함</option><option value="n"'+(LV.ins==='n'?' selected':'')+'>미가입</option></select></div><div><div class="xs mut">⑥ 자기부담비율</div><select id="lvS">'+[10,20,30,40].map(function(x){return '<option value="'+x+'"'+(LV.self==x?' selected':'')+'>'+x+'%</option>'}).join('')+'</select></div></div>'+
+  '<button class="btn full" id="lvGo" style="margin-top:12px"'+(LV.busy?' disabled':'')+'>'+(LV.busy?'⏳ 기상청급 예보 불러오는 중…':'🔎 실시간 위험 조회')+'</button>'+(LV.err?'<div class="callout warn" style="margin-top:8px">'+LV.err+'</div>':'')+'</div>';
+ if(LV.busy)return h+'<div class="card" style="text-align:center;padding:26px"><div style="font-size:30px">🛰</div><p class="sm mut">지오코딩 → 16일 예보 → 위험지수 계산 중…</p></div>';
+ if(!LV.res)return h+lvSrc();
+ var g=LV.res.g,R=lvRisk(LV.res.d),C=lvCalc(R),mxall=Math.max.apply(null,R.mx),i;
+ h+='<div class="card"><div class="hd"><h3 style="margin:0">📍 '+g.name+'</h3><span class="tag '+(LV.res.live?'':'gr')+'">'+(LV.res.live?'실시간 '+lvAgo(LV.res.at):'저장본 '+lvAgo(LV.res.at))+'</span></div><p class="xs mut" style="margin:4px 0 8px">'+it.n+' '+LV.qty+it.u+' · 평가액 '+won(C.eval_)+'</p>'+
+  Object.keys(LHZ).map(function(k){var r=R.h[k],w=LIVE_ITEMS[LV.item].w[k];return '<div style="margin-top:8px"><div class="row sp"><span class="sm">'+LHZ[k][0]+' <b>'+LHZ[k][1]+'</b> <span class="xs mut">'+r.why+'</span></span><span class="tag '+tcls(r.s)+'">'+r.s+'</span></div><div style="height:7px;border-radius:9px;background:#e6ebe8;margin-top:3px"><i style="display:block;height:7px;border-radius:9px;width:'+Math.max(2,r.s)+'%;background:'+col(r.s)+'"></i></div>'+(w===0?'<div class="xs mut">이 품목은 해당 위험 영향이 작아요</div>':'')+'</div>'}).join('')+'</div>'+
+  '<div class="card"><h3>🌡 16일 최고기온 · 강수</h3><div class="vbars sc">'+R.days.map(function(d,i){var t=R.mx[i];return '<div title="'+d+'"><span>'+Math.round(t)+'</span><i style="height:'+Math.max(6,Math.round(t/Math.max(40,mxall)*100))+'%;background:'+(t>=33?'var(--r4)':t>=30?'var(--r3)':R.pr[i]>=30?'#3b82f6':'var(--r1)')+'"></i>'+lvDay(d)+'</div>'}).join('')+'</div><p class="xs mut">빨강 33℃↑ · 파랑 일강수 30mm↑ · 가로 스크롤</p></div>';
+ var hz=LHZ[C.top];
+ h+='<div class="card" style="border:2px solid '+col(C.topv)+'"><div class="hd"><h3 style="margin:0">'+hz[0]+' 가장 큰 위험: '+hz[1]+'</h3><span class="tag '+tcls(C.topv)+'">'+lvl(C.topv)+'</span></div>'+
+  '<div class="grid3" style="margin-top:10px"><div class="kpi"><b>'+Math.round(C.loss*100)+'%</b><small>예상 피해율</small></div><div class="kpi"><b style="color:var(--r3)">'+won(C.lossAmt)+'</b><small>예상 손실액</small></div><div class="kpi"><b style="color:var(--g)">'+won(C.pay)+'</b><small>예상 보험금</small></div></div>'+
+  (LV.ins==='y'?'<div class="callout" style="margin-top:10px">✅ 가입금액 '+won(C.sum)+' (평가액 80%) · 자기부담 '+LV.self+'% = '+won(C.self)+'를 넘는 손실부터 보상돼요.</div>':'<div class="callout bad" style="margin-top:10px">❗ 미가입이라 <b>'+won(C.gap)+'</b> 전액 본인 부담이에요. 아래 보험료로 가입하면 최대 <b>'+won(Math.max(0,C.lossAmt-C.sum*.2))+'</b> 보상받을 수 있어요.</div>')+
+  '</div><div class="card"><h3>💳 보험료 시뮬레이션</h3><div class="grid3"><div class="kpi"><b>'+won(C.prem)+'</b><small>총 보험료</small></div><div class="kpi"><b style="color:var(--g)">'+won(C.mine)+'</b><small>농가 부담(약 25%)</small></div><div class="kpi"><b>'+won(C.prem-C.mine)+'</b><small>정부·지자체</small></div></div><p class="xs mut">※ 순보험료율 '+it.rate+'% · 자기부담 할인 · 국비+지방비 75% 가정의 <b>참고용 추정</b>. 실제 보험료는 지역·상품·가입시기별 상이.</p></div>'+
+  '<div class="card" style="background:#0f291e;color:#fff"><div class="xs" style="color:#fde68a;font-weight:700">이번 주 행동 안내</div>'+lvAct(C.top,R,it).map(function(a){return '<div style="background:rgba(255,255,255,.08);border-radius:10px;padding:9px 10px;margin-top:6px" class="sm">'+a+'</div>'}).join('')+'<div class="row" style="margin-top:10px"><button class="btn sm" id="lvCopy">안내문 복사</button><button class="btn sm ghost" id="lvAlert">🔔 알림함에 추가</button></div></div>';
+ if(LV.hist.length)h+='<div class="card"><h3>🕘 최근 조회</h3>'+LV.hist.slice(0,5).map(function(x,i){return '<div class="row sp sm" style="padding:6px 0;border-top:1px solid var(--line)" data-lh="'+i+'"><span>'+x.name+' · '+LIVE_ITEMS[x.item].n+'</span><span class="tag '+tcls(x.s)+'">'+LHZ[x.top][1]+' '+x.s+'</span></div>'}).join('')+'</div>';
+ return h+lvSrc();
+};
+function lvAct(top,R,it){
+ var A={heat:['☀️ 한낮(11~16시) 환기·차광망, 축사 송풍·미스트 가동','💧 음수 공급 확인, 가축 폭염 증상 시 즉시 수의사 연락','📸 폭염 피해 발생 시 사진·폐사 두수 기록 후 신고'],
+  rain:['🌧 배수로·집수정 사전 점검, 시설 고정 확인','📦 침수 우려 농기계·자재 고지대 이동','📸 침수 전·후 사진 기록 후 3일 내 사고접수'],
+  wind:['🌪 시설하우스 비닐·고정끈 점검, 과수 지주 보강','🍎 낙과 예상 시 수확 가능분 우선 수확','📸 피해 전경·세부 사진을 촬영하고 신고'],
+  frost:['🥶 서리 예보일 새벽 방상팬·연소·살수 준비','📸 피해 부위 사진 기록 (발생 시 사고접수용)','📞 피해 확인 즉시 농협 사고접수'],
+  dry:['🏜 관수 계획 점검, 멀칭으로 수분 증발 억제','📈 가뭄 장기화 시 지자체 급수 지원 문의','📝 가입 특약 중 가뭄 보장 여부 확인']}[top];
+ var w=R.h[top];return A.concat(['⏰ 가장 위험한 날: '+(w.d>=0?lvDay(R.days[w.d]):'-')+' ('+w.v+')'])
+}
+function lvSrc(){
+ var rows=[['Open-Meteo 일별 예보(16일)+과거 14일','기온·강수·순간풍속','<span class="tag">실시간</span>'],['Open-Meteo 지오코딩','지역명 → 좌표','<span class="tag">실시간</span>'],['위험지수·피해율·보험료 산식','품목 민감도·순보험료율·보조율','<span class="tag y">내장·가정치</span>'],['농협손보 지급통계(2025 등)','다발 사고·평균 가입액','<span class="tag y">내장</span>'],['기상청 단기예보 / 농진청 농업기상','필지(30×30m) 경보','<span class="tag gr">연동 예정</span>'],['농업경영체·마이데이터','경영체 면적·품목 자동입력','<span class="tag gr">연동 예정</span>']];
+ return '<div class="card"><h3>🔌 데이터 출처</h3>'+rows.map(function(r){return '<div class="row sp sm" style="padding:7px 0;border-top:1px solid var(--line);gap:8px"><span><b>'+r[0]+'</b><br><span class="xs mut">'+r[1]+'</span></span>'+r[2]+'</div>'}).join('')+'<p class="xs mut">실시간 기상은 앱이 직접 호출합니다(키 불필요). 나머지는 PPT의 연동 구조를 가정한 내장 데이터예요.</p></div>'}
+PAGES['d-live']=function(){return '<div class="callout" style="margin-bottom:10px">🏢 창구 활용: 고객이 말한 지역·품목·규모를 입력하면 <b>가입 전 위험·보험료 안내</b>를 바로 보여줄 수 있어요.</div>'+PAGES['f-live']()};
+BIND['f-live']=function(){
+ var q=$('#lvQ');q.oninput=function(){LV.q=q.value};q.onkeydown=function(e){if(e.key==='Enter')lvRun()};
+ $$('[data-lq]').forEach(function(b){b.onclick=function(){LV.q=b.getAttribute('data-lq');lvRun()}});
+ $$('[data-li]').forEach(function(b){b.onclick=function(){var k=b.getAttribute('data-li');LV.item=k;LV.qty=LIVE_ITEMS[k].q;LV.val=LIVE_ITEMS[k].v;lvSave();render()}});
+ var rd=function(){LV.q=q.value;LV.qty=+($('#lvN').value.replace(/[^0-9.]/g,''))||0;LV.val=+($('#lvV').value.replace(/[^0-9.]/g,''))||0;LV.ins=$('#lvI').value;LV.self=+$('#lvS').value};
+ ['#lvN','#lvV','#lvI','#lvS'].forEach(function(id){$(id).onchange=function(){rd();render()}});
+ $('#lvGo').onclick=function(){rd();lvRun()};
+ $('#lvMic').onclick=function(){startVoice(function(t){var k=Object.keys(LIVE_PLACES).filter(function(n){return t.indexOf(n)>=0})[0];LV.q=k||t.replace(/[^가-힣\s]/g,'').trim().split(/\s+/)[0]||t;rd();LV.q=k||LV.q;lvRun()},null)};
+ $$('[data-lh]').forEach(function(r){r.onclick=function(){var x=LV.hist[+r.getAttribute('data-lh')];LV.q=x.q;LV.item=x.item;lvRun()}});
+ var cp=$('#lvCopy');if(cp){var R=lvRisk(LV.res.d),C=lvCalc(R),it=LIVE_ITEMS[LV.item];
+  var txt='[농협손보 재해 대비 안내] '+LV.res.g.name+' · '+it.n+' '+LV.qty+it.u+'\n· 최대 위험: '+LHZ[C.top][1]+' ('+R.h[C.top].why+')\n· 예상 피해율 '+Math.round(C.loss*100)+'% / 예상 손실 '+won(C.lossAmt)+'\n· '+(LV.ins==='y'?'예상 보험금 '+won(C.pay):'미가입 시 본인 부담 '+won(C.gap))+'\n'+lvAct(C.top,R,it).map(function(a){return '- '+a}).join('\n')+'\n(Open-Meteo 예보 기준 참고용 추정)';
+  cp.onclick=function(){try{navigator.clipboard.writeText(txt)}catch(e){}toast('안내문을 복사했어요')};
+  $('#lvAlert').onclick=function(){LV.alerts=LV.alerts||[];LV.alerts.unshift({t:LHZ[C.top][1]+' 위험 '+Math.round(C.topv)+' · '+LV.res.g.name,at:Date.now()});toast('알림함에 추가했어요')}}
+};
+BIND['d-live']=BIND['f-live'];
+
+/* ================= 창구 · OCR 인수심사 (슬라이드 5) ================= */
+PAGES['d-ocr']=function(){
+ var st=S.sel.ocrStep;
+ var steps=[['OCR 서류 요건 검증','정부·지자체 지원 서류 자동 판독'],['공공마이데이터 대조','가축사육업허가증·경영체 정보 연동'],['인수 체크리스트 표준화','농축협·본사 인수 심사 비용 절감']];
+ var h='<div class="card"><h3>OCR·공공마이데이터 기반 인수 심사 자동화</h3><p class="xs mut" style="margin:0">예: 가축재해보험 가입 시 가축사육업허가(등록)증 및 농업경영체등록확인서 내 가축정보 자동 검증</p>'+
+ steps.map(function(s,i){return '<div class="step"><div class="num '+(i<st?'':'dim')+'">'+(i<st?'✓':i+1)+'</div><div><b class="sm">'+s[0]+'</b><div class="xs mut">'+s[1]+'</div></div></div>'}).join('')+'</div>';
+ if(st===0)h+='<div class="card"><div class="drop" id="ocrDrop">📄 서류 사진 올리기<br><span class="xs">탭하면 데모 서류(가축사육업허가증 · 농업경영체등록확인서)로 진행</span></div><input type="file" id="ocrFile" accept="image/*" style="display:none"></div>';
+ if(st>=1)h+='<div class="card"><h3>① OCR 판독 결과</h3><table><tr><th>항목</th><th>판독값</th><th>신뢰도</th></tr><tr><td>서류</td><td>가축사육업 허가증</td><td>99%</td></tr><tr><td>허가번호</td><td>제2019-○○○호</td><td>97%</td></tr><tr><td>사업장</td><td>충남 홍성군 은하면 ○○리</td><td>96%</td></tr><tr><td>축종 / 규모</td><td>돼지 · 2,400두</td><td>98%</td></tr><tr><td>서류</td><td>농업경영체등록확인서</td><td>99%</td></tr><tr><td>경영주</td><td>이○○</td><td>99%</td></tr></table></div>';
+ if(st>=2)h+='<div class="card"><h3>② 공공마이데이터 대조</h3><ul class="list"><li><span class="sm">허가 유효 여부 (가축사육업 DB)</span><span class="ok">유효</span></li><li><span class="sm">허가 두수 2,400 / 청약 두수 2,350</span><span class="ok">일치</span></li><li><span class="sm">경영체 등록 축종·주소</span><span class="ok">일치</span></li><li><span class="sm">축사 면적 (경영체 1,980㎡ / 청약 2,200㎡)</span><span class="pd">차이 11%</span></li></ul></div>';
+ if(st>=3)h+='<div class="card"><h3>③ 표준 인수 체크리스트</h3><ul class="list"><li><span class="sm">필수 서류 2종 완비</span><span class="ok">✓</span></li><li><span class="sm">가입 두수 ≤ 허가 두수</span><span class="ok">✓</span></li><li><span class="sm">축사 면적 차이 10% 초과</span><span class="pd">보완요청</span></li><li><span class="sm">비상발전기·경보장치 (무창돈사)</span><span class="pd">사진 요청</span></li><li><span class="sm">최근 3년 손해율 할증</span><span class="ok">해당없음</span></li></ul>'+
+  '<div class="callout warn" style="margin-top:10px">결과: <b>조건부 인수</b> — 축사 면적 확인 서류, 비상발전기 사진 보완 시 승인</div><div class="row" style="margin-top:10px"><button class="btn sm" id="ocrReq">보완 요청 알림톡 발송</button><button class="btn sm ghost" id="ocrReset">처음부터</button></div></div>';
+ if(st>0&&st<3)h+='<button class="btn full" id="ocrNext">다음 단계 →</button>';
+ return h;
+};
+BIND['d-ocr']=function(){
+ var d=$('#ocrDrop');if(d){d.onclick=function(){$('#ocrFile').click();setTimeout(function(){if(S.sel.ocrStep===0){S.sel.ocrStep=1;render()}},400)};$('#ocrFile').onchange=function(){S.sel.ocrStep=1;render()}}
+ var n=$('#ocrNext');if(n)n.onclick=function(){S.sel.ocrStep++;render()};
+ var q=$('#ocrReq');if(q)q.onclick=function(){toast('보완 요청 알림톡 발송 (데모)')};
+ var rs=$('#ocrReset');if(rs)rs.onclick=function(){S.sel.ocrStep=0;render()};
+};
+
+/* ================= 창구 · 미가입 손실 안내 (슬라이드 4) ================= */
+PAGES['d-loss']=function(){
+ var regions=[['전북 장수군','사과',24,3200],['경북 영주시','사과',19,3100],['충남 홍성군','양돈',1.8,0],['전남 나주시','배',21,2800],['경남 하동군','녹차',15,1400],['제주 서귀포시','감귤',17,2600]];
+ return '<div class="card"><h3>기후데이터 분석 · 미가입 손실액 추정 안내</h3><p class="xs mut" style="margin:0">STEP 01 맞춤형 보장 진단 → STEP 02 손실 시뮬레이션</p></div>'+
+ '<div class="card"><h3>STEP 01 · 지역·작목 기후 위험</h3><select id="lsR">'+regions.map(function(r,i){return '<option value="'+i+'">'+r[0]+' · '+r[1]+'</option>'}).join('')+'</select>'+
+ '<div class="row" style="margin-top:8px"><span class="sm">고객 현재 가입</span><select id="lsI" style="width:auto"><option value="0">미가입</option><option value="1">주계약만</option><option value="2">주계약+특약</option></select></div><div id="lsO"></div></div>';
+};
+BIND['d-loss']=function(){
+ var regions=[['전북 장수군','사과',24,3200,['봄 냉해','우박','태풍 낙과']],['경북 영주시','사과',19,3100,['우박','일소','저온']],['충남 홍성군','양돈',1.8,0,['폭염 폐사','화재','정전']],['전남 나주시','배',21,2800,['태풍 낙과','저온','우박']],['경남 하동군','녹차',15,1400,['동해','가뭄','서리']],['제주 서귀포시','감귤',17,2600,['태풍','한파','일소']]];
+ function calc(){var r=regions[+$('#lsR').value],ins=+$('#lsI').value,pig=r[1]==='양돈';
+  var val=pig?2000*38:r[3],loss=val*r[2]/100,cov=[0,0.6,0.85][ins],gap=loss*(1-cov);
+  $('#lsO').innerHTML='<h4>다발 기후 위험</h4><div class="chips">'+r[4].map(function(x,i){return '<span class="tag '+(i?'y':'r')+'">'+x+'</span>'}).join('')+'</div>'+
+  '<h4>STEP 02 · 보장 공백 시 예상 피해</h4><div class="grid2"><div class="kpi"><b style="color:var(--r4)">'+won(loss)+'</b><small>평균 손해액 ('+(pig?'2,000두':'1ha')+')</small></div><div class="kpi"><b style="color:var(--r3)">'+won(gap)+'</b><small>보장 공백 (고객 부담)</small></div></div>'+
+  '<div class="callout '+(ins<2?'warn':'')+'" style="margin-top:10px">“'+r[0]+' '+r[1]+' 농가가 보험 없이 '+r[4][0]+' 피해를 입으면 평균 <b>'+won(loss)+'</b>를 직접 부담하게 됩니다.”</div><p class="xs mut">※ 지역 평균 피해율 '+r[2]+'% · 타사 “미보장 시 평균 손해액 제시” 방식 벤치마킹 · 데모 수치</p>'};
+ $('#lsR').onchange=calc;$('#lsI').onchange=calc;calc();
+};
+
+/* ================= 창구 · 효과 ================= */
+PAGES['d-kpi']=function(){
+ var k=[['인수 심사 소요시간','45분','12분',73],['서류 보완 요청률','31%','12%',61],['심사 비용 (건당)','1.0','0.55',45],['보장 공백 관련 민원','100','60',40]];
+ return '<div class="card"><h3>AI 프로세스 혁신 기대효과</h3><p class="xs mut" style="margin:0 0 8px">인수·지급 업무 효율화 및 민원 예방 · 목표치(가정)</p>'+
+ k.map(function(x){return '<div style="margin:12px 0"><div class="row sp sm"><b>'+x[0]+'</b><span class="ok">−'+x[3]+'%</span></div><div class="row sm mut"><span>현행 '+x[1]+'</span><span>→</span><span class="b" style="color:var(--g)">AI '+x[2]+'</span></div><div class="bar"><i style="width:'+(100-x[3])+'%;background:var(--g7)"></i></div></div>'}).join('')+'</div>'+
+ '<div class="card"><h3>업무 흐름 변화</h3><table><tr><th>단계</th><th>현행</th><th>AI 적용</th></tr><tr><td>상담</td><td>약관 숙지 필요</td><td>키워드 입력 → 보장분석</td></tr><tr><td>서류</td><td>수기 확인·복사</td><td>OCR + 마이데이터 자동 대조</td></tr><tr><td>심사</td><td>농축협·본사 이중 검토</td><td>표준 체크리스트 · 예외만 본사</td></tr><tr><td>사후</td><td>사고 후 접수</td><td>조기경보 기반 사전 예방</td></tr></table></div>';
+};
+
+/* ================= 지자체 · Macro (슬라이드 20 L1) ================= */
+var DO=[['경기',48,71],['강원',63,84],['충북',55,78],['충남',72,92],['전북',76,95],['전남',69,88],['경북',66,86],['경남',58,80],['제주',61,90]];
+PAGES['g-macro']=function(){
+ var s=S.sel.region,r=DO[s];
+ return '<div class="card"><div class="hd"><h3 style="margin:0">LEVEL 1 · 전국 재해 위험 히트맵</h3><span class="tag b">Macro</span></div><p class="xs mut" style="margin:2px 0 10px">권역별 기상특보·손해율 모니터링 → 본사·정부 정책 지원</p>'+
+ '<div class="heat" style="grid-template-columns:repeat(3,1fr)">'+DO.map(function(d,i){return '<div class="cell '+(i===s?'sel':'')+'" data-reg="'+i+'" style="background:'+col(d[1])+'">'+d[0]+'<em>'+d[1]+'</em></div>'}).join('')+'</div></div>'+
+ '<div class="card"><h3>'+r[0]+' 권역 현황</h3><div class="grid3"><div class="kpi"><b style="color:'+col(r[1])+'">'+r[1]+'</b><small>위험지수</small></div><div class="kpi"><b>'+r[2]+'%</b><small>당해 손해율</small></div><div class="kpi"><b>'+(r[1]*37).toLocaleString()+'</b><small>경보 대상 농가</small></div></div>'+
+ '<h4>권역별 손해율</h4>'+DO.map(function(d){return '<div class="hbar"><span>'+d[0]+'</span><div class="bar"><i style="width:'+d[2]+'%;background:'+(d[2]>=90?'var(--r4)':d[2]>=80?'var(--r3)':'var(--g7)')+'"></i></div><span>'+d[2]+'%</span></div>'}).join('')+
+ '<div class="note">💡 정책 지원: 위험지수 70 이상 권역('+DO.filter(function(d){return d[1]>=70}).map(function(d){return d[0]}).join('·')+')에 재해 대비 예산·현장 점검 우선 배정 권고</div></div>';
+};
+BIND['g-macro']=function(){$$('[data-reg]').forEach(function(b){b.onclick=function(){S.sel.region=+b.getAttribute('data-reg');render()}})};
+
+/* ================= 지자체 · Meso (슬라이드 20 L2, 22-②) ================= */
+var SIGUN=['전주','군산','익산','정읍','남원','김제','완주','진안','무주','장수','임실','순창','고창','부안'];
+var HZ={cold:[38,30,35,58,66,42,55,79,77,84,72,63,40,36],heat:[61,57,60,66,58,70,59,44,41,46,50,62,68,64],wind:[34,72,40,45,38,55,36,30,29,31,33,37,69,78]};
+S.sel.hz='cold';
+PAGES['g-meso']=function(){
+ var d=HZ[S.sel.hz],s=S.sel.sigun,v=d[s];
+ var days=[0,1,2,3,4,5,6,7,8].map(function(j){return Math.max(15,Math.min(98,Math.round(v+Math.sin(j*1.3+s)*14-(j>5?8:0)+(j===2?10:0))))});
+ var emd=[['장계면',23,4],['장수읍',31,-3],['계남면',12,8],['천천면',9,-6],['번암면',4,0],['산서면',14,2],['계북면',3,0]];
+ var adv={cold:'D+3 새벽 방상팬·미세살수 가동 지원, 미가입 과수농가 봄동상해 특약 안내',heat:'D+2 축사 냉방·비상발전기 점검반 투입, 가금·양돈 밀집지 우선',wind:'시설하우스 결박·피복재 점검, 해안 읍면 농기계 고지대 이동 안내'}[S.sel.hz];
+ return '<div class="card"><div class="hd"><h3 style="margin:0">LEVEL 2 · 전북 시군 위험도</h3><span class="tag b">Meso</span></div>'+
+ '<div class="chips" style="margin:10px 0">'+[['cold','저온·서리'],['heat','폭염'],['wind','강풍·태풍']].map(function(h){return '<button class="chip '+(h[0]===S.sel.hz?'on':'')+'" data-hz="'+h[0]+'">'+h[1]+'</button>'}).join('')+'</div>'+
+ '<div class="heat" style="grid-template-columns:repeat(4,1fr)">'+SIGUN.map(function(n,i){return '<div class="cell '+(i===s?'sel':'')+'" data-sg="'+i+'" style="background:'+col(d[i])+'">'+n+'<em>'+d[i]+'</em></div>'}).join('')+'</div></div>'+
+ '<div class="card"><div class="hd"><h3 style="margin:0">'+SIGUN[s]+' 상세</h3><span class="tag '+tcls(v)+'">'+lvl(v)+' '+v+'</span></div>'+
+ '<div class="grid3" style="margin-top:8px"><div class="kpi"><b>'+(120+s*37)+'</b><small>대상 농가</small></div><div class="kpi"><b>'+Math.round((120+s*37)*.62)+'</b><small>가입 농가</small></div><div class="kpi"><b>62%</b><small>가입률</small></div></div>'+
+ '<h4>일자별 위험지수</h4><div class="vbars">'+days.map(function(x,j){return '<div><span>'+x+'</span><i style="height:'+x+'%;background:'+col(x)+'"></i>D+'+(j+1)+'</div>'}).join('')+'</div>'+
+ '<div class="callout" style="margin-top:10px">💡 '+adv+' · 지자체 방재 예산 우선 배분 대상</div></div>'+
+ '<div class="card"><h3>읍면별 집계 (k-익명성 적용)</h3><table><tr><th>읍면</th><th>농가</th><th>위험</th><th>3년 평균지급</th></tr>'+emd.map(function(e,i){var sc=Math.min(97,v+e[2]);return e[1]<5?'<tr><td>'+e[0]+'</td><td colspan="3" class="mut">5농가 미만 → 시군 단위 합산</td></tr>':'<tr><td>'+e[0]+'</td><td>'+e[1]+'</td><td class="b" style="color:'+col(sc)+'">'+sc+'</td><td>'+won(800+i*90+s*20)+'</td></tr>'}).join('')+'</table>'+
+ '<div class="note">🔒 개별 필지가 아닌 법정동·500m 격자 및 최소 5농가 이상 집계 통계로만 제공</div></div>';
+};
+BIND['g-meso']=function(){$$('[data-hz]').forEach(function(b){b.onclick=function(){S.sel.hz=b.getAttribute('data-hz');render()}});$$('[data-sg]').forEach(function(b){b.onclick=function(){S.sel.sigun=+b.getAttribute('data-sg');render()}})};
+
+/* ================= 지자체 · Micro (슬라이드 20 L3) ================= */
+PAGES['g-micro']=function(){
+ var cells='';for(var i=0;i<144;i++){var x=i%12,y=Math.floor(i/12),v=Math.round(40+30*Math.exp(-((x-4)*(x-4)+(y-7)*(y-7))/14)+18*Math.sin(x*.7+y*.4));v=Math.max(20,Math.min(95,v));cells+='<i class="'+(i===88?'me':'')+'" style="background:'+col(v)+'" title="'+v+'"></i>'}
+ return '<div class="card"><div class="hd"><h3 style="margin:0">LEVEL 3 · 격자(500m) 집계 분석</h3><span class="tag b">Micro</span></div><p class="xs mut" style="margin:2px 0 10px">장수군 장계면 일대 · D+3 새벽 저온 위험 · 1칸 = 500m 격자 · 최소 5농가 집계</p><div class="px">'+cells+'</div>'+
+ '<div class="row sp xs mut" style="margin-top:6px"><span>■ 테두리 = 집계 기준 충족 격자</span><span>저지대일수록 냉기 정체</span></div></div>'+
+ '<div class="card"><h3>농가 직통 알림 (본인 동의 농가만)</h3><div class="callout bad">🔔 [D+3 저온 주의] 내 농장 위험지수 86 · 봄동상해 특약 미가입<br><span class="xs">→ NH오늘농사 앱 푸시 · 알림톡 · 고령농 음성 ARS</span></div>'+
+ '<table style="margin-top:10px"><tr><th>채널</th><th>대상</th><th>내용</th></tr><tr><td>앱 푸시</td><td>동의 농가</td><td>위험지수 + 보장공백</td></tr><tr><td>알림톡</td><td>동의 농가</td><td>대응요령 + 특약 안내</td></tr><tr><td>문자/ARS</td><td>미동의·고령</td><td>재해 대응요령만</td></tr></table>'+
+ '<div class="note">🔒 필지 단위 정보는 지자체에 제공되지 않으며, 농가 본인에게만 직접 전달됩니다.</div></div>';
+};
+
+/* ================= 지자체 · 연계 매트릭스 (슬라이드 14) ================= */
+PAGES['g-matrix']=function(){
+ var M=[['농작물재해보험','저온·서리·폭염·강풍·호우','품목·생육기별 재해 손해율','방제·배수 대응법 및 특약 확인'],['가축재해보험','폭염(최고기온)·한파·대설','축종별 폐사율·축사 파손액','냉난방·환기 설비 사전 점검 알림'],['농기계종합보험','집중호우·침수·강우·짙은 안개','침수 수리비·농번기 사고 빈도','고지대 이동 보관 및 안전운행 경보'],['풍수해·지진재해','태풍·순간최대풍속·적설량','온실·하우스 구조별 파손율','하우스 결박·제설 대비 행동요령']];
+ return '<div class="card"><h3>정책보험 전 상품 × 기상조기경보 통합 연계</h3>'+M.map(function(m){return '<div style="padding:10px 0;border-top:1px solid var(--line)"><div class="b">'+m[0]+'</div><div class="sm"><span class="tag b">경보요소</span> '+m[1]+'</div><div class="sm"><span class="tag">지급데이터</span> '+m[2]+'</div><div class="sm"><span class="tag o">사전안내</span> '+m[3]+'</div></div>'}).join('')+'</div>'+
+ '<div class="card"><h3>고유 데이터 집적 현황 (데모)</h3><div class="grid2"><div class="kpi"><b>🐄</b><small>가축재해 · 축종별 사육·사고</small></div><div class="kpi"><b>🚜</b><small>농기계 · 기종별 운행·손해</small></div><div class="kpi"><b>🌪</b><small>풍수해·지진 · 지역별 피해</small></div><div class="kpi"><b>🌾</b><small>농작물 · 품목별 재배·재해</small></div></div></div>';
+};
+
+/* ================= 지자체 · AI 엔진·API (슬라이드 10, 22-①) ================= */
+PAGES['g-engine']=function(){
+ return '<div class="card"><h3>조기경보 × 지급데이터 연계 구조</h3><p class="xs mut" style="margin:0 0 10px">단순 기상 경보를 넘어 “과거 유사 기상에서 실제 발생한 지급 패턴”을 결합</p>'+
+ '<div class="flow"><div class="n"><b class="sm">농진청 조기경보 (9일)</b><div class="xs mut">30m 격자 기상예측 · 재해경보 · API</div></div><div class="ar">＋</div><div class="n"><b class="sm">당사 정책보험 지급데이터</b><div class="xs mut">사고원인 · 손해율 · 지급액 (내부망)</div></div><div class="ar">↓</div><div class="n ai"><b class="sm">AI 재해피해 예측 엔진</b><div class="xs">기상 임계치별 실제 손실 추정</div></div><div class="ar">↓</div><div class="n"><b class="sm">0~100점 위험지수만 외부 제공</b><div class="xs mut">원천데이터 반출 차단</div></div></div></div>'+
+ '<div class="card"><h3>임계치 학습 예시 (사과 개화기)</h3><table><tr><th>최저기온</th><th>과거 지급률</th><th>평균 피해율</th><th>경보</th></tr><tr><td>0℃ 이상</td><td>2%</td><td>3%</td><td><span class="tag">관심</span></td></tr><tr><td>0 ~ −1℃</td><td>18%</td><td>11%</td><td><span class="tag y">주의</span></td></tr><tr><td>−1 ~ −2℃</td><td>47%</td><td>24%</td><td><span class="tag o">경계</span></td></tr><tr><td>−2℃ 이하</td><td>81%</td><td>46%</td><td><span class="tag r">심각</span></td></tr></table></div>'+
+ '<div class="card"><h3>외부 제공 API 응답 예시</h3><p class="xs mut" style="margin:0">지자체·중앙회 앱 연동 시 결과값(수치)만 전달 → 결합 규제 원천 회피</p>'+
+ '<pre>GET /v1/risk-index?grid=500m&amp;code=4580025000\n{\n  "area": "장수군 장계면 (500m 격자 12개)",\n  "hazard": "저온·서리",\n  "date": "D+3",\n  "risk_index": 84,\n  "grade": "경계",\n  "farms_aggregated": 23,   // ≥ 5 (k-익명)\n  "personal_data": null     // 계약·사고 원천 미포함\n}</pre></div>';
+};
+
+
+/* ================= v2: 통합 계약 · 알림 · 사고접수 · AI 상담 · 지급심사 ================= */
+FARMS.rice={name:'정○○ 농가',region:'전남 나주시 ○○면',emd:'○○면',sigun:'나주시',item:'벼(일반답) 3.5ha',icon:'🌾',score:78,
+  stage:'출수기',plot:'일반답 · 배수로 인접 저지대',
+  fc:[{d:'월',i:'🌧',tn:21,tx:27,r:35,k:62},{d:'화',i:'⛈',tn:22,tx:26,r:120,k:88,hz:'집중호우'},{d:'수',i:'🌧',tn:22,tx:27,r:60,k:79,hz:'논 침수 우려'},{d:'목',i:'🌥',tn:23,tx:30,r:5,k:76,hz:'고온다습 · 병해'},{d:'금',i:'🌤',tn:22,tx:31,r:0,k:58},{d:'토',i:'☀️',tn:23,tx:32,r:0,k:45},{d:'일',i:'⛅',tn:22,tx:30,r:0,k:40},{d:'월',i:'🌧',tn:21,tx:27,r:20,k:52},{d:'화',i:'⛅',tn:20,tx:28,r:0,k:38}],
+  alerts:{1:{t:'D+2 집중호우 120mm (논 침수 우려)',prod:'농작물재해보험',past:'나주시 벼 사고 2위 호우(22%) · 과거 유사 강우 시 저지대 논 침수 지급 집중',cover:{ok:true,txt:'벼 주계약 호우 피해 보장'},act:['물꼬·배수로 사전 정비','논두렁 붕괴 위험 구간 점검','침수 시 사진 촬영 후 7일 내 사고 접수']},
+          3:{t:'D+4 고온다습 → 깨씨무늬병 확산 우려',prod:'농작물재해보험',past:'나주시 벼 사고 1위 깨씨무늬병(67%)',cover:{ok:false,txt:'병충해 보장특약 미가입 → 깨씨무늬병 피해 보상 제한'},act:['적용 약제로 사전 방제','칼리질 비료 추가 시비 검토','병반 발생 시 사진 기록']}},
+  assets:[{k:'작물',n:'벼 3.5ha',ins:'농작물재해보험 (벼)',ok:true},{k:'농기계',n:'콤바인',ins:'농기계종합보험',ok:true},{k:'농기계',n:'이앙기',ins:null,ok:false},{k:'시설',n:'방제·배수 시설',ins:null,ok:false},{k:'인적',n:'경영주 본인 (64세)',ins:null,ok:false}],
+  riders:[['병충해 보장특약',false,'나주 사고 1위 깨씨무늬병(67%)'],['자기부담 10~15%형 전환',false,'실부담 보험료 16.3%로 부담 작음'],['수확불능 보장',true,'']],
+  self:{me:20,peer:'10~15%',peerShare:63},
+  hist:[{y:2023,c:'깨씨무늬병',p:540,m:'9월'},{y:2024,c:'깨씨무늬병',p:780,m:'9월'},{y:2025,c:'호우 침수',p:310,m:'7월'}],
+  repeat:'9월 깨씨무늬병 피해 2년 연속 — 매년 8월 중순 방제·특약 점검 대상',
+  local:{top:[['깨씨무늬병',67],['호우',22],['기타',11]],avg:410,farms:168,ins:66},
+  sim:{price:1200,base:35,sc:[['평년 수준',6],['인근 평균(3년)',15],['최악 연도',35]]},
+  trend:[2]};
+FARMS.hanwoo={name:'윤○○ 한우농장',region:'경기도 ○○시 ○○면',emd:'○○면',sigun:'경기도',item:'한우 번식·비육 62두',icon:'🐄',score:72,
+  stage:'겨울철',plot:'우사 2동 · 전기설비 12년 경과',
+  fc:[{d:'월',i:'⛅',tn:2,tx:13,r:0,k:44},{d:'화',i:'🌬',tn:-3,tx:6,r:0,w:12,k:63,hz:'강풍·건조'},{d:'수',i:'🥶',tn:-9,tx:0,r:0,k:81,hz:'한파'},{d:'목',i:'🥶',tn:-7,tx:2,r:0,k:76,hz:'한파·큰 일교차'},{d:'금',i:'☀️',tn:-4,tx:6,r:0,k:70,hz:'건조 · 화재 위험'},{d:'토',i:'☀️',tn:-2,tx:8,r:0,k:50},{d:'일',i:'⛅',tn:0,tx:9,r:0,k:42},{d:'월',i:'🌨',tn:-3,tx:3,r:6,k:55},{d:'화',i:'⛅',tn:-1,tx:7,r:0,k:40}],
+  alerts:{2:{t:'D+3 한파 −9℃ (송아지 질병폐사 위험)',prod:'가축재해보험',past:'경기도 한우 사고 1위 질병폐사(68%) · 한파·큰 일교차 시기 폐사 지급 집중',cover:{ok:true,txt:'소 주계약 질병폐사 보장 (사고 시 가입액의 평균 51% 지급)'},act:['송아지 방풍막·보온등 설치','환기는 유지하며 외풍 차단','기침·설사 개체 수의사 진료']},
+          4:{t:'D+5 건조·강풍 → 축사 화재 위험',prod:'가축재해보험',past:'화재 발생 시 가축 평균 2억 원 · 축사 1,483만 원 대형 보험금',cover:{ok:false,txt:'축사(건물) 화재 담보 미가입 → 건물 피해 보상 불가'},act:['노후 전기배선·보온등 점검','소화기 비치 및 사용법 확인','건초 더미와 전열기 거리 두기']}},
+  assets:[{k:'가축',n:'한우 62두',ins:'가축재해보험 (소 주계약)',ok:true},{k:'시설',n:'우사 2동',ins:null,ok:false},{k:'설비',n:'전기·보온 설비',ins:null,ok:false},{k:'농기계',n:'TMR 배합기',ins:null,ok:false},{k:'인적',n:'경영주 본인 (58세)',ins:'농업인안전보험',ok:true}],
+  riders:[['축사(건물) 화재 담보',false,'화재 시 축사 평균 1,483만 원 지급'],['가입금액 현실화',false,'두당 380만 원 < 경기 평균 473만 원 (일부보험 우려)'],['긴급도축(절박도살) 보장',true,'경기 2위 사고 절박도살(32%)']],
+  self:{me:20,peer:'20%',peerShare:71},
+  hist:[{y:2024,c:'질병폐사 (송아지)',p:230,m:'2월'},{y:2025,c:'절박도살 (골절)',p:250,m:'5월'}],
+  repeat:'겨울철 송아지 질병폐사 반복 — 매년 11월 말 보온·방역 점검 대상',
+  local:{top:[['질병폐사',68],['절박도살',32]],avg:241,farms:86,ins:77},
+  sim:{price:380,base:62,unit:'두',min:10,max:200,step:1,sc:[['평년 수준',2],['지역 평균',5],['최악 연도',12]]},
+  trend:[1]};
+FARMS.rice.pol=[
+ {p:'농작물재해보험',ic:'🌾',sub:'벼 · 일반답 3.5ha',st:'ok',until:'2026-11-30',tot:184,me:30,amt:4200},
+ {p:'농기계종합보험',ic:'🚜',sub:'콤바인',st:'ok',until:'2027-05-20',tot:45,me:22,amt:3500},
+ {p:'풍수해·지진재해',ic:'🌪',sub:'농산물 창고',st:'no',why:'나주 집중호우 시 저지대 창고 침수 반복'},
+ {p:'가축재해보험',ic:'🐄',sub:'사육 가축 없음',st:'na'}];
+FARMS.hanwoo.pol=[
+ {p:'가축재해보험',ic:'🐄',sub:'한우 62두 · 소 주계약',st:'ok',until:'2027-03-31',tot:310,me:62,amt:23560},
+ {p:'풍수해·지진재해',ic:'🌪',sub:'우사 2동',st:'no',why:'축사 화재 시 건물 평균 1,483만 원 · 건물 담보 필요'},
+ {p:'농기계종합보험',ic:'🚜',sub:'TMR 배합기 · 트랙터',st:'no',why:'축사 내 농기계 사고 증가'},
+ {p:'농작물재해보험',ic:'🌾',sub:'재배 작물 없음',st:'na'}];
+FARMS.rice.claim={type:'깨씨무늬병 피해',date:'D+4 이후',ai:24,unit:'수확감소율',base:4200,self:20,boxes:[[12,22,30,20],[50,48,26,22]],wx:'출수기 고온다습(평균 27℃ · 습도 90%) 지속'};
+FARMS.hanwoo.claim={type:'질병폐사',date:'D+3 한파',ai:2,unit:'폐사 두수',per:380,self:20,boxes:[[24,36,40,30]],wx:'사고일 최저 −9.4℃ (경보 −9℃)'};
+FARMS.apple.pol=[
+ {p:'농작물재해보험',ic:'🌾',sub:'사과 · 적과전 종합위험',st:'ok',until:'2026-11-30',tot:420,me:84,amt:3840},
+ {p:'농기계종합보험',ic:'🚜',sub:'트랙터 55마력',st:'ok',until:'2027-04-12',tot:38,me:19,amt:2800},
+ {p:'풍수해·지진재해',ic:'🌪',sub:'저온저장고 66㎡',st:'no',why:'최근 3년 장계면 강풍 창고 파손 지급 6건'},
+ {p:'가축재해보험',ic:'🐄',sub:'사육 가축 없음',st:'na'}];
+FARMS.pig.pol=[
+ {p:'가축재해보험',ic:'🐄',sub:'비육돈 2,350두 + 축사 3동',st:'ok',until:'2027-06-30',tot:1850,me:370,amt:89300},
+ {p:'풍수해·지진재해',ic:'🌪',sub:'관리사·창고',st:'no',why:'홍성군 태풍 시 관리동 지붕 파손 반복'},
+ {p:'농기계종합보험',ic:'🚜',sub:'스키드로더 1대',st:'no',why:'축사 내 농기계 대인사고 증가'},
+ {p:'농작물재해보험',ic:'🌾',sub:'재배 작물 없음',st:'na'}];
+FARMS.farm.pol=[
+ {p:'농작물재해보험',ic:'🌾',sub:'딸기 · 시설작물',st:'ok',until:'2027-05-31',tot:260,me:52,amt:4950},
+ {p:'풍수해·지진재해',ic:'🌪',sub:'연동 비닐온실 (농업용시설물)',st:'ok',until:'2027-05-31',tot:310,me:62,amt:9800},
+ {p:'농기계종합보험',ic:'🚜',sub:'관리기 1대',st:'no',why:'귀농 초기 농기계 사고 비중 높음'},
+ {p:'가축재해보험',ic:'🐄',sub:'사육 가축 없음',st:'na'}];
+FARMS.apple.claim={type:'저온(동상해) 피해',date:'D+3 새벽',ai:31,unit:'착과 피해율',base:3840,self:20,boxes:[[14,20,22,18],[52,38,20,22],[30,60,18,16]],wx:'사고일 농진청 관측 최저 −1.8℃ (경보 −1.5℃)'};
+FARMS.pig.claim={type:'폭염 폐사',date:'D+3',ai:42,unit:'폐사 두수',per:38,self:20,boxes:[[20,40,26,20],[55,50,24,18]],wx:'사고일 축사 인근 최고 36.4℃ (경보 36℃)'};
+FARMS.farm.claim={type:'대설 시설 파손',date:'D+3',ai:18,unit:'시설 손해율',base:9800,self:10,boxes:[[10,10,50,20],[60,30,28,30]],wx:'사고일 적설 13cm (경보 12cm)'};
+S.read={};S.chat={};S.claimStep={};S.cases=S.cases||[];S.rules=S.rules||[];S.audit=S.audit||[];S.claimSent=S.claimSent||{};
+function inboxItems(){var f=F(),it=[];Object.keys(f.alerts).forEach(function(d){var a=f.alerts[d];it.push({id:S.farm+'a'+d,ic:'⚠️',t:a.t,s:a.cover.ok?'가입 보장 범위 내 · 대응요령 확인':'보장 공백 있음 · '+a.cover.txt.split('→')[0],go:'f-alert',day:+d,when:'방금'})});
+ f.pol.forEach(function(x){if(x.st==='ok'&&x.until&&x.until<'2027-01-01')it.push({id:S.farm+'r'+x.p,ic:'📅',t:x.p+' 만기 '+x.until.slice(5).replace('-','/')+'',s:'갱신 시 미가입 특약 함께 검토하세요',go:'f-cover',when:'오늘'})});
+ if(!f.mine)it.push({id:S.farm+'loc',ic:'📍',t:f.emd+' 이웃 농가 통계 업데이트',s:'최근 3년 1위 사고원인: '+f.local.top[0][0],go:'f-local',when:'어제'});
+ it.push({id:S.farm+'rec',ic:'✨',t:'내 농장 맞춤 보험 패키지 도착',s:'보장 공백 '+f.riders.filter(function(r){return!r[1]}).length+'건 기반 추천',go:'f-reco',when:'2일 전'});
+ (LV.alerts||[]).forEach(function(a,i){it.unshift({id:'lv'+a.at,ic:'📡',t:a.t,s:'실시간 조회 기반 · 대응요령은 실시간 탭에서 확인',go:'f-live',when:'방금'})});
+ return it}
+function unread(){return inboxItems().filter(function(x){return!S.read[x.id]}).length}
+function homeTop(){var f=F(),ok=f.pol.filter(function(x){return x.st==='ok'}),no=f.pol.filter(function(x){return x.st==='no'});
+ return '<div class="card"><div class="hd"><h3 style="margin:0">🔗 4대 정책보험 한눈에</h3><button class="btn sm ghost" data-go="f-cover">전체</button></div><div class="row" style="margin-top:10px;justify-content:space-around">'+f.pol.map(function(x){return '<div style="text-align:center;width:25%"><div class="pol '+(x.st==='ok'?'':x.st)+'" style="border:0;padding:0;justify-content:center"><div class="pi">'+x.ic+'</div></div><div class="xs" style="margin-top:4px">'+x.p.replace('보험','').replace('·지진재해','')+'</div><div class="xs b '+(x.st==='ok'?'ok':x.st==='no'?'pd':'mut')+'">'+(x.st==='ok'?'가입':x.st==='no'?'미가입':'해당없음')+'</div></div>'}).join('')+'</div>'+
+ (no.length?'<div class="callout warn" style="margin-top:10px">'+no[0].ic+' '+no[0].p+' 미가입 — '+no[0].why+'</div>':'')+'</div>'}
+function quickMenu(){var q=[['f-live','📡','실시간 위험'],['f-reco','✨','맞춤추천'],['f-local','📍','우리동네'],['f-claim','📸','사고접수'],['f-chat','💬','AI 상담'],['f-cover','💸','손실계산'],['f-alert','🛰','9일 경보'],['set','🔒','내 정보']];
+ return '<div class="card"><div class="qgrid">'+q.map(function(x){return '<button data-go="'+x[0]+'"><span>'+x[1]+'</span>'+x[2]+'</button>'}).join('')+'</div></div>'}
+function polCard(){var f=F(),ok=f.pol.filter(function(x){return x.st==='ok'}),tot=ok.reduce(function(a,x){return a+x.tot},0),me=ok.reduce(function(a,x){return a+x.me},0);
+ return '<div class="card"><h3>🔗 통합 계약 현황 (4대 정책보험)</h3>'+f.pol.map(function(x){return '<div class="pol '+(x.st==='ok'?'':x.st)+'"><div class="pi">'+x.ic+'</div><div style="flex:1"><div class="row sp"><b class="sm">'+x.p+'</b>'+(x.st==='ok'?'<span class="tag">가입</span>':x.st==='no'?'<span class="tag o">미가입</span>':'<span class="tag gr">해당없음</span>')+'</div><div class="xs mut">'+x.sub+'</div>'+
+  (x.st==='ok'&&!x.tot?'<div class="xs mut">가입 확인됨 · 만기·보험료는 계약 연동 후 표시</div>':x.st==='ok'?'<div class="xs">만기 '+x.until+' · 가입금액 '+won(x.amt)+' · 보험료 '+won(x.tot)+' 중 <b>본인부담 '+won(x.me)+'</b></div>':x.st==='no'?'<div class="xs" style="color:#b4560f">'+x.why+'</div>':'')+'</div></div>'}).join('')+
+ (tot?'<div class="grid2" style="margin-top:8px"><div class="kpi"><b>'+won(tot)+'</b><small>연간 총 보험료</small></div><div class="kpi"><b style="color:var(--g)">'+won(me)+'</b><small>실제 본인부담 ('+Math.round(me/tot*100)+'%)</small></div></div><p class="xs mut">※ 정부 50% + 지자체 지원 반영 (예시)</p>':'<p class="xs mut">실제 보험료·만기는 계약 데이터 연동 시 표시돼요.</p>')+'</div>'}
+
+/* ---- 알림함 ---- */
+PAGES['f-inbox']=function(){var it=inboxItems();
+ return farmPicker()+'<div class="card"><div class="hd"><h3 style="margin:0">🔔 알림함</h3><button class="btn sm ghost" id="readAll">모두 읽음</button></div><ul class="list inbox" style="margin-top:6px">'+it.map(function(x){return '<li data-ib="'+x.id+'" data-to="'+x.go+'" data-day="'+(x.day==null?'':x.day)+'"><span class="dot '+(S.read[x.id]?'read':'')+'"></span><span style="font-size:20px">'+x.ic+'</span><div style="flex:1"><div class="sm b">'+x.t+'</div><div class="xs mut">'+x.s+'</div></div><span class="xs mut">'+x.when+'</span></li>'}).join('')+'</ul></div>'+
+ '<div class="note">알림 채널: 앱 푸시 · 카카오 알림톡 · 문자 · 고령 농가 음성 ARS. 보장 공백 문구는 정보제공 동의 시에만 포함됩니다.</div>'};
+BIND['f-inbox']=function(){bindFarm();$$('[data-ib]').forEach(function(li){li.onclick=function(){S.read[li.getAttribute('data-ib')]=1;var d=li.getAttribute('data-day');if(d!=='')S.sel.day=+d;go(li.getAttribute('data-to'))}});$('#readAll').onclick=function(){inboxItems().forEach(function(x){S.read[x.id]=1});render()}};
+
+/* ---- 사고접수 · 지급 (AI 프로세스 혁신: 지급) ---- */
+function claimCalc(){var f=F(),c=f.claim;
+ if(c.per){var loss=c.ai*c.per;return{loss:loss,pay:Math.round(loss*(1-c.self/100)),desc:c.ai+'두 × '+c.per+'만 원'}}
+ var loss=c.base*c.ai/100;return{loss:loss,pay:Math.max(0,Math.round(c.base*(c.ai-c.self)/100)),desc:won(c.base)+' × ('+c.ai+'% − 자기부담 '+c.self+'%)'}}
+var VI={text:'',res:null};
+function bindVI(){var m=$('#viMic');if(!m)return;m.onclick=function(){startVoice(function(t){VI.text=t;VI.res=aiIntake(t,F());render()},'#viText')};
+ $('#viGo').onclick=function(){var t=$('#viText').value.trim();if(!t){toast('내용을 말하거나 입력해 주세요');return}VI.text=t;VI.res=aiIntake(t,F());render()};
+ var sd=$('#viSend');if(sd)sd.onclick=function(){var r=VI.res,c=newCase({type:'claim',cat:'etc',text:'[음성 사고접수] '+r.raw+' → 일시 '+r.when+' · 원인 '+r.cause+' · 규모 '+r.size});audit('음성 사고접수 '+c.id);S.claimStep[S.farm]=1;VI={text:'',res:null};save();toast('접수했어요 · '+c.id);render()}}
+function aiIntake(t,f){var cause=[[/냉해|서리|저온|얼었|동해|한파/,'저온·냉해'],[/태풍|강풍|바람/,'강풍'],[/호우|비가|침수|물에|잠겼/,'호우·침수'],[/폭염|더위|더워|일소/,'폭염'],[/병|깨씨|도열|방제/,'병해충'],[/폐사|죽었|쓰러/,'폐사'],[/화재|불이|불났/,'화재'],[/우박/,'우박']],when=[[/그저께|그제/,'그저께'],[/어제|어저께/,'어제'],[/오늘|아까|방금/,'오늘'],[/지난주/,'지난주'],[/(\d+)\s*일\s*전/,null]],cs='확인 필요',wh='확인 필요';
+ cause.forEach(function(x){if(cs==='확인 필요'&&x[0].test(t))cs=x[1]});
+ when.forEach(function(x){if(wh!=='확인 필요')return;var m=t.match(x[0]);if(m)wh=x[1]||(m[1]+'일 전')});
+ var sz=t.match(/(\d+)\s*(두|마리|평|헥타르|ha|a|동|그루|%)/);
+ return{when:wh,item:f.item,cause:cs,size:sz?sz[0]:'확인 필요',raw:t}}
+function voiceIntake(f){var r=VI.res;
+ return '<div class="card"><h3>🎤 말로 사고 접수</h3><p class="xs mut" style="margin:0 0 8px">버튼을 누르고 “어제 서리 맞아서 사과 꽃이 얼었어요”처럼 말씀해 보세요. AI가 접수 내용으로 정리해 드려요.</p>'+
+  '<div class="row" style="gap:8px"><button class="btn" id="viMic" style="flex:1">🎤 말하기</button></div><textarea id="viText" rows="2" placeholder="직접 입력해도 돼요" style="margin-top:8px">'+esc(VI.text)+'</textarea><button class="btn ghost full" id="viGo" style="margin-top:6px">AI로 정리하기</button>'+
+  (r?'<table style="margin-top:10px;width:100%"><tr><th align="left">사고일시</th><td>'+r.when+'</td></tr><tr><th align="left">피해작목</th><td>'+esc(r.item)+'</td></tr><tr><th align="left">원인</th><td>'+r.cause+'</td></tr><tr><th align="left">피해 규모</th><td>'+r.size+'</td></tr></table><div class="note">접수 원문과 요약이 함께 저장돼 구두 전달 누락·오기 분쟁을 줄여요. “확인 필요” 항목은 담당자가 전화로 확인해요.</div><button class="btn full" id="viSend" style="margin-top:8px">이 내용으로 접수</button>':'')+'</div>'}
+PAGES['f-claim']=function(){
+ var f=F(),c=f.claim,st=S.claimStep[S.farm]||0,r=claimCalc();
+ var h=farmPicker()+'<div class="card"><h3>📸 사진 한 장으로 사고 접수</h3><p class="xs mut" style="margin:0">경보 이력 · 계약 · 경영체 정보가 자동으로 채워지고, AI가 피해를 1차 판독합니다</p>'+
+ ['사고 선택','사진 판독','예상 보험금','접수 완료'].map(function(t,i){return '<span class="tag '+(i<=st?'':'gr')+'" style="margin:8px 4px 0 0">'+(i+1)+'. '+t+'</span>'}).join('')+'</div>';
+ if(st===0)h+='<div class="card"><div class="callout bad">⚠️ '+c.date+' <b>'+c.type+'</b> 경보가 있었던 날이에요. 이 사고를 접수할까요?</div>'+
+  '<ul class="list" style="margin-top:8px"><li><span class="sm">계약</span><span class="sm b">'+f.pol[0].p+'</span></li><li><span class="sm">농가</span><span class="sm">'+f.name+' · '+f.region+'</span></li><li><span class="sm">대상</span><span class="sm">'+f.item+'</span></li><li><span class="sm">기상 근거</span><span class="sm">'+c.wx+'</span></li></ul>'+
+  '<button class="btn full" data-cs="1" style="margin-top:10px">이 사고로 접수</button></div>'+voiceIntake(f);
+ if(st===1){var ph=PHOTO[S.farm],has=!!ph;h+='<div class="card"><h3>피해 사진 올리기</h3><div class="photo" style="'+(has&&ph!=='demo'?'background:#222 url('+ph+') center/cover no-repeat':(has?'':'background:#e8ece6'))+'">'+(has?c.boxes.map(function(b){return '<i style="left:'+b[0]+'%;top:'+b[1]+'%;width:'+b[2]+'%;height:'+b[3]+'%"></i>'}).join('')+'<span>AI 판독: 피해 영역 '+c.boxes.length+'곳</span>':'<div style="position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;color:#6b7a66"><div style="font-size:44px">📷</div><div class="sm">피해 부위를 가까이서 찍어 주세요</div></div>')+'</div>'+
+  (has?'<div class="grid2" style="margin-top:10px"><div class="kpi"><b style="color:var(--r4)">'+c.ai+(c.per?'두':'%')+'</b><small>AI 추정 '+c.unit+'</small></div><div class="kpi"><b>92%</b><small>판독 신뢰도</small></div></div>':'')+
+  '<input type="file" accept="image/*" id="clFile" style="display:none"><div class="row" style="margin-top:10px;gap:8px"><button class="btn" id="clCam" style="flex:1">📷 카메라로 촬영</button><button class="btn ghost" id="clPick" style="flex:1">🖼 앨범에서 선택</button></div>'+
+  (has?'<button class="btn full" data-cs="2" style="margin-top:8px">판독 결과 확인 →</button>':'<button class="btn full ghost" id="clDemo" style="margin-top:8px">사진 없이 예시로 보기 (시연)</button>')+
+  '<p class="xs mut">※ AI 판독 수치는 예시값이에요. 촬영한 사진은 이 기기 화면에만 표시되고 서버로 전송하지 않아요.</p></div>'}
+ if(st===2)h+='<div class="card"><h3>예상 보험금</h3><div style="text-align:center;padding:8px 0"><div class="xs mut">예상 지급액</div><div style="font-size:30px;font-weight:900;color:var(--g)">'+won(r.pay)+'</div><div class="xs mut">'+r.desc+'</div></div>'+
+  '<div class="hbar"><span>추정 손해</span><div class="bar"><i style="width:100%;background:var(--r4)"></i></div><span style="width:70px">'+won(r.loss)+'</span></div><div class="hbar"><span>보험금</span><div class="bar"><i style="width:'+(r.pay/r.loss*100)+'%;background:var(--g7)"></i></div><span style="width:70px">'+won(r.pay)+'</span></div>'+
+  '<div class="callout" style="margin-top:8px">🛰 기상 교차검증 일치 · 소액·고신뢰 건은 <b>현장조사 없이 신속 지급</b> 대상</div><p class="xs mut">최종 지급액은 손해평가 후 확정됩니다 (데모 계산)</p><button class="btn full" data-cs="3">접수하기</button></div>';
+ if(st===3)h+='<div class="card"><h3>✅ 접수 완료 · 진행 현황</h3><div class="tl"><div class="done"><b class="sm">접수 완료</b><div class="xs mut">오늘 · 접수번호 C-2611-0'+(S.farm.length*317)+'</div></div><div class="done"><b class="sm">AI 1차 판독 · 기상 교차검증</b><div class="xs mut">'+c.wx+'</div></div><div class="now"><b class="sm">손해평가 일정 배정</b><div class="xs mut">'+f.sigun+' 손해평가인 · 2일 내 방문 예정</div></div><div><b class="sm">심사</b><div class="xs mut">본사 지급심사 (AI 이상징후 점검)</div></div><div><b class="sm">보험금 지급</b><div class="xs mut">예상 '+won(r.pay)+' · 등록 계좌</div></div></div><button class="btn ghost full" data-cs="0" id="csReset">처음으로 (데모)</button></div>';
+ if(!f.mine)h+='<div class="card"><h3>지난 사고 · 지급 내역</h3><table><tr><th>연도</th><th>원인</th><th>지급</th><th>소요</th></tr>'+f.hist.map(function(x,i){return '<tr><td>'+x.y+'</td><td>'+x.c+'</td><td class="b">'+won(x.p)+'</td><td>'+[34,27,19][i%3]+'일</td></tr>'}).join('')+'</table><div class="note">AI 지급 적용 시 평균 처리기간 27일 → 7일 목표 (가정)</div></div>';
+ return h};
+BIND['f-claim']=function(){bindFarm();bindVI();$$('[data-cs]').forEach(function(b){b.onclick=function(){S.claimStep[S.farm]=+b.getAttribute('data-cs');render()}});var p=$('#clPick');if(p){var fi=$('#clFile');p.onclick=function(){fi.removeAttribute('capture');fi.click()};
+  var cb=$('#clCam');if(cb)cb.onclick=function(){if(isApk()){toast('카메라를 여는 중이에요');location.href='camera:start'}else{fi.setAttribute('capture','environment');fi.click()}};
+  fi.onchange=function(){var f0=fi.files&&fi.files[0];if(!f0)return;var rd=new FileReader();rd.onload=function(){PHOTO[S.farm]=rd.result;render()};rd.readAsDataURL(f0)};
+  var dm=$('#clDemo');if(dm)dm.onclick=function(){PHOTO[S.farm]='demo';render()}}};
+window.onPhoto=function(b64){PHOTO[S.farm]='data:image/jpeg;base64,'+b64;toast('사진을 받았어요');render()};
+window.onPhotoErr=function(){toast('카메라를 열 수 없어요 · 앨범에서 선택해 주세요')};
+
+/* ---- AI 상담 ---- */
+var RIDER_INFO={'봄동상해':'개화기 전후 서리·저온으로 꽃·어린 과실이 피해를 입었을 때 보장하는 특약이에요. 기본 계약은 이 시기 동상해 보장이 제한돼요.','일소':'여름 강한 햇볕·고온으로 과실이 데이는 피해를 보장해요.','폭염':'폭염으로 가축이 폐사했을 때 보장해요. 기본 가축재해보험만으로는 보상되지 않아요.','전기적장치':'정전·누전 등 전기장치 사고로 환기·냉방이 멈춰 생긴 폐사나 화재를 보장해요.','부대시설':'온실의 ICT 제어기·난방기 같은 부대설비 손해를 보장해요.','자기부담':'손해 중 농가가 직접 부담하는 비율이에요. 낮을수록 보험금은 커지고 보험료는 올라가요.'};
+function botAnswer(q){var f=F(),gaps=f.riders.filter(function(r){return!r[1]}),pk=f.fc.reduce(function(m,x,i){return x.k>f.fc[m].k?i:m},0),al=f.alerts[pk]||f.alerts[2];
+ for(var k in RIDER_INFO){if(q.indexOf(k)>=0)return{t:'📘 '+k+'\n'+RIDER_INFO[k]+(k==='자기부담'?'\n\n내 농장: '+f.self.me+'% · 인근 유사 농가 '+f.self.peerShare+'%는 '+f.self.peer+'형을 선택했어요.':''),b:[['f-cover','내 보험 보기']]}}
+ if(/공백|빠진|미가입|부족/.test(q))return{t:S.consent.pers?'🛡 보장 공백 '+(gaps.length+f.pol.filter(function(x){return x.st==='no'}).length)+'건이 있어요.\n'+gaps.map(function(g){return '· '+g[0]+' ('+g[2]+')'}).join('\n')+'\n'+f.pol.filter(function(x){return x.st==='no'}).map(function(x){return '· '+x.p+' — '+x.sub}).join('\n'):'🔒 보장 공백 분석은 보험계약 이력 활용 동의 후 알려드릴 수 있어요.',b:S.consent.pers?[['f-reco','맞춤 추천 보기']]:[['set','동의 설정']]};
+ if(/위험|경보|날씨|이번|서리|폭염|태풍|눈/.test(q))return{t:'⚠️ 향후 9일 중 D+'+(pk+1)+'이(가) 가장 위험해요 (위험지수 '+f.fc[pk].k+').\n'+al.t+'\n\n'+al.past+'\n\n지금 할 일: '+al.act[0],b:[['f-alert','대응요령 전체']]};
+ if(/보험료|얼마|비용|부담/.test(q)){var ok=f.pol.filter(function(x){return x.st==='ok'});return{t:'💰 연간 보험료 '+won(ok.reduce(function(a,x){return a+x.tot},0))+' 중 실제 본인부담은 '+won(ok.reduce(function(a,x){return a+x.me},0))+'이에요. (정부·지자체 지원 반영)',b:[['f-cover','계약별 보기']]}}
+ if(/사고|피해|접수|보험금|청구/.test(q))return{t:'📸 사진 한 장으로 접수할 수 있어요.\n1) 경보 이력에서 사고 선택\n2) 피해 사진 → AI 1차 판독\n3) 예상 보험금 확인 후 접수\n피해 후 7일 안에 접수해 주세요.',b:[['f-claim','사고 접수하기']]};
+ if(/추천|가입|상품/.test(q))return{t:'✨ '+f.name+'에 맞는 패키지를 준비했어요: '+gaps.map(function(g){return g[0]}).join(', ')+' 등',b:[['f-reco','추천 패키지']]};
+ if(!f.mine&&/동네|이웃|지역|주변/.test(q))return{t:'📍 '+f.emd+' 최근 3년 1위 사고원인은 '+f.local.top[0][0]+', 평균 지급액은 '+won(f.local.avg)+'이에요.',b:[['f-local','우리동네 보기']]};
+ if(/만기|갱신/.test(q)){var o=f.pol.filter(function(x){return x.st==='ok'});return{t:'📅 '+o.map(function(x){return x.p+' 만기 '+x.until}).join('\n'),b:[['f-cover','내 보험']]}}
+ return{t:'아직 그 질문은 배우는 중이에요 🙏\n“보장 공백”, “이번 주 위험”, “보험료”, “사고 접수”, “봄동상해가 뭐야?” 처럼 물어봐 주세요.',b:[]}}
+PAGES['f-chat']=function(){var f=F(),log=S.chat[S.farm]||(S.chat[S.farm]=[{a:1,t:'안녕하세요, '+f.name+' 님 👋\n정책보험·재해 경보·사고 접수 무엇이든 물어보세요.'}]);
+ return farmPicker()+'<div class="chat" id="chatLog">'+log.map(function(m){return '<div class="msg '+(m.a?'a':'u')+'">'+m.t+(m.b&&m.b.length?'<div class="row wrap">'+m.b.map(function(x){return '<button class="btn sm ghost" data-go="'+x[0]+'">'+x[1]+'</button>'}).join('')+'</div>':'')+'</div>'}).join('')+'</div>'+
+ '<div class="chatbar"><div class="chips">'+['내 보장 공백은?','이번 주 위험','보험료 얼마?','사고 접수 방법','봄동상해가 뭐야?','자기부담비율','우리 동네 피해'].map(function(q){return '<button class="chip" data-q="'+q+'">'+q+'</button>'}).join('')+'</div><div class="row"><button class="micsm" id="chatMic" aria-label="말로 묻기">🎤</button><input type="text" id="chatIn" placeholder="🎤 누르고 말하거나 입력"><button class="btn" id="chatSend">전송</button></div></div>'};
+function ask(q){if(!q)return;var log=S.chat[S.farm];log.push({t:q});log.push(Object.assign({a:1},botAnswer(q)));render();setTimeout(function(){window.scrollTo(0,document.body.scrollHeight)},30)}
+BIND['f-chat']=function(){bindFarm();$('#chatMic').onclick=function(){startVoice(function(t){ask(t)},'#chatIn')};$$('[data-q]').forEach(function(b){b.onclick=function(){ask(b.getAttribute('data-q'))}});$('#chatSend').onclick=function(){ask($('#chatIn').value.trim())};$('#chatIn').onkeydown=function(e){if(e.key==='Enter')ask($('#chatIn').value.trim())};setTimeout(function(){window.scrollTo(0,document.body.scrollHeight)},30)};
+
+/* ---- 창구 · AI 지급심사 ---- */
+var CLAIMS=[
+ {id:'C-0412',farm:'김○○ (장수 사과)',type:'저온 동상해',ask:422,ai:31,wx:['사고일 최저 −1.8℃','경보 발령 이력 있음'],wxok:true,photo:'일치',hist:'최근 3년 2회 (정상 범위)',score:12,dec:'auto'},
+ {id:'C-0415',farm:'이○○ (홍성 양돈)',type:'폭염 폐사',ask:1277,ai:42,wx:['사고일 최고 36.4℃','폭염 경보 3일 연속'],wxok:true,photo:'폐사체 42두 확인',hist:'전년 동일 사고 1회',score:28,dec:'auto'},
+ {id:'C-0419',farm:'최○○ (나주 배)',type:'침수 낙과',ask:1850,ai:9,wx:['사고일 강수 0mm','인근 7일간 호우 특보 없음'],wxok:false,photo:'사진 촬영일 불일치 (메타데이터)',hist:'최근 2년 3회 · 유사 사진 재사용 의심',score:81,dec:'field'}];
+S.sel.cl=0;
+PAGES['d-claim']=function(){var c=CLAIMS[S.sel.cl];
+ return '<div class="card"><h3>AI 지급심사 대기열</h3><p class="xs mut" style="margin:0 0 6px">조기경보·관측 기상, 사진 판독, 과거 지급 패턴을 교차검증해 신속 지급 / 현장조사로 분류</p><ul class="list">'+CLAIMS.map(function(x,i){return '<li data-cl="'+i+'" style="cursor:pointer;'+(i===S.sel.cl?'background:var(--g1);margin:0 -14px;padding:9px 14px':'')+'"><div><div class="sm b">'+x.id+' · '+x.type+'</div><div class="xs mut">'+x.farm+' · 청구 '+won(x.ask)+'</div></div>'+(x.dec==='auto'?'<span class="tag">신속지급</span>':'<span class="tag r">현장조사</span>')+'</li>'}).join('')+'</ul></div>'+
+ '<div class="card"><div class="hd"><h3 style="margin:0">'+c.id+' 심사 상세</h3><span class="tag '+(c.score>=60?'r':'')+'">이상징후 '+c.score+'점</span></div>'+
+ '<div class="step"><div class="num">1</div><div><b class="sm">기상 교차검증 (농진청 관측·경보)</b>'+c.wx.map(function(w){return '<div class="sm '+(c.wxok?'':'ng')+'">'+(c.wxok?'✓ ':'✗ ')+w+'</div>'}).join('')+'</div></div>'+
+ '<div class="step"><div class="num">2</div><div><b class="sm">사진 AI 판독</b><div class="sm '+(c.dec==='auto'?'':'ng')+'">'+c.photo+'</div><div class="xs mut">AI 추정 피해 '+c.ai+(c.type.indexOf('폐사')>=0?'두':'%')+'</div></div></div>'+
+ '<div class="step"><div class="num">3</div><div><b class="sm">지급 이력 패턴</b><div class="sm">'+c.hist+'</div></div></div>'+
+ (c.dec==='auto'?'<div class="callout">✅ <b>신속 지급 권고</b> — 기상·사진·이력 모두 정상. 손해평가 서면 대체 가능</div>':'<div class="callout bad">🚩 <b>현장조사 필요</b> — 기상 근거 불일치 및 사진 재사용 의심. 손해평가인 현장 확인 배정</div>')+
+ '<div class="row" style="margin-top:10px"><button class="btn sm" id="clOk">'+(c.dec==='auto'?'지급 승인':'현장조사 배정')+'</button><button class="btn sm ghost" id="clHold">보류·메모</button></div></div>'+
+ '<div class="note">기상 데이터와 지급 이력을 결합하면 보험사기 예방과 정상 건 신속 지급을 동시에 달성 (민원 예방)</div>'};
+BIND['d-claim']=function(){$$('[data-cl]').forEach(function(li){li.onclick=function(){S.sel.cl=+li.getAttribute('data-cl');render()}});$('#clOk').onclick=function(){toast(CLAIMS[S.sel.cl].dec==='auto'?'지급 승인 완료 (데모)':'현장조사 배정 완료 (데모)')};$('#clHold').onclick=function(){toast('보류 처리 (데모)')}};
+
+
+/* ================= 음성 입력 (APK: 안드로이드 음성인식 · 웹: 브라우저 음성인식 → 실패 시 키보드 🎤 안내) ================= */
+var SAY=['나주에서 벼농사 짓는데 깨씨무늬병이 걱정되고 방제 시설이 없어요 비가 많이 오면 논이 잠겨요','경기도에서 한우 키우는데 소가 병으로 죽거나 긴급도축할까 봐 걱정이에요 축사 화재도 걱정돼요','장수에서 사과 농사 짓는데요 과수원이 좀 낮은 데 있고 방상팬은 아직 없어요','홍성에서 돼지 이천 마리 키우는데 창문 없는 돈사고 전기 배선이 십 년 넘었어요','김제에서 딸기 하우스 하는데 난방기랑 스마트팜 설비가 비싸요','해남인데 트랙터랑 콤바인 있고 나이가 일흔이라 창고가 좀 낮은 데 있어요'];
+var VKW=[[/장수/,'#전북_장수군'],[/홍성/,'#충남_홍성군'],[/김제/,'#전북_김제시'],[/해남/,'#전남_해남군'],[/영주/,'#경북_영주시'],[/나주/,'#전남_나주시'],[/경기/,'#경기도'],[/문경/,'#경북_문경시'],[/상주/,'#경북_상주시'],[/아산/,'#충남_아산시'],[/경남|경상남도/,'#경상남도'],
+ [/사과|홍로|부사/,'#사과'],[/신고배|배 ?(농사|과수원|나무)/,'#배'],[/돼지|양돈|비육돈/,'#양돈'],[/한우|번식우|비육우|송아지/,'#가축_한우'],[/벼|논농사|쌀농사|일반답/,'#논작물_벼'],[/콩/,'#콩'],[/닭|양계|육계/,'#가금'],[/딸기/,'#딸기'],[/스마트팜|온실|하우스/,'#시설_온실'],[/트랙터|콤바인|이앙기|농기계/,'#농기계'],
+ [/꽃|개화/,'#개화기'],[/저지대|낮은 ?(데|곳|땅)|골짜기/,'#저지대'],[/방상팬.{0,8}(없|안|미)/,'#방상팬_미설치'],[/창문 ?없|무창/,'#무창돈사'],
+ [/(배선|배전|전기|전선).{0,10}(오래|노후|10 ?년|십 ?년)|(오래|노후).{0,6}(배선|배전|전기)/,'#노후_배전설비'],[/(이천|2,?000|2천) ?마리/,'#2천두_규모'],
+ [/난방기|보일러/,'#난방설비'],[/깨씨무늬|병충해|도열병|병해충/,'#병충해_우려'],[/방제.{0,8}(없|안|미)/,'#방제시설_미비'],[/침수|잠겨|잠기|호우|비가 많/,'#침수·호우_우려'],[/(병으로|질병).{0,8}(죽|폐사)|질병 ?폐사/,'#질병폐사_우려'],[/긴급 ?도축|절박 ?도살/,'#긴급도축_우려'],[/화재|불이 ?나/,'#화재_우려'],[/방역.{0,6}(안|미|부족|못)/,'#질병방역_관리미비'],[/(일흔|칠십|70|여든|팔십|80) ?(살|세|이)?/,'#고령_경영주'],[/창고.{0,10}(낮|저지대|물)|물 ?(이 )?(차|잠)/,'#침수_우려']];
+function speechToKw(t){return VKW.filter(function(v){return v[0].test(t)}).map(function(v){return v[1]})}
+function isSpeechLike(t){return t.length>=14&&/(요|다|데|고|어)\b|요$|다$|어요|해요|있고|없어/.test(t)}
+function esc(t){return String(t).replace(/[&<>"]/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]})}
+var VOICE={cb:null,input:null,rec:null,text:''};
+function isApk(){return location.protocol==='file:'}
+function vShow(html){$('#vbox').innerHTML=html;$('#vov').classList.add('on');var c=$('#vCancel');if(c)c.onclick=vClose;var k=$('#vKey');if(k)k.onclick=function(){vClose();var i=VOICE.input&&$(VOICE.input);if(i){i.focus();i.scrollIntoView({block:'center'})}}}
+function vClose(){$('#vov').classList.remove('on');try{VOICE.rec&&VOICE.rec.abort()}catch(e){}VOICE.rec=null}
+function vListening(sub){vShow('<div class="vmic">🎤</div><b>듣고 있어요</b><div class="vtx" id="vTx">'+(sub||'천천히 말씀해 주세요')+'</div><button class="btn ghost" id="vCancel">취소</button>')}
+function startVoice(cb,input){VOICE.cb=cb;VOICE.input=input;VOICE.text='';
+ if(isApk()){vListening('잠시 후 뜨는 음성 입력 창에 말씀해 주세요');location.href='voice:start';return}
+ var R=window.SpeechRecognition||window.webkitSpeechRecognition;
+ if(!R){voiceFail();return}
+ try{var r=new R();VOICE.rec=r;r.lang='ko-KR';r.interimResults=true;r.continuous=false;
+  r.onresult=function(e){var t='';for(var i=0;i<e.results.length;i++)t+=e.results[i][0].transcript;VOICE.text=t;var x=$('#vTx');if(x)x.textContent='“'+t+'”'};
+  r.onerror=function(){VOICE.rec=null;voiceFail()};
+  r.onend=function(){if(!VOICE.rec)return;VOICE.rec=null;if(VOICE.text)voiceDone(VOICE.text);else vClose()};
+  vListening();r.start()}catch(e){voiceFail()}}
+function voiceDone(t){vClose();t=String(t||'').trim();if(t&&VOICE.cb)VOICE.cb(t)}
+function voiceFail(){vShow('<div style="font-size:40px">⌨️🎤</div><b>여기서는 마이크를 바로 쓸 수 없어요</b><div class="vtx">입력칸을 누른 뒤 <b>키보드의 🎤 버튼</b>을 눌러 말씀해 주세요.<br><span class="xs mut">설치한 앱(APK)에서는 버튼 한 번으로 바로 말할 수 있어요</span></div><button class="btn full" id="vKey">입력칸으로 가기</button>')}
+window.onVoice=function(s){var t;try{t=decodeURIComponent(String(s).replace(/\+/g,' '))}catch(e){t=String(s)}voiceDone(t)};
+window.onVoiceErr=function(){voiceFail()};
+window.onVoiceCancel=function(){vClose()};
+
+/* ================= 데이터·개인정보 (슬라이드 21~22) ================= */
+function setPage(){
+ return '<div class="card"><h3>🔐 내 역할·권한</h3><div class="b">'+ROLES[S.user.role].n+(S.user.role==='f'?'':' · '+S.user.name)+'</div><div class="xs mut" style="margin:4px 0 8px">'+RPERM[S.user.role]+'</div><div class="row" style="gap:8px"><button class="btn sm" data-go="login">역할 전환</button><button class="btn sm ghost" id="lgOut">로그아웃</button></div></div>'+'<div class="card"><h3>🔒 내 정보 제공 동의</h3>'+consRows()+'</div>'+
+ '<div class="card"><h3>데이터 결합 시 예상 리스크</h3><ul class="list">'+[['이종 데이터 결합 규제','농진청 필지 좌표·경영체 정보와 보험계약 데이터 직접 결합 제한'],['농촌 특유의 재식별 위험','소규모 읍면·희귀작목은 비식별화해도 특정 농가 유추 가능'],['제3자 제공·목적 외 이용 제한','지자체·중앙회 앱 연동 시 계약·사고 원천데이터 반출 불가']].map(function(r){return '<li style="display:block"><div class="b sm">⚠️ '+r[0]+'</div><div class="xs mut">'+r[1]+'</div></li>'}).join('')+'</ul></div>'+
+ '<div class="card"><h3>데이터 가공·제공 원칙</h3>'+[['원천데이터 반출 차단','내부망 분석 후 0~100점 위험지수 결과값만 API로 전달'],['k-익명성 확보','지자체 제공 시 법정동·500m 격자, 최소 5농가 이상 집계 통계만'],['본인 동의 기반 개인화','보장공백 안내는 이용자 본인의 명시적 동의(마이데이터 전송요구) 후 제공']].map(function(r,i){return '<div class="step"><div class="num">'+(i+1)+'</div><div><b class="sm">'+r[0]+'</b><div class="xs mut">'+r[1]+'</div></div></div>'}).join('')+'</div>'+
+ '<button class="btn full ghost" id="resetAll">데모 초기화 (온보딩부터)</button>';
+}
+function bindOut(){var o=$('#topOut');if(o)o.onclick=function(){audit('로그아웃');S.user=null;save();location.hash='login';render();toast('로그아웃했어요')}}
+function bindSet(){bindCons();var lo=$('#lgOut');if(lo)lo.onclick=function(){audit('로그아웃');S.user=null;save();location.hash='login';render()};var r=$('#resetAll');if(r)r.onclick=function(){S.user=null;S.cases=[];S.rules=[];S.audit=[];S.claimSent={};S.onb=0;S.checks={};S.consent={svc:true,pers:false,myd:false};save();location.hash='';render()}}
+function aboutPage(){
+ return '<div class="hero"><div class="xs" style="opacity:.8">All for one, one for All “정책보험”</div><h2>농민을 위한 하나의 통합 플랫폼,<br>모두를 위한 데이터 가치 창출</h2><div class="sm" style="opacity:.9">AI 기반 정책보험 통합 플랫폼 프로토타입</div></div>'+
+ '<div class="card" style="margin-top:12px"><h3>핵심 비전</h3>'+[['🔗','통합 플랫폼','분산된 정책보험 데이터를 하나로 연결'],['🤖','AI 프로세스 혁신','인수·지급 업무 효율화 및 민원 예방'],['🛰','선제적 리스크 관리','기상조기경보와 지급데이터 결합 서비스']].map(function(v){return '<div class="step"><span style="font-size:22px">'+v[0]+'</span><div><b class="sm">'+v[1]+'</b><div class="xs mut">'+v[2]+'</div></div></div>'}).join('')+'</div>'+
+ '<div class="card"><h3>화면 구성</h3><table><tr><th>모드</th><th>기능</th></tr><tr><td>👨‍🌾 농가</td><td>4대 보험 통합 현황 · 위험도 대시보드 · 9일 경보 · 알림함 · 보장공백 · 손실 시뮬레이션 · 사진 사고접수 · AI 상담 · 맞춤 추천 · 지역 통계</td></tr><tr><td>🏢 창구</td><td>🎤 음성·키워드 AI 보장분석 · 지역 지급데이터 안내 · OCR 인수심사 · AI 지급심사 · 미가입 손실 안내 · 기대효과</td></tr><tr><td>🏛 지자체·본사</td><td>Macro/Meso/Micro 관제 · 연계 매트릭스 · AI 엔진·API</td></tr></table></div>'+
+ '<div class="card"><div class="callout">작게는 개별 농가 단위에서 넓게는 전국 단위의 데이터 관리로 — AI 시대에 걸맞은 차세대 정책보험</div><p class="xs mut">모든 수치·농가·지역 통계는 시연용 가상 데이터입니다.</p></div>';
+}
+
+['analyze','ocr','reco','live'].forEach(function(k){PAGES['u-'+k]=PAGES['d-'+k];BIND['u-'+k]=BIND['d-'+k]});['claim','paydata','loss'].forEach(function(k){PAGES['c-'+k]=PAGES['d-'+k];BIND['c-'+k]=BIND['d-'+k]});PAGES['g-kpi']=PAGES['d-kpi'];BIND['g-kpi']=BIND['d-kpi'];['analyze','ocr','reco','live','claim','paydata','loss','kpi'].forEach(function(k){PAGES['h-'+k]=PAGES['d-'+k];BIND['h-'+k]=BIND['d-'+k]});PAGES['h-uqueue']=PAGES['u-queue'];BIND['h-uqueue']=bindQueue;PAGES['h-queue']=PAGES['c-queue'];BIND['h-queue']=bindQueue;PAGES['h-loop']=PAGES['g-loop'];BIND['h-loop']=BIND['g-loop'];PAGES['h-macro']=PAGES['g-macro'];BIND['h-macro']=BIND['g-macro'];PAGES['h-perm']=PAGES['g-perm'];
+PAGES['u-cqueue']=PAGES['c-queue'];BIND['u-cqueue']=bindQueue;['claim','paydata','loss'].forEach(function(k){PAGES['u-'+k]=PAGES['d-'+k];BIND['u-'+k]=BIND['d-'+k]});
+['u','c'].forEach(function(r){['macro','meso','micro','matrix','engine'].forEach(function(k){PAGES[r+'-'+k]=PAGES['g-'+k];BIND[r+'-'+k]=BIND['g-'+k]})});PAGES['c-kpi']=PAGES['d-kpi'];BIND['c-kpi']=BIND['d-kpi'];PAGES['c-perm']=PAGES['g-perm'];PAGES['u-perm']=PAGES['g-perm'];
+
+var _fc=PAGES['f-claim'],_fcb=BIND['f-claim'];
+PAGES['f-claim']=function(){var st=S.claimStep[S.farm]||0,n='';
+ if(ruleOn('amount')&&st===2)n+='<div class="callout">📣 <b>고객 의견으로 개선된 안내</b><br>예상 보험금 = 추정 손해액 × (1 − 자기부담비율). 손해평가 확정 후 금액이 달라질 수 있어요.</div>';
+ if(ruleOn('delay')&&st===3)n+='<div class="callout">📣 <b>고객 의견으로 개선된 안내</b><br>예상 처리 일정: 접수 → AI 판독 1일 → (현장조사) → 지급 7영업일 내. 단계가 바뀌면 알림을 드려요.</div>';
+ return _fc()+n+cmCard()};
+BIND['f-claim']=function(){_fcb();$$('[data-cs="3"]').forEach(function(b){b.onclick=function(){S.claimStep[S.farm]=3;if(!S.claimSent[S.farm]){S.claimSent[S.farm]=1;var f=F();var c=newCase({type:'claim',cat:'etc',text:'[사고접수] '+f.claim.type+' · AI 추정 '+f.claim.ai+(f.claim.per?'두':'%')});audit('사고 접수 '+c.id)}save();render()}});bindCm()};
+var _hb=BIND['f-home'];
+BIND['f-home']=function(){_hb();var b=$('#reqBtn');if(b&&!REQ[S.farm])b.onclick=function(){var pr=prodRecs(F()),rc=(pr.prods.length?pr.prods:pr.addons).slice(0,3).map(function(r){return r.n}).join(', ');var c=newCase({type:'inquiry',cat:'uw',text:'',extra:'추가 가입 상담: '+rc});c.type='uw';audit('가입 상담 요청 '+c.id);REQ[S.farm]=1;b.textContent='✅ 상담 요청 접수됨';toast('인수팀에 상담 요청을 보냈어요')}};
+var _ib=inboxItems;inboxItems=function(){var it=_ib();S.cases.filter(function(c){return c.farm===S.farm&&c.reply}).forEach(function(c){it.unshift({id:'rp'+c.id,ic:'✉️',t:'답변 도착 · '+c.id,s:c.reply.slice(0,42)+'…',go:'f-claim',when:ago(c.handledAt||c.at)})});return it};
+var _ha=heroAlert;heroAlert=function(f){var h=_ha(f);if(ruleOn('gap')){var k=h.indexOf('<p class="b"');var e=h.indexOf('</p>',k)+4;h=h.slice(0,e)+'<div class="callout bad" style="margin:6px 0">📣 <b>고객 의견으로 개선된 안내</b> · 보장에 없는 위험으로 피해가 나면 <b>전액 본인 부담</b>이에요. 아래 추천 보험을 꼭 확인하세요.</div>'+h.slice(e)}return h};
+var _cv=PAGES['f-cover'];PAGES['f-cover']=function(){var h=_cv();return ruleOn('uw')?h.replace('<div class="card"><h3>✨ 추천 추가 가입','<div class="callout">📣 <b>고객 의견으로 개선된 안내</b> · 보험료 = 가입금액(평가액 80%) × 보험료율, 정부·지자체 보조(약 75% 가정)를 뺀 금액이 농가 부담이에요.</div><div class="card"><h3>✨ 추천 추가 가입'):h};
+var _cv2=PAGES['f-cover'];PAGES['f-cover']=function(){var h=_cv2();if(F().mine||(S.farm!=='hanwoo'&&S.farm!=='pig'))return h;
+ return h+'<div class="card"><div class="hd"><h3 style="margin:0">🔥 축사 화재점검 진단</h3><span class="tag o">B등급 · 예시</span></div><p class="xs mut" style="margin:6px 0">축사화재 인수점검 보고서(사진·등급·점검내역)를 바탕으로 우리 축사의 강점과 보완할 점을 알려드려요.</p>'+
+  '<div class="callout" style="margin-bottom:6px">👍 <b>잘 하고 계신 점</b><br>· 분전함 내부 소화로프 설치 — 전기화재 초기 대응<br>· 차단기 규격 정돈, 외함 밀폐 — 분진 유입 차단</div>'+
+  '<div class="callout warn">🛠 <b>보완하면 좋은 점</b><br>· 10년 넘은 보온등·환기팬 전선 피복 열화 → 전선 교체<br>· 분전함 내부 먼지 누적(화재 원인의 약 62%) → 트래킹클리너 설치·청소<br><span class="xs mut">보완 시 화재 위험도 약 45%↓ 기대 · 우수 등급이 쌓이면 가입 조건 우대</span></div><p class="xs mut" style="margin-top:6px">※ 등급·항목은 시연용 예시이며, 실제 점검 보고서 연동 시 내 축사 결과로 바뀌어요.</p></div>'};
+
+
+['analyze','ocr','reco','live'].forEach(function(k){PAGES['u-'+k]=PAGES['d-'+k];BIND['u-'+k]=BIND['d-'+k]});['claim','paydata','loss'].forEach(function(k){PAGES['c-'+k]=PAGES['d-'+k];BIND['c-'+k]=BIND['d-'+k]});PAGES['g-kpi']=PAGES['d-kpi'];BIND['g-kpi']=BIND['d-kpi'];
+render();
+if(S.mine&&Date.now()-S.mine.at>3*3600*1000)refreshMine();
+</script>
+</body>
+</html>
