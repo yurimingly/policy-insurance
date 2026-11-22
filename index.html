@@ -435,12 +435,12 @@ var DESK={
   s1:['집중호우 시 저지대 창고 침수 지급 반복 지역','→ <b>침수 손해</b> 보장 확인 + 고지대 보관 안내'],s2:['고령 1인 운전 · 농로 전복 사고 빈발','→ <b>대인·자기신체(자손)</b> + 농업인안전보험 결합'],
   s3:[['농기계 등록(형식·연식) 자동 조회','ok'],['운전자 연령 · 안전교육 이수','pd'],['보관 장소 침수 이력 지역','ng']],src:['해남군 농기계 침수 지급','농기계 등록 DB','도로·농로 사고 통계']}
 };
-var DADR=['충남 홍성군 광천읍','전남 나주시 남평읍','전북 장수군 장계면','경기 이천시 부발읍','경북 안동시 풍산읍','충남 예산군 삽교읍'];
+var DADR=[{w:'김○○',it:'양돈 2,350두',a:'충청남도 홍성군 광천읍 담산리 123',k:'pig'},{w:'윤○○',it:'벼 30(10a)',a:'전라남도 나주시 남평읍 남석리 312',k:'rice'},{w:'조○○',it:'사과 2.4ha',a:'전북특별자치도 장수군 장계면 장계리 245',k:'apple'},{w:'박○○',it:'한우 45두',a:'경기도 이천시 부발읍 응암리 87',k:'hanwoo'},{w:'오○○',it:'스마트팜 딸기 6동',a:'전북특별자치도 김제시 백산면 하서리 410',k:'farm'},{w:'강○○',it:'농기계(트랙터)',a:'전라남도 해남군 계곡면 계곡리 201',k:'mach'},{w:'임○○',it:'한우 52두',a:'강원특별자치도 홍천군 홍천읍 희망리 56',k:'hanwoo'}];
 var DKL={rice:'벼',hanwoo:'한우',apple:'사과',pig:'양돈',farm:'스마트팜',mach:'농기계'};
 PAGES['d-analyze']=function(){
  return '<div class="card"><h3>고객 주소 입력만으로 AI 인수·보장분석</h3><p class="xs mut" style="margin:0 0 10px">고객 농장 주소를 입력하면 지도로 위치를 확인하고, 지역 위험과 보장 공백을 분석해요.</p>'+
- '<div class="chips" style="margin-bottom:8px">'+DADR.map(function(x){return '<button class="chip" data-ad="'+x+'">'+x.split(' ').slice(1).join(' ')+'</button>'}).join('')+'</div>'+
- '<input type="text" id="dAddr" placeholder="고객 농장 주소 (예: 충남 홍성군 광천읍 …)" value="'+esc(S.sel.daddr||'')+'"><button class="btn full" id="dRun" style="margin-top:8px">🔎 주소 확인 · AI 분석</button></div>'+
+  '<input type="text" id="dAddr" placeholder="고객 농장 주소 (예: 충남 홍성군 광천읍 …)" value="'+esc(S.sel.daddr||'')+'"><button class="btn full" id="dRun" style="margin-top:8px">🔎 주소 확인 · AI 분석</button></div>'+
+ '<div class="card"><h3 style="margin:0 0 6px">📋 접수 고객 농가</h3><p class="xs mut" style="margin:0 0 6px">누르면 농가 주소로 바로 조회해요.</p><ul class="list">'+DADR.map(function(x,i){return '<li data-ad="'+i+'" style="display:block;cursor:pointer"><div class="row sp"><b class="sm">'+x.w+' 농가</b><span class="tag gr">'+x.it+'</span></div><div class="xs mut">'+x.a+'</div></li>'}).join('')+'</ul></div>'+
  '<div class="card"><div class="row sp xs mut"><span>① 주소 입력</span><span>② 위치·위험 매칭</span><span>③ 리포트</span></div></div><div id="dMap"></div><div id="dOut"></div>';
 };
 function deskSteps(p){return p.steps||[['AI 위험 진단 · 보장 공백 포착',p.s1],['적정 가입조건 · 한도 제안',p.s2]]}
@@ -474,8 +474,8 @@ function deskShow(){var k=S.sel.dk,o=$('#dOut');if(!k||!o)return;var p=DESK[k],a
 function runDesk(){var a=($('#dAddr').value||'').trim();if(!a){toast('고객 주소를 입력하세요');return}
  S.sel.daddr=a;S.sel.dgeo=null;$('#dOut').innerHTML='';$('#dMap').innerHTML='<div class="card lock">📍 주소를 확인하고 있어요…</div>';
  geoAddr(a,function(g){var m=$('#dMap');if(!m||!document.body.contains(m))return;if(!g){m.innerHTML='<div class="card lock">주소를 찾지 못했어요.<br>시·군·읍면까지 입력해 주세요 (예: 충남 홍성군 광천읍)</div>';return}
-  S.sel.dgeo=g;S.sel.dz=g.coarse?12:15;S.sel.dk=deskByAddr(a);audit('AI 보장분석 · 주소 조회');deskMap();deskShow()})}
-BIND['d-analyze']=function(){$('#dRun').onclick=runDesk;$$('[data-ad]').forEach(function(b){b.onclick=function(){$('#dAddr').value=b.getAttribute('data-ad');runDesk()}});if(S.sel.dgeo){deskMap();deskShow()}};
+  S.sel.dgeo=g;S.sel.dz=g.coarse?12:15;var pr=DADR.filter(function(x){return x.a===a})[0];S.sel.dk=pr?pr.k:deskByAddr(a);audit('AI 보장분석 · 주소 조회');deskMap();deskShow()})}
+BIND['d-analyze']=function(){$('#dRun').onclick=runDesk;$$('[data-ad]').forEach(function(b){b.onclick=function(){$('#dAddr').value=DADR[+b.getAttribute('data-ad')].a;runDesk()}});if(S.sel.dgeo){deskMap();deskShow()}};
 
 
 /* ================= 창구 · 지급데이터 분석 및 손해 대비 안내 (PPT 05 · AI 프로세스 혁신 II) ================= */
