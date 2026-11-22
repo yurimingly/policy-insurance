@@ -168,7 +168,7 @@ pre{background:#1e2622;color:#cde8d6;border-radius:10px;padding:10px;font-size:1
 .vbox b{font-size:19px;display:block}
 .vbox .vtx{min-height:44px;margin:10px 0 14px;font-size:15px;color:var(--ink)}
 .vheard{background:#eef6f1;border-radius:12px;padding:12px;font-size:15px;margin-bottom:8px}
-.nmap2{position:relative;aspect-ratio:10/7;overflow:hidden;border-radius:10px;background:#dfe8d8;margin:8px 0}.nmap2 img{position:absolute;max-width:none;display:block}.nmap2 .bub{position:absolute;left:50%;top:50%;transform:translate(-50%,-175%);background:#fff;border:2px solid var(--g);border-radius:12px;padding:6px 10px;font-size:12px;font-weight:700;text-align:center;line-height:1.4;box-shadow:0 2px 8px rgba(0,0,0,.3);z-index:4;white-space:nowrap}.nmap2 .pin.hq{cursor:pointer}.nmap2 .pin{position:absolute;left:50%;top:50%;transform:translate(-50%,-100%);font-size:28px;z-index:3;filter:drop-shadow(0 1px 2px rgba(0,0,0,.4))}.nmap2 .nmap{position:absolute;inset:0;margin:0;gap:2px;grid-template-rows:repeat(7,1fr)}.nmap2 .nmap i{aspect-ratio:auto;opacity:.8}.nmap2 .nmap i.na{opacity:.55}.nmap2 .attr{position:absolute;right:4px;bottom:2px;font-size:9px;background:rgba(255,255,255,.8);padding:0 4px;border-radius:3px;color:#444;z-index:2}.mp-t{background:transparent;border:0;box-shadow:none;color:#fff;font-weight:700;font-size:11px;text-shadow:0 0 3px #000}.leaflet-tooltip.mp-t:before{display:none}</style>
+.nmap2{position:relative;aspect-ratio:10/7;overflow:hidden;border-radius:10px;background:#dfe8d8;margin:8px 0}.nmap2 img{position:absolute;max-width:none;display:block}.nmap2 .bub{position:absolute;left:50%;top:50%;transform:translate(-50%,-175%);background:#fff;border:2px solid var(--g);border-radius:12px;padding:6px 10px;font-size:12px;font-weight:700;text-align:center;line-height:1.4;box-shadow:0 2px 8px rgba(0,0,0,.3);z-index:4;white-space:nowrap}.nmap2 .pin.hq{cursor:pointer}.nmap2 .pin{position:absolute;left:50%;top:50%;transform:translate(-50%,-100%);font-size:28px;z-index:3;filter:drop-shadow(0 1px 2px rgba(0,0,0,.4))}.nmap2 .nmap{position:absolute;inset:0;margin:0;gap:2px;grid-template-rows:repeat(7,1fr)}.nmap2 .nmap i{aspect-ratio:auto;opacity:.8}.nmap2 .nmap i.na{opacity:.55}.nmap2 .attr{position:absolute;right:4px;bottom:2px;font-size:9px;background:rgba(255,255,255,.8);padding:0 4px;border-radius:3px;color:#444;z-index:2}.mp-t{background:transparent;border:0;box-shadow:none;color:#fff;font-weight:700;font-size:11px;text-shadow:0 0 3px #000}.leaflet-tooltip.mp-t:before{display:none}.pcnav{position:sticky;top:0;z-index:20;background:#fff;border-bottom:1px solid var(--line);padding:8px 16px;display:flex;gap:6px;flex-wrap:wrap}.pcgrid{column-count:3;column-gap:16px;padding:14px 16px}.pcc{break-inside:avoid;margin-bottom:18px;display:inline-block;width:100%}.pcc>h2{font-size:15px;margin:0 0 8px;color:var(--g)}body.pc #app{max-width:none;padding-bottom:30px}body.pc .subw{display:none}@media(max-width:1100px){.pcgrid{column-count:2}}@media(max-width:700px){.pcgrid{column-count:1}}</style>
 </head>
 <body>
 <div id="app"></div>
@@ -1637,6 +1637,21 @@ function nbrMap(f){
  '<div class="nmap2">'+mapTiles(f)+'<div class="nmap">'+cells+'</div></div><div class="row sp xs mut"><span>■ 55%↑ 높음</span><span style="color:#d9a21b">■ 40~54%</span><span style="color:#e0662a">■ 40%↓ 낮음</span><span>▨ 5농가 미만</span></div>'+
  '<div class="callout" style="margin-top:8px">⬛ 테두리 칸이 <b>내 농장 격자</b>예요. 내 격자 가입률 <b>'+myv+'%</b> · 주변 평균 <b>'+avg+'%</b>'+(myv<avg?' — 주변보다 낮아요.':' — 주변보다 높아요.')+'</div></div>'}
 var _cv3=PAGES['f-cover'];PAGES['f-cover']=function(){var h=_cv3(),i=h.indexOf('<h3>📎 특약 구성 진단'),j;if(i>=0)j=h.indexOf('<div class="card">',i);else{var k=h.indexOf('💸 미가입 시 예상 손실');j=k<0?-1:h.lastIndexOf('<div class="card">',k)}return j<0?h+nbrMap(F()):h.slice(0,j)+nbrMap(F())+h.slice(j)};
+
+/* ===== PC 대시보드로 보기 (인수·보상·정책·지자체: 전체 화면을 한 페이지에 펼침) ===== */
+S.pc=S.pc||0;
+var _tb0=topBar;
+topBar=function(role){var h=_tb0(role),u=S.user;if(u&&u.role!=='f'&&role&&role!=='f'&&ROLES[role]&&role===u.role)h=h.replace('<div class="row">','<div class="row"><button class="iconbtn" id="pcTog" style="white-space:nowrap">'+(S.pc?'📱 모바일로':'🖥 PC 대시보드')+'</button>');return h};
+function pcOn(){var r=route(),role=r[0];return S.pc&&S.user&&S.user.role!=='f'&&role===S.user.role&&ROLES[role]}
+function pcRender(){var role=S.user.role,R=ROLES[role],a=$('#app'),tabs=R.tabs.filter(function(t){return PAGES[role+'-'+t[0]]});
+ var html=topBar(role)+'<div class="pcnav">'+tabs.map(function(t){return '<button class="chip" data-pcj="'+t[0]+'">'+t[1]+'</button>'}).join('')+'</div><div class="pcgrid">'+
+  tabs.map(function(t){var c='';try{c=PAGES[role+'-'+t[0]]()}catch(e){c='<div class="card"><p class="sm mut">이 화면은 PC 보기에서 불러오지 못했어요</p></div>'}return '<section class="pcc" id="pc_'+t[0]+'"><h2>'+t[1]+'</h2>'+c+'</section>'}).join('')+'</div>';
+ a.innerHTML=html;bindTop();
+ tabs.forEach(function(t){try{(BIND[role+'-'+t[0]]||function(){})()}catch(e){}});
+ $$('[data-pcj]').forEach(function(b){b.onclick=function(){var e=$('#pc_'+b.getAttribute('data-pcj'));if(e)e.scrollIntoView({behavior:'smooth',block:'start'})}})}
+var _r1=render;
+render=function(){_r1();var on=pcOn();document.body.classList.toggle('pc',!!on);if(on)pcRender();var b=$('#pcTog');if(b)b.onclick=function(){S.pc=S.pc?0:1;save();render();window.scrollTo(0,0)}};
+render();
 </script>
 </body>
 </html>
