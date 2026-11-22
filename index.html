@@ -1419,7 +1419,7 @@ PAGES['h-nh']=function(){var e=EP[S.sel.ep];
  '<div class="card"><h3>지급데이터 분석 기반 초개인화 안내</h3><div class="xs mut" style="margin-bottom:6px">① 지역별 맞춤 안내</div><div class="grid3"><div class="kpi"><small><b>시군구·읍면동 다발 재해 매핑</b><br>우리 동네 최다 발생 사고원인 안내</small></div><div class="kpi"><small><b>인근 농가 평균 피해 규모 제시</b><br>동일 지역·작목 평균 지급보험금 비교</small></div><div class="kpi"><small><b>미가입 농가 타겟 가입 권유</b><br>지역 특화 위험 근거로 가입 필요성 설득</small></div></div>'+
  '<div class="callout" style="margin-top:8px"><b>안내 예시</b> “장계면 사과 농가의 최근 3년 주요 피해는 우박·저온이며, 평균 지급액은 1,250만 원입니다.”</div>'+
  '<div class="xs mut" style="margin:10px 0 6px">② 계약자별 맞춤 안내</div>'+
- [['개인별 과거 사고·지급 이력 분석 (과거 이력 기반 재발 방지)',['계약자 본인의 과거 사고 유형·빈도·지급내역 리포트','반복 피해 취약 구간 도래 시 선제적 예방 체크리스트 제공']],['내 농장 맞춤 보장 공백(Gap) 안내 (보장 공백 진단 및 최적화)',['보유 영농자산(작물·가축·농기계·시설) 대비 미가입 영역 식별','자기부담비율 및 특약 구성을 인근 유사 농가와 비교 추천']]].map(function(b){return '<div style="background:var(--bg);border-radius:12px;padding:10px;margin-top:6px"><div class="sm b">'+b[0]+'</div>'+b[1].map(function(t){return '<div class="xs" style="margin-top:4px">• '+t+'</div>'}).join('')+'</div>'}).join('')+'</div>'};
+ [['개인별 과거 사고·지급 이력 분석 (과거 이력 기반 재발 방지)',['계약자 본인의 과거 사고 유형·빈도·지급내역 리포트','반복 피해 취약 구간 도래 시 선제적 예방 체크리스트 제공']],['내 농장 맞춤 보장 공백(Gap) 안내 (보장 공백 진단 및 최적화)',['보유 영농자산(작물·가축·농기계·시설) 대비 미가입 영역 식별','자기부담비율 및 특약 구성을 인근 유사 농가와 비교 추천']]].map(function(b){return '<div style="background:var(--bg);border-radius:12px;padding:10px;margin-top:6px"><div class="sm b">'+b[0]+'</div>'+b[1].map(function(t){return '<div class="xs" style="margin-top:4px">• '+t+'</div>'}).join('')+'</div>'}).join('')+'</div>';return h};
 BIND['h-nh']=function(){BIND['h-nh0']();$$('[data-ep]').forEach(function(b){b.onclick=function(){S.sel.ep=b.getAttribute('data-ep');render()}})};
 
 /* ===== 지급데이터 · AI 직접 입력 분석 (예시는 선택형) ===== */
@@ -1444,7 +1444,7 @@ var _cq=PAGES['c-queue'];PAGES['c-queue']=function(){var n=S.cases.filter(functi
 PAGES['h-queue']=PAGES['c-queue'];
 function cropCard(){return '<div class="card"><h3>🌱 지급데이터 분석 · 지역·작목 상세</h3><table style="width:100%"><tr><th align="left">작목·지역</th><th align="left">사고 1·2위</th><th align="left">안내</th></tr>'+
  [['콩 · 문경시','호우 71% · 가뭄 26%','침수·배수 특화 대비'],['콩 · 상주시','가뭄 46% · 호우 44%','가뭄 집중 대비'],['벼 · 나주시','깨씨무늬병 67% · 호우 22%','기본 보장으로 병충해·수해 포괄 안내'],['벼 · 아산시','호우 44% · 목도열병 24%','배수로 정비 등 호우 대비'],['돼지 · 경기','폭염 85% · 화재 5%','가축+축사 동시 가입'],['돼지 · 경남','폭염 89% · 화재 3%','축사 건물 담보 필수']].map(function(r){return '<tr><td class="sm">'+r[0]+'</td><td class="xs">'+r[1]+'</td><td class="xs">'+r[2]+'</td></tr>'}).join('')+'</table><div class="note">콩 실제 자부담 보험료 평균 11% · 벼 16.3%(정부 83.7% 지원) → 자기부담 10~15%형 가입 유도. 한우는 사고 시 가입액의 약 50%(200만 원대) 실질 보상으로 보험료 불신 해소.</div></div>'}
-var _pd=PAGES['d-paydata'];PAGES['d-paydata']=function(){return _pd()+cropCard()};
+
 ['u','c','h'].forEach(function(r){PAGES[r+'-paydata']=PAGES['d-paydata']});
 
 function mapTiles(f){var P=null,sg=f.sigun||'',k;for(k in LIVE_PLACES){var q=LIVE_PLACES[k];if(sg.indexOf(k)>=0||q[2].indexOf(sg)>=0&&sg){P=q;break}}if(!P)P=LIVE_PLACES['홍천'];
