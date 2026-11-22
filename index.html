@@ -1421,6 +1421,22 @@ PAGES['h-nh']=function(){var e=EP[S.sel.ep];
  '<div class="xs mut" style="margin:10px 0 6px">② 계약자별 맞춤 안내</div>'+
  [['개인별 과거 사고·지급 이력 분석 (과거 이력 기반 재발 방지)',['계약자 본인의 과거 사고 유형·빈도·지급내역 리포트','반복 피해 취약 구간 도래 시 선제적 예방 체크리스트 제공']],['내 농장 맞춤 보장 공백(Gap) 안내 (보장 공백 진단 및 최적화)',['보유 영농자산(작물·가축·농기계·시설) 대비 미가입 영역 식별','자기부담비율 및 특약 구성을 인근 유사 농가와 비교 추천']]].map(function(b){return '<div style="background:var(--bg);border-radius:12px;padding:10px;margin-top:6px"><div class="sm b">'+b[0]+'</div>'+b[1].map(function(t){return '<div class="xs" style="margin-top:4px">• '+t+'</div>'}).join('')+'</div>'}).join('')+'</div>'};
 BIND['h-nh']=function(){BIND['h-nh0']();$$('[data-ep]').forEach(function(b){b.onclick=function(){S.sel.ep=b.getAttribute('data-ep');render()}})};
+
+/* ===== 지급데이터 · AI 직접 입력 분석 (예시는 선택형) ===== */
+var PXEX=[['❄️ 서리·냉해 (사과)','전북 장수군 · 사과(홍로) · 개화기 진입 · 저지대 과수원 · 방상팬 미설치','apple'],['🐄 한우 질병폐사','경기도 · 한우(번식·비육) · 질병방역 관리 미비 · 축사화재 예방시설','hanwoo'],['🐖 양돈 무창돈사','충남 홍성군 · 양돈 비육돈 · 무창돈사 · 배전설비 10년 경과','pig'],['🌾 벼 병충해·침수','전남 나주시 · 논작물 벼 · 방제시설 · 집중호우 시설','rice'],['🫘 콩 호우·가뭄','경북 문경시 · 콩 · 침수·배수 대비 · 가뭄 우려','soy']];
+function pxGemAll(q){var ctx=Object.keys(PAYD).map(function(k){var g=PAYD[k];return g.n+' '+g.head+'\n'+g.regs.map(function(r){return r.r+': '+r.dist.map(function(d){return d[0]+' '+d[1]+'%'}).join(', ')+(r.ins?' (평균 가입 '+r.ins+'만/지급 '+r.paid+'만)':'')+(r.amt?' · '+r.amt:'')+' → '+r.rec}).join('\n')}).join('\n');
+ var pr='농협손해보험 정책보험 인수·상품 담당 AI입니다. 아래 지급데이터를 근거로, 고객 입력 키워드에 대해 JSON으로만 답하세요. 키: kw(입력에서 뽑은 해시태그 4개 배열, 예 "#충남_홍성군"), out(길이 3 배열, 각 원소는 [소제목, 설명 한두 문장]). 소제목 3개는 순서대로 ①지역·축종·작물 위험 진단 및 핵심 담보 ②적정 가입조건·특약·자기부담 제안 ③인수 심사 자동 체크포인트. 지급데이터에 없는 수치는 만들지 마세요.\n[지급데이터]\n'+ctx+'\n[고객 입력] '+q;
+ return fetch('https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key='+encodeURIComponent(S.gkey||GK),{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({contents:[{parts:[{text:pr}]}],generationConfig:{responseMimeType:'application/json',temperature:0.2}})}).then(function(r){if(!r.ok)throw 0;return r.json()}).then(function(j){var x=JSON.parse(j.candidates[0].content.parts[0].text);if(Array.isArray(x))x=x[0];if(!x.out||x.out.length<3)throw 0;return{q:q,kw:(x.kw||[]).slice(0,4),out:x.out.slice(0,3),src:'Gemini'}})}
+PAGES['d-paydata']=function(){var R=S.sel.pxr||null,sx=S.sel.pxs;
+ return '<div class="card"><h3>지급데이터 분석 및 손해 대비 안내</h3><p class="xs mut" style="margin:0 0 10px">지역·품목·시설 키워드를 입력하면 과거 지급데이터를 근거로 AI가 위험 진단 · 특약 · 인수 체크포인트를 정리해요.</p>'+
+ '<div class="xs mut" style="margin-bottom:6px">예시 선택 (탭하면 입력돼요)</div><div class="chips" style="margin-bottom:8px">'+PXEX.map(function(x,i){return '<button class="chip '+(sx===i?'on':'')+'" data-px="'+i+'">'+x[0]+'</button>'}).join('')+'</div>'+
+ '<textarea id="pxIn" rows="3" placeholder="예) 충남 홍성 · 양돈 · 무창돈사 · 배전설비 10년 경과" style="width:100%;box-sizing:border-box;border:1.5px solid var(--line);border-radius:14px;padding:12px;font:inherit;font-size:15px">'+esc(S.sel.pxq||'')+'</textarea><button class="btn full" id="pxGo" style="margin-top:8px">AI 분석</button>'+
+ (S.gkey||GK?'<div class="xs mut" style="margin-top:6px">🔑 Gemini 연결됨</div>':'')+'</div>'+
+ (R?'<div class="card"><h3 style="font-size:15px">AI 분석 결과</h3>'+pxBox(R.kw,R.out)+'<div class="xs mut" style="margin-top:8px">정리 방식: '+R.src+' · 입력: '+esc(R.q)+'</div></div>':'')};
+BIND['d-paydata']=function(){$$('[data-px]').forEach(function(b){b.onclick=function(){var i=+b.getAttribute('data-px');S.sel.pxs=i;S.sel.pxq=PXEX[i][1];S.sel.pxr=null;render()}});
+ var px=$('#pxGo');if(px)px.onclick=function(){var q=$('#pxIn').value.trim();if(!q){toast('키워드를 입력하거나 예시를 선택해 주세요');return}S.sel.pxq=q;px.disabled=true;px.textContent='AI가 분석하는 중…';
+  pxGemAll(q).then(function(R){S.sel.pxr=R;render()}).catch(function(){var k=S.sel.pxs!=null?PXEX[S.sel.pxs][2]:'hanwoo',e=PEX[k]||PEX.hanwoo;S.sel.pxr={q:q,kw:q.split(/[·,\s]+/).filter(Boolean).slice(0,4).map(function(w){return '#'+w}),out:e.out,src:'예시 응답 (Gemini 연결 실패)'};toast('Gemini 연결 실패 · 예시 응답을 보여드려요');render()})}};
+['u','c','h'].forEach(function(r){PAGES[r+'-paydata']=PAGES['d-paydata'];BIND[r+'-paydata']=BIND['d-paydata']});
 ['meso','micro','matrix','engine'].forEach(function(k){PAGES['h-'+k]=PAGES['g-'+k];BIND['h-'+k]=BIND['g-'+k]});
 /* 보상팀 접수 채널 · 지급데이터 지역 상세 */
 var _cq=PAGES['c-queue'];PAGES['c-queue']=function(){var n=S.cases.filter(function(c){return c.type==='claim'}).length;
