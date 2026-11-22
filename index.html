@@ -716,7 +716,7 @@ PAGES['g-perm']=function(){
 var CM={cat:'etc'};
 function cmCard(){
  var mine=S.cases.filter(function(c){return c.farm===S.farm});
- return '<div class="card"><h3>💬 민원·문의 남기기</h3><div class="chips" style="margin:6px 0">'+['delay','amount','gap','uw','etc'].map(function(k){return '<button class="chip '+(CM.cat===k?'on':'')+'" data-cc="'+k+'">'+CATS[k][0]+' '+CATS[k][1]+'</button>'}).join('')+'</div><div class="row" style="gap:6px;align-items:flex-start"><textarea id="cmText" rows="3" placeholder="불편하신 점이나 궁금한 점을 적어주세요" style="flex:1;border:1px solid var(--line);border-radius:10px;padding:8px;font:inherit;font-size:13px"></textarea><button class="btn sm ghost" id="cmMic">🎤</button></div><button class="btn full" id="cmSend" style="margin-top:8px">민원 접수</button></div>'+
+ return '<div class="card"><h3>💬 민원·문의 남기기</h3><div class="chips" style="margin:6px 0">'+['delay','amount','gap','uw','etc'].map(function(k){return '<button class="chip '+(CM.cat===k?'on':'')+'" data-cc="'+k+'">'+CATS[k][0]+' '+CATS[k][1]+'</button>'}).join('')+'</div><div class="viBox"><textarea id="cmText" rows="3" placeholder="불편하신 점이나 궁금한 점을 적어주세요"></textarea><button class="viMic" id="cmMic" aria-label="말하기">🎤<span>말하기</span></button></div><button class="btn full" id="cmSend" style="margin-top:8px">민원 접수</button></div>'+
  (mine.length?'<div class="card"><h3>📋 내 접수 현황</h3><ul class="list">'+mine.map(function(c){return '<li style="display:block"><div class="row sp"><b class="sm">'+CATS[c.cat][0]+' '+c.id+'</b><span class="tag '+(c.status==='답변완료'?'':c.status==='검토중'?'y':'o')+'">'+c.status+'</span></div><div class="xs mut">'+esc((c.text||c.extra).slice(0,50))+' · '+ago(c.at)+'</div>'+(c.reply?'<div class="callout" style="margin-top:6px">✉️ '+esc(c.reply)+'</div>':'')+'</li>'}).join('')+'</ul></div>':'')}
 function bindCm(){
  $$('[data-cc]').forEach(function(b){b.onclick=function(){CM.cat=b.getAttribute('data-cc');var t=$('#cmText').value;render();$('#cmText').value=t}});
@@ -1121,7 +1121,7 @@ function aiIntake(t,f){var cause=[[/냉해|서리|저온|얼었|동해|한파/,'
  var sz=t.match(/(\d+)\s*(두|마리|평|헥타르|ha|a|동|그루|%)/);
  return{when:wh,item:f.item,cause:cs,size:sz?sz[0]:'확인 필요',raw:t}}
 function voiceIntake(f){var r=VI.res;
- return '<div class="card"><h3>🎤 사고 접수 내용</h3><p class="xs mut" style="margin:0 0 8px">버튼을 누르고 “어제 서리 맞아서 사과 꽃이 얼었어요”처럼 말씀해 보세요. AI가 접수 내용으로 정리해 드려요.</p>'+
+ return '<div class="card"><h3>사고 접수 내용</h3><p class="xs mut" style="margin:0 0 8px">버튼을 누르고 “어제 서리 맞아서 사과 꽃이 얼었어요”처럼 말씀해 보세요. AI가 접수 내용으로 정리해 드려요.</p>'+
   '<div class="viBox"><textarea id="viText" rows="3" placeholder="예) 어제 서리 맞아서 사과 꽃이 얼었어요">'+esc(VI.text)+'</textarea><button class="viMic" id="viMic" aria-label="말하기">🎤<span>말하기</span></button></div><button class="btn full" id="viGo" style="margin-top:8px">AI로 정리하기</button>'+
   (r?'<table style="margin-top:10px;width:100%"><tr><th align="left">사고일시</th><td>'+r.when+'</td></tr><tr><th align="left">피해작목</th><td>'+esc(r.item)+'</td></tr><tr><th align="left">원인</th><td>'+r.cause+'</td></tr><tr><th align="left">피해 규모</th><td>'+r.size+'</td></tr></table><div class="note">접수 원문과 요약이 함께 저장돼 구두 전달 누락·오기 분쟁을 줄여요. “확인 필요” 항목은 담당자가 전화로 확인해요.</div><button class="btn full" id="viSend" style="margin-top:8px">이 내용으로 접수</button>':'')+'</div>'}
 PAGES['f-claim']=function(){
