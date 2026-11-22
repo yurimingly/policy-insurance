@@ -749,7 +749,7 @@ var SELF={10:1,20:.85,30:.72,40:.62};
 var LV=(function(){var d={q:'나주',item:'apple',qty:12,val:1100,ins:'y',self:20,res:null,busy:0,hist:[]};try{var x=JSON.parse(localStorage.getItem('pai_live')||'null');if(x){d.q=x.q||d.q;d.item=x.item||d.item;d.hist=x.hist||[];d.last=x.last||null}}catch(e){}return d})();
 function lvSave(){try{localStorage.setItem('pai_live',JSON.stringify({q:LV.q,item:LV.item,hist:LV.hist.slice(0,8),last:LV.last}))}catch(e){}}
 function tmo(ms){return new Promise(function(_,r){setTimeout(function(){r(new Error('timeout'))},ms)})}
-function jget(u){return Promise.race([fetch(u).then(function(r){if(!r.ok)throw new Error('HTTP '+r.status);return r.json()}),tmo(9000)])}
+function jget(u){return Promise.race([fetch(u,{cache:'no-store'}).then(function(r){if(!r.ok)throw new Error('HTTP '+r.status);return r.json()}),tmo(9000)])}
 function lvGeo(q){
  var k=Object.keys(LIVE_PLACES).filter(function(n){return q.indexOf(n)>=0})[0];
  return jget('https://geocoding-api.open-meteo.com/v1/search?name='+encodeURIComponent(q)+'&count=1&language=ko&countryCode=KR')
@@ -759,8 +759,10 @@ function lvGeo(q){
 function lvWx(g){
  return jget('https://api.open-meteo.com/v1/forecast?latitude='+g.lat+'&longitude='+g.lon+'&daily=temperature_2m_max,temperature_2m_min,precipitation_sum,wind_gusts_10m_max&past_days=14&forecast_days=16&timezone=Asia%2FSeoul');
 }
+function lvToday(){return new Date(Date.now()+9*36e5).toISOString().slice(0,10)}
+function lvFresh(r){return !!(r&&r.d&&r.d.time&&r.d.time.indexOf(lvToday())>=0)}
 function lvRisk(d){
- var t=d.time,n=t.length,tdy=14,f=function(a){return a.slice(tdy)},
+ var t=d.time,n=t.length,tdy=Math.max(0,t.indexOf(lvToday())),f=function(a){return a.slice(tdy)},
   mx=f(d.temperature_2m_max),mn=f(d.temperature_2m_min),pr=f(d.precipitation_sum),gu=f(d.wind_gusts_10m_max),
   pastP=d.precipitation_sum.slice(0,tdy).reduce(function(a,b){return a+(b||0)},0),
   hotDays=mx.filter(function(x){return x>=33}).length,hotMax=Math.max.apply(null,mx),
@@ -792,7 +794,8 @@ function lvRun(){
  }).catch(function(e){
   LV.busy=0;
   if(e&&e.message==='nf'){LV.err='"'+q+'" 지역을 찾지 못했어요. 시·군 이름으로 다시 입력해 주세요 (예: 나주, 홍천)'}
-  else if(LV.last){LV.res=LV.last;LV.res.live=0;LV.err='네트워크 연결이 안 돼 마지막 조회 결과를 보여드려요.'}
+  else if(lvFresh(LV.last)){LV.res=LV.last;LV.res.live=0;LV.err='네트워크 연결이 안 돼 오늘 받아둔 조회 결과를 보여드려요.'}
+  else if(LV.last){LV.res=null;LV.last=null;lvSave();LV.err='실시간 조회에 실패했어요. 저장된 결과는 오늘 날짜가 아니라 보여드리지 않아요. 인터넷 연결을 확인하고 다시 조회해 주세요.'}
   else{LV.err='실시간 조회에 실패했어요 (인터넷 연결 확인). 웹 미리보기에서는 외부 호출이 막힐 수 있고, 설치한 앱(APK)에서는 정상 동작합니다.'}
   render();
  });
