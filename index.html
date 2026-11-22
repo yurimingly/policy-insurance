@@ -506,6 +506,22 @@ var PAYD={
 var PSTRAT={live:['체감 효용 입증으로 불신 해소 및 적정 가입금액 유도',[['체감 효용 어필','사고 시 보험가입금액 절반(약 50%) · 200만 원대 실질 보상으로 보험료 불신 해소'],['가입 설계 시 (일부보험 방지)','지역 평균 가입액(약 450만 원) 벤치마크 제시로 우량 시세 기준 한도 설정']]],
  crop:['특화 담보 및 적정 자부담 비율 안내',[['특화 담보 안내','특정 지역의 과거 지급건을 바탕으로 특화 담보 안내'],['적정 자부담비율 안내','실제 자부담 보험료가 약 15%로 자기부담비율 10~15%형 가입 유도']]]};
 S.sel.pd='hanwoo';S.sel.pdr=0;S.sel.hw=380;
+PAYD.apple={n:'🍎 사과',head:'개화기 저온·냉해 대비',badge:'봄동상해 담보 핵심',grp:'crop',regs:[]};
+var PEX={
+ hanwoo:{t:'[예시 1] “경기도 · 한우 · 질병폐사·긴급도축 우려” 입력 시',kw:['#경기도_축산농가','#가축_한우(번식·비육우)','#질병방역_관리미비','#축사화재_예방시설'],out:[['AI 지역·축종 위험 진단 및 핵심 담보 포착','경기도 한우 사고 1위 질병폐사(68%) · 2위 절박도살(32%) 집중 → 가축주계약 필수'],['대형 화재 피해 분석 및 화재 예방시설 구축 권고','화재 발생 시 가축 평균 2억 원 · 건물(축사) 1,483만 원 대형 보험금 발생 → 축사 화재 대비 및 소방·전기안전 시설 구축 권고'],['질병 방역시설 구축 및 인수 심사 체크포인트','방역시설 미비 → 질병폐사 예방 소독·환기시설 우선 설치 권고 및 축사·개체 이력제 대조 검증']]},
+ pig:{t:'[예시 2] “홍성 · 양돈 · 무창돈사 · 노후배전” 입력 시',kw:['#충남_홍성군(밀집 사육지)','#양돈_비육돈','#무창돈사','#배전설비_10년경과'],out:[['AI 핵심 사고위험 및 특약 매칭','무창돈사 정전·환기 중단 시 집단 폐사 위험 → ‘폭염·전기적장치 특약’ 필수'],['화재·축사 복구비 보장 한도 산출','노후 배전설비 화재 지급데이터 기반 → 축사 건물·기계장치 가입금액 상향 권고'],['인수 심사 자동 체크포인트','가축사육업허가증 사육두수 연동 및 비상발전기·경보장치 구비 여부 자동 검증']]},
+ rice:{t:'[예시 1] “전남 나주 · 벼 · 병충해·침수우려” 입력 시',kw:['#전남_나주시','#논작물_벼','#방제시설','#집중호우시설'],out:[['AI 지역 위험 진단 및 병충해 사고 포착','나주시 사고 1위 깨씨무늬병(67%) · 2위 호우(22%) 집중 → 병충해 살충제·약제 살포 및 호우 대비 등 예방법 안내'],['적정 가입조건 및 실제 자부담비율 제안','보험료 83.7% 지원(실부담 16.3%)으로 부담 최소화 → 소액 피해도 확실히 보장받는 자기부담 10~15%형 선택 추천'],['깨씨무늬병 방제시설 및 침수 대비 시설 구축 안내','방제 및 집중호우 대비 시설 모두 미비 → 나주 핵심 위험인 깨씨무늬병 방제시설과 배수·침수 예방 시설 동시 구축 권고']]},
+ apple:{t:'[예시 2] “장수 · 사과 · 개화기 · 저지대” 입력 시',kw:['#전북_장수군(산간 분지)','#사과_홍로(개화기 진입)','#저지대_과수원','#방상팬_미설치'],out:[['AI 위험 진단 및 보장 공백 포착','산간 저지대 냉기류 정체로 봄철 냉해 빈발 → ‘봄동상해’ 보장 필수 추천'],['적정 가입조건 및 자기부담비율 제안','최근 3년 인근 평균 피해율(24%) 반영 → 선택 가능 시 자기부담비율 10~15%형 유도'],['인수 심사 자동 체크포인트','농업경영체등록확인서 과수 면적 대조 및 방지시설 항목 미적용 자동 검증']]}
+};
+function pxBox(kw,out,tt){return '<div style="background:#0f6b3a;border-radius:14px;padding:12px;color:#fff"><div class="xs" style="color:#bbf7d0;font-weight:700">INPUT · 음성/키워드 인식</div>'+kw.map(function(k){return '<div class="b" style="margin-top:8px;font-size:14px">'+esc(k)+'</div>'}).join('')+'</div>'+out.map(function(o,i){return '<div style="border:1px solid var(--line);border-radius:12px;padding:10px;margin-top:8px;background:#fff"><div class="sm b">'+(i+1)+'. '+esc(o[0])+'</div><div class="xs mut" style="margin-top:3px">'+esc(o[1])+'</div></div>'}).join('')}
+function pexCard(k){var e=PEX[k],h='';
+ if(e)h+='<div class="card"><h3 style="font-size:15px">'+e.t+'</h3>'+pxBox(e.kw,e.out)+'</div>';
+ var R=S.sel.pxr&&S.sel.pxr.k===k?S.sel.pxr:null;
+ h+='<div class="card"><h3 style="font-size:15px">🔎 직접 입력해서 AI 분석</h3><p class="xs mut" style="margin:0 0 8px">지역·품목·시설 키워드를 입력하면 지급데이터를 근거로 AI가 위험 진단 · 특약 · 인수 체크포인트를 정리해요.</p><textarea id="pxIn" rows="2" placeholder="예) 충남 홍성 · 양돈 · 무창돈사 · 배전설비 10년 경과" style="width:100%;box-sizing:border-box;border:1px solid var(--line);border-radius:10px;padding:8px;font:inherit;font-size:13px">'+esc(R?R.q:'')+'</textarea><button class="btn full" id="pxGo" style="margin-top:8px">AI 분석</button>'+(R&&R.out?'<div style="margin-top:8px">'+pxBox(R.kw,R.out)+'<div class="xs mut" style="margin-top:6px">정리 방식: '+R.src+'</div></div>':'')+'</div>';
+ return h}
+function pxGem(k,q){var g=PAYD[k],ctx=g.n+' '+g.head+'\n'+g.regs.map(function(r){return r.r+': '+r.dist.map(function(d){return d[0]+' '+d[1]+'%'}).join(', ')+(r.ins?' (평균 가입 '+r.ins+'만/지급 '+r.paid+'만)':'')+(r.amt?' · '+r.amt:'')+' → '+r.rec}).join('\n');
+ var pr='농협손해보험 정책보험 인수·상품 담당 AI입니다. 아래 지급데이터를 근거로, 고객 입력 키워드에 대해 JSON으로만 답하세요. 키: kw(입력에서 뽑은 해시태그 4개 배열, 예 "#충남_홍성군"), out(길이 3 배열, 각 원소는 [소제목, 설명 한두 문장]). 소제목 3개는 순서대로 ①지역·축종·작물 위험 진단 및 핵심 담보 ②적정 가입조건·특약·자기부담 제안 ③인수 심사 자동 체크포인트. 지급데이터에 없는 수치는 만들지 마세요.\n[지급데이터]\n'+ctx+'\n[고객 입력] '+q;
+ return fetch('https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key='+encodeURIComponent(S.gkey||GK),{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({contents:[{parts:[{text:pr}]}],generationConfig:{responseMimeType:'application/json',temperature:0.2}})}).then(function(r){if(!r.ok)throw 0;return r.json()}).then(function(j){var x=JSON.parse(j.candidates[0].content.parts[0].text);if(Array.isArray(x))x=x[0];if(!x.out||x.out.length<3)throw 0;return{k:k,q:q,kw:(x.kw||[]).slice(0,4),out:x.out.slice(0,3),src:'Gemini'}})}
 PAGES['d-paydata']=function(){
  var g=PAYD[S.sel.pd],st=PSTRAT[g.grp];
  var h='<div class="card"><h3>지급데이터 분석 및 손해 대비 안내</h3><p class="xs mut" style="margin:0 0 8px">다발 사고부터 대형 재해까지 — 지역별 과거 지급 패턴으로 맞춤 담보 설계</p><div class="chips">'+
@@ -513,7 +529,7 @@ PAGES['d-paydata']=function(){
   '<div class="card"><div class="hd"><h3 style="margin:0">'+g.n+' · '+g.head+'</h3><span class="tag o">'+g.badge+'</span></div>'+
   g.regs.map(function(r,i){return '<div style="background:var(--bg);border-radius:12px;padding:12px;margin-top:10px"><div class="row sp"><b>'+r.r+'</b>'+(r.ins?'<span class="xs mut">평균 가입 '+r.ins+'만 원 / 지급 '+r.paid+'만 원'+(g.grp==='live'?' ('+Math.round(r.paid/r.ins*100)+'%)':'')+'</span>':'')+'</div>'+
    distBars(r.dist)+(r.amt?'<div class="xs" style="color:#b4560f">🔥 '+r.amt+'</div>':'')+'<div class="sm b" style="margin-top:4px;color:var(--g)">→ '+r.rec+'</div></div>'}).join('')+'</div>';
- if(S.sel.pd==='hanwoo'){var v=S.sel.hw,avg=473,pay=Math.round(v*0.51);
+ h+=pexCard(S.sel.pd);if(S.sel.pd==='hanwoo'){var v=S.sel.hw,avg=473,pay=Math.round(v*0.51);
   h+='<div class="card"><h3>🧮 두당 가입금액 점검 (일부보험 방지)</h3><div class="row sp sm"><span>고객 두당 가입금액</span><b>'+v+'만 원</b></div><input type="range" id="hwA" min="200" max="700" step="10" value="'+v+'">'+
    '<div class="grid2" style="margin-top:8px"><div class="kpi"><b>'+avg+'만</b><small>경기 평균 가입액</small></div><div class="kpi"><b style="color:var(--g)">약 '+pay+'만</b><small>사고 시 예상 지급 (51%)</small></div></div>'+
    (v<avg*0.9?'<div class="callout warn" style="margin-top:8px">지역 평균보다 <b>'+(avg-v)+'만 원</b> 낮아요 → 시세 대비 일부보험 우려, 한도 상향 권장</div>':'<div class="callout" style="margin-top:8px">지역 평균 수준으로 적정해요</div>')+'</div>'}
@@ -521,7 +537,9 @@ PAGES['d-paydata']=function(){
   st[1].map(function(x,i){return '<div style="background:rgba(255,255,255,.08);border-radius:10px;padding:10px;margin-top:6px"><div class="sm b" style="color:#fde68a">'+(i+1)+'. '+x[0]+'</div><div class="xs" style="color:#cbd5e1">'+x[1]+'</div></div>'}).join('')+'</div>'+
   '<button class="btn full" id="pdCopy">고객 안내문 복사</button>';
  return h};
-BIND['d-paydata']=function(){$$('[data-pd]').forEach(function(b){b.onclick=function(){S.sel.pd=b.getAttribute('data-pd');render()}});
+BIND['d-paydata']=function(){var px=$('#pxGo');if(px)px.onclick=function(){var q=$('#pxIn').value.trim();if(!q){toast('키워드를 입력해 주세요');return}var k=S.sel.pd;px.disabled=true;px.textContent='AI가 분석하는 중…';
+  pxGem(k,q).then(function(R){S.sel.pxr=R;render()}).catch(function(){var e=PEX[k]||PEX.hanwoo;S.sel.pxr={k:k,q:q,kw:q.split(/[·,\s]+/).filter(Boolean).slice(0,4).map(function(w){return '#'+w}),out:e.out,src:'예시 응답 (Gemini 연결 실패)'};toast('Gemini 연결 실패 · 예시 응답을 보여드려요');render()})};
+$$('[data-pd]').forEach(function(b){b.onclick=function(){S.sel.pd=b.getAttribute('data-pd');render()}});
  var r=$('#hwA');if(r)r.onchange=function(){S.sel.hw=+r.value;render()};if(r)r.oninput=function(){r.previousElementSibling.lastChild.textContent=r.value+'만 원'};
  $('#pdCopy').onclick=function(){var g=PAYD[S.sel.pd];var t='[농협손보 지급데이터 안내] '+g.n.replace(/^\S+ /,'')+'\n'+g.regs.map(function(r){return '· '+r.r+': 사고 1위 '+r.dist[0][0]+'('+r.dist[0][1]+'%)'+(r.ins?' / 평균 지급 '+r.paid+'만 원':'')+' → '+r.rec}).join('\n');try{navigator.clipboard.writeText(t).then(function(){toast('복사했어요')},function(){toast('복사 실패')})}catch(e){toast('복사 실패')}}};
 
