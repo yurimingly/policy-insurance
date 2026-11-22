@@ -238,7 +238,7 @@ var TRENDS=[
 
 /* ---------------- 라우팅 ---------------- */
 var ROLES={f:{n:'👨‍🌾 농가',sc:'본인 계약·농장',tabs:[['home','🏠','홈'],['live','📡','위험'],['cover','🛡','보험'],['claim','📸','접수·민원']]},
- u:{n:'📝 인수팀',sc:'인수 + 지자체 통계',tabs:[['uwlist','인수심사 목록'],['spec','특이점 심사'],['grade','점검 등급 DB'],['queue','가입 상담함'],['analyze','AI 보장분석'],['reco','AI 추천'],['live','실시간 위험'],['macro','전국 관제'],['meso','시군·읍면'],['micro','격자(500m)'],['matrix','연계 매트릭스'],['engine','AI 엔진·API'],['loop','활용']]},
+ u:{n:'📝 인수팀',sc:'인수 + 지자체 통계',tabs:[['uwlist','인수심사 목록'],['spec','특이점 심사'],['grade','점검 등급 DB'],['queue','가입 상담함'],['analyze','AI 보장분석'],['live','실시간 위험'],['macro','전국 관제'],['meso','시군·읍면'],['micro','격자(500m)'],['matrix','연계 매트릭스'],['engine','AI 엔진·API'],['loop','활용']]},
  c:{n:'🧾 보상팀',sc:'보상 + 지자체 통계',tabs:[['queue','접수함'],['claim','AI 지급심사'],['paydata','지급데이터'],['loss','미가입 손실'],['kpi','기대효과'],['perm','권한·감사'],['macro','전국 관제'],['meso','시군·읍면'],['micro','격자(500m)'],['matrix','연계 매트릭스'],['engine','AI 엔진·API'],['loop','활용']]},
  h:{n:'📊 정책팀',sc:'상품개발·위험관제',tabs:[['qlog','질의 로그 활용'],['nh','NH오늘농사 연계'],['weights','위험도 구성'],['loop','활용·개선'],['macro','전국 관제'],['meso','시군·읍면'],['micro','격자(500m)'],['matrix','연계 매트릭스'],['engine','AI 엔진·API'],['kpi','기대효과'],['perm','권한·감사']]},
  g:{n:'🏛 지자체',sc:'집계 통계·위험지수',tabs:[['macro','전국'],['meso','시군·읍면'],['micro','격자(500m)'],['matrix','연계 매트릭스'],['engine','AI 엔진·API'],['loop','민원 통계']]}};
@@ -266,7 +266,7 @@ function render(){
  if(!ROLES[role])role=S.user.role;var R=ROLES[role];if(!tab)tab=R.tabs[0][0];
  var html=topBar(role),ok=(role===S.user.role)&&(role==='f'||R.tabs.some(function(t){return t[0]===tab}));
  if(role!=='f'&&role===S.user.role){var SEC={uqueue:'인수',analyze:'인수',ocr:'인수',uwlist:'인수',reco:'인수',live:'인수',cqueue:'보상',claim:'보상',paydata:'보상',loss:'보상',kpi:'정책',perm:'정책',spec:'인수',grade:'인수',qlog:'정책',nh:'정책',weights:'정책',macro:'통계',meso:'통계',micro:'통계',matrix:'통계',engine:'통계',loop:'활용'},ORD=['인수','보상','정책','통계','활용'],gp={};R.tabs.forEach(function(t){var sc=SEC[t[0]]||(t[0]==='queue'?(role==='u'?'인수':'보상'):'기타');(gp[sc]=gp[sc]||[]).push(t)});
-  var LK={u:['보상','c','보상팀',['접수함','AI 지급심사','지급데이터','미가입 손실']],c:['인수','u','인수팀',['인수심사 목록','가입 상담함','AI 보장분석','AI 추천','실시간 위험']]}[role],curN='';R.tabs.forEach(function(t){if(t[0]===tab)curN=t[1]});
+  var LK={u:['보상','c','보상팀',['접수함','AI 지급심사','지급데이터','미가입 손실']],c:['인수','u','인수팀',['인수심사 목록','가입 상담함','AI 보장분석','실시간 위험']]}[role],curN='';R.tabs.forEach(function(t){if(t[0]===tab)curN=t[1]});
   html+='<div class="subw"><button class="navtog" id="navTog"><span>📂 '+curN+'</span><span>메뉴 접기/펼치기 ▴</span></button><div class="sub" id="subBody" style="display:block">'+ORD.concat(['보상','인수']).filter(function(k,i,a){return a.indexOf(k)===i&&(gp[k]||(LK&&LK[0]===k))}).map(function(k){var op=true,cnt=(gp[k]||[]).length+(LK&&LK[0]===k?LK[3].length:0);return '<div class="tsec"><button class="tsh" data-ts="'+k+'"><span class="car">'+(op?'▾':'▸')+'</span> '+k+' <small>'+cnt+'</small></button><div class="tch" style="display:'+(op?'flex':'none')+'">'+(gp[k]||[]).map(function(t){return '<button data-go="'+role+'-'+t[0]+'" class="'+(t[0]===tab?'on':'')+'">'+t[1]+'</button>'}).join('')+(LK&&LK[0]===k?LK[3].map(function(n){return '<button class="lk" data-lock="'+LK[1]+'">🔒 '+n+'</button>'}).join(''):'')+'</div></div>'}).join('')+'</div></div>'}
  var fn=PAGES[role+'-'+tab]||PAGES['f-home'];
  html+='<div class="page">'+(ok?fn():deny(role,tab))+'</div>';
@@ -460,6 +460,12 @@ function deskByAddr(a){var M=[[/홍성|광천|예산|충남/,'pig'],[/나주|남
 function deskMap(){var g=S.sel.dgeo,z=S.sel.dz||15,o=$('#dMap');if(!g||!o)return;
  o.innerHTML='<div class="card"><div class="row sp"><b>📍 고객 농장 위치</b><span class="tag '+(g.coarse?'o':'')+'">'+(g.coarse?'시·군 단위':'주소 확인')+'</span></div><div class="xs mut" style="margin-top:4px">'+esc(g.name)+'</div><div class="nmap2" style="aspect-ratio:3/2">'+addrTiles(g,z)+'</div><div class="row" style="gap:8px"><button class="btn sm ghost" id="dZm">－ 축소</button><button class="btn sm ghost" id="dZp">＋ 확대</button></div>'+(g.coarse?'<div class="xs mut" style="margin-top:6px">상세 주소를 찾지 못해 시·군 중심으로 표시했어요. 읍·면·리까지 입력하면 더 정확해요.</div>':'')+'</div>';
  $('#dZm').onclick=function(){S.sel.dz=Math.max(9,z-1);deskMap()};$('#dZp').onclick=function(){S.sel.dz=Math.min(18,z+1);deskMap()}}
+function deskReco(k){var fk=FARMS[k]?k:(k==='farm'?'farm':'apple'),f=FARMS[fk],P=[];try{P=prodRecs(f).prods.slice(0,3)}catch(e){}
+ if(!P.length)return '<div class="card"><h3>🛍 추천 상품</h3><p class="sm mut" style="margin:0">이 고객 농장에 추가로 권할 일반 상품이 없어요. 가입 상품이 충분해요.</p></div>';
+ var tp=P.reduce(function(a,x){return a+x.pay},0),tm=P.reduce(function(a,x){return a+x.mine},0),tpr=P.reduce(function(a,x){return a+x.prem},0);
+ return '<div class="card"><h3>🛍 추천 상품 · 이 고객 기대 효과</h3><p class="xs mut" style="margin:0 0 8px">미가입 일반 상품 중 이 고객 농장의 위험에 맞는 순서로 골랐어요.</p><div class="grid3"><div class="kpi"><b>'+P.length+'건</b><small>추천 상품</small></div><div class="kpi"><b style="color:var(--g)">'+won(tp)+'</b><small>사고 시 예상 보험금</small></div><div class="kpi"><b>'+won(tm)+'</b><small>연 농가 부담</small></div></div></div>'+
+ P.map(function(x,i){var rt=x.mine>0?Math.round(x.pay/x.mine*10)/10:0;return '<div class="card" style="padding-top:8px">'+prodRow(x,i).replace(/<\/div>$/,'<div class="callout" style="margin-top:8px">💡 연 농가 부담 <b>'+won(x.mine)+'</b>으로 사고 시 <b>'+won(x.pay)+'</b> 보장</div></div>')+'</div>'}).join('')+
+ '<p class="xs mut" style="padding:0 4px">※ 보험금·보험료는 가정치이며, 실제는 당사 지급통계로 대체돼요.</p>'}
 function deskShow(){var k=S.sel.dk,o=$('#dOut');if(!k||!o)return;var p=DESK[k],a=(S.sel.daddr||'').split(/\s+/).slice(0,2).join(' '),ti=p.title.indexOf(' · ')>0?(a?a+' · ':'')+p.title.split(' · ').slice(1).join(' · '):p.title;
  o.innerHTML='<div class="card"><div class="xs mut">분석 품목 (지역 주력 품목 기준 · 바꿔서 볼 수 있어요)</div><div class="chips" style="margin-top:6px">'+Object.keys(DKL).map(function(x){return '<button class="chip'+(x===k?' on':'')+'" data-dk="'+x+'">'+DKL[x]+'</button>'}).join('')+'</div></div>'+
   '<div class="card"><div class="hd"><div><div class="b">'+ti+'</div><div class="xs mut">'+p.prod+'</div></div>'+gauge(p.score,90)+'</div>'+
@@ -468,7 +474,7 @@ function deskShow(){var k=S.sel.dk,o=$('#dOut');if(!k||!o)return;var p=DESK[k],a
   deskSteps(p).map(function(st,i){return '<div class="step"><div class="num">'+(i+1)+'</div><div><b class="sm">'+st[0]+'</b>'+st[1].map(function(l){return '<div class="sm">'+l+'</div>'}).join('')+'</div></div>'}).join('')+
   '<div class="step"><div class="num">'+(deskSteps(p).length+1)+'</div><div style="flex:1"><b class="sm">인수 심사 자동 체크포인트</b><ul class="list">'+p.s3.map(function(c){return '<li><span class="sm">'+c[0]+'</span><span class="'+c[1]+'">'+(c[1]==='ok'?'적합':c[1]==='ng'?'부적합':'확인필요')+'</span></li>'}).join('')+'</ul></div></div>'+
   '<div class="note">분석 근거: '+p.src.join(' · ')+'</div>'+
-  '<div class="row" style="margin-top:10px"><button class="btn sm" id="dCopy">상담 요약 복사</button><button class="btn sm ghost" data-go="u-uwlist">인수심사 목록 →</button></div></div>';
+  '<div class="row" style="margin-top:10px"><button class="btn sm" id="dCopy">상담 요약 복사</button><button class="btn sm ghost" data-go="u-uwlist">인수심사 목록 →</button></div></div>'+deskReco(k);
  bindTop();$$('[data-dk]').forEach(function(b){b.onclick=function(){S.sel.dk=b.getAttribute('data-dk');deskShow()}});
  $('#dCopy').onclick=function(){var s='[AI 보장분석] '+(S.sel.daddr||'')+'\n'+ti+'\n위험도 '+p.score+'점\n'+deskSteps(p).map(function(st){return '· '+st[0]+': '+st[1][1].replace(/<[^>]+>/g,'').replace(/^→ ?/,'')}).join('\n');try{navigator.clipboard.writeText(s).then(function(){toast('복사했어요')},function(){toast('복사 실패')})}catch(e){toast('복사 실패')}}}
 function runDesk(){var a=($('#dAddr').value||'').trim();if(!a){toast('고객 주소를 입력하세요');return}
