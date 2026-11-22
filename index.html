@@ -239,7 +239,7 @@ var TRENDS=[
 /* ---------------- 라우팅 ---------------- */
 var ROLES={f:{n:'👨‍🌾 농가',sc:'본인 계약·농장',tabs:[['home','🏠','홈'],['live','📡','위험'],['cover','🛡','보험'],['claim','📸','접수·민원']]},
  u:{n:'📝 인수팀',sc:'인수 + 지자체 통계',tabs:[['uwlist','인수심사 목록'],['spec','특이점 심사'],['grade','점검 등급 DB'],['queue','가입 상담함'],['analyze','AI 보장분석'],['live','실시간 위험'],['macro','전국 관제'],['meso','시군·읍면'],['micro','격자(500m)'],['matrix','연계 매트릭스'],['engine','AI 엔진·API'],['loop','활용']]},
- c:{n:'🧾 보상팀',sc:'보상 + 지자체 통계',tabs:[['queue','접수함'],['claim','AI 지급심사'],['paydata','지급데이터'],['loss','미가입 손실'],['macro','전국 관제'],['meso','시군·읍면'],['micro','격자(500m)'],['matrix','연계 매트릭스'],['engine','AI 엔진·API'],['loop','활용']]},
+ c:{n:'🧾 보상팀',sc:'보상 + 지자체 통계',tabs:[['queue','보상 접수 목록'],['cmin','민원 접수함'],['claim','AI 지급심사'],['paydata','지급데이터'],['loss','미가입 손실'],['macro','전국 관제'],['meso','시군·읍면'],['micro','격자(500m)'],['matrix','연계 매트릭스'],['engine','AI 엔진·API'],['loop','활용']]},
  h:{n:'📊 정책팀',sc:'상품개발·위험관제',tabs:[['qlog','질의 로그 활용'],['nh','NH오늘농사 연계'],['weights','위험도 구성'],['loop','활용·개선'],['macro','전국 관제'],['meso','시군·읍면'],['micro','격자(500m)'],['matrix','연계 매트릭스'],['engine','AI 엔진·API'],['kpi','기대효과'],['perm','권한·감사']]},
  g:{n:'🏛 지자체',sc:'집계 통계·위험지수',tabs:[['macro','전국'],['meso','시군·읍면'],['micro','격자(500m)'],['matrix','연계 매트릭스'],['engine','AI 엔진·API'],['loop','민원 통계']]}};
 var DMAP={analyze:'u',ocr:'u',reco:'u',live:'u',claim:'c',paydata:'c',loss:'c',kpi:'h'};
@@ -265,8 +265,8 @@ function render(){
  if(role==='set'||role==='about'){a.innerHTML=topBar(null)+'<div class="page">'+(role==='set'?setPage():aboutPage())+'</div>';bindTop();bindSet();return}
  if(!ROLES[role])role=S.user.role;var R=ROLES[role];if(!tab)tab=R.tabs[0][0];
  var html=topBar(role),ok=(role===S.user.role)&&(role==='f'||R.tabs.some(function(t){return t[0]===tab}));
- if(role!=='f'&&role===S.user.role){var SEC={uqueue:'인수',analyze:'인수',ocr:'인수',uwlist:'인수',reco:'인수',live:'인수',cqueue:'보상',claim:'보상',paydata:'보상',loss:'보상',kpi:'정책',perm:'정책',spec:'인수',grade:'인수',qlog:'정책',nh:'정책',weights:'정책',macro:'통계',meso:'통계',micro:'통계',matrix:'통계',engine:'통계',loop:'활용'},ORD=['인수','보상','정책','통계','활용'],gp={};R.tabs.forEach(function(t){var sc=SEC[t[0]]||(t[0]==='queue'?(role==='u'?'인수':'보상'):'기타');(gp[sc]=gp[sc]||[]).push(t)});
-  var LK={u:['보상','c','보상팀',['접수함','AI 지급심사','지급데이터','미가입 손실']],c:['인수','u','인수팀',['인수심사 목록','가입 상담함','AI 보장분석','실시간 위험']]}[role],LK2=role==='c'?['정책','h','정책팀',['기대효과','권한·감사']]:null,lkOf=function(k){return LK&&LK[0]===k?LK:(LK2&&LK2[0]===k?LK2:null)},curN='';R.tabs.forEach(function(t){if(t[0]===tab)curN=t[1]});
+ if(role!=='f'&&role===S.user.role){var SEC={uqueue:'인수',analyze:'인수',ocr:'인수',uwlist:'인수',reco:'인수',live:'인수',cqueue:'보상',cmin:'보상',claim:'보상',paydata:'보상',loss:'보상',kpi:'정책',perm:'정책',spec:'인수',grade:'인수',qlog:'정책',nh:'정책',weights:'정책',macro:'통계',meso:'통계',micro:'통계',matrix:'통계',engine:'통계',loop:'활용'},ORD=['인수','보상','정책','통계','활용'],gp={};R.tabs.forEach(function(t){var sc=SEC[t[0]]||(t[0]==='queue'?(role==='u'?'인수':'보상'):'기타');(gp[sc]=gp[sc]||[]).push(t)});
+  var LK={u:['보상','c','보상팀',['보상 접수 목록','민원 접수함','AI 지급심사','지급데이터','미가입 손실']],c:['인수','u','인수팀',['인수심사 목록','가입 상담함','AI 보장분석','실시간 위험']]}[role],LK2=role==='c'?['정책','h','정책팀',['기대효과','권한·감사']]:null,lkOf=function(k){return LK&&LK[0]===k?LK:(LK2&&LK2[0]===k?LK2:null)},curN='';R.tabs.forEach(function(t){if(t[0]===tab)curN=t[1]});
   html+='<div class="subw"><button class="navtog" id="navTog"><span>📂 '+curN+'</span><span>메뉴 접기/펼치기 ▴</span></button><div class="sub" id="subBody" style="display:block">'+ORD.concat(['보상','인수']).filter(function(k,i,a){return a.indexOf(k)===i&&(gp[k]||lkOf(k))}).map(function(k){var op=true,cnt=(gp[k]||[]).length+(lkOf(k)?lkOf(k)[3].length:0);return '<div class="tsec"><button class="tsh" data-ts="'+k+'"><span class="car">'+(op?'▾':'▸')+'</span> '+k+' <small>'+cnt+'</small></button><div class="tch" style="display:'+(op?'flex':'none')+'">'+(gp[k]||[]).map(function(t){return '<button data-go="'+role+'-'+t[0]+'" class="'+(t[0]===tab?'on':'')+'">'+t[1]+'</button>'}).join('')+(lkOf(k)?lkOf(k)[3].map(function(n){return '<button class="lk" data-lock="'+lkOf(k)[1]+'">🔒 '+n+'</button>'}).join(''):'')+'</div></div>'}).join('')+'</div></div>'}
  var fn=PAGES[role+'-'+tab]||PAGES['f-home'];
  html+='<div class="page">'+(ok?fn():deny(role,tab))+'</div>';
@@ -660,12 +660,13 @@ var SEL={case:null};
 var QSTEPS={uw:['접수 확인','고객 정보·보장 현황 확인','AI 보장분석 검토','상품 안내·답변'],claim:['접수 확인','사진·서류 확인','현장조사 배정','손해사정·지급 심사','답변 발송'],complaint:['접수 확인','민원 원문 검토','관련 지급 내역 확인','답변 발송']};
 function stepsOf(c){var n=QSTEPS[c.type].length,a=c.steps;if(a&&a.length===n)return a.map(function(x){return c.status==='답변완료'||!!x});var k=c.status==='답변완료'?n:c.status==='검토중'?Math.max(1,Math.ceil((n-1)/2)):0;return QSTEPS[c.type].map(function(_,i){return i<k})}
 function ensureVoice(){S.cases.forEach(function(c){if(c.type==='claim'&&c.farm==='seed'&&!c.voice){var ci=S.cases.filter(function(x){return x.type==='claim'&&x.farm==='seed'}).indexOf(c);c.voice={ch:ci%3===2?'콜센터 접수':'농축협 유선접수',raw:c.text,when:fmtDT(c.at).slice(0,10),item:c.item,cause:CATS[c.cat][0].replace(/^\S+\s/,'')||'기타',size:'현장 확인 후 산정'}}})}
+function qTypes(k){return k==='u'?['uw']:k==='m'?['complaint']:['claim']}
 function qPage(kind){ensureVoice();
- var types=kind==='u'?['uw']:['claim','complaint'],list=S.cases.filter(function(c){return types.indexOf(c.type)>=0}),cur=list.filter(function(c){return c.id===SEL.case})[0]||list[0];
+ var types=qTypes(kind),list=S.cases.filter(function(c){return types.indexOf(c.type)>=0}),cur=list.filter(function(c){return c.id===SEL.case})[0]||list[0];
  var cnt=function(st){return list.filter(function(c){return c.status===st}).length};
- var h='<div class="card"><div class="hd"><h3 style="margin:0">'+(kind==='u'?'📝 가입 상담함':'🧾 사고·민원 접수함')+'</h3><span class="tag">'+list.length+'건</span></div><div class="grid3" style="margin-top:8px"><div class="kpi"><b>'+cnt('접수')+'</b><small>접수</small></div><div class="kpi"><b>'+cnt('검토중')+'</b><small>검토중</small></div><div class="kpi"><b style="color:var(--g)">'+cnt('답변완료')+'</b><small>답변완료</small></div></div>'+
+ var h='<div class="card"><div class="hd"><h3 style="margin:0">'+(kind==='u'?'📝 가입 상담함':kind==='m'?'💬 민원 접수함':'🧾 보상 접수 목록 (사고)')+'</h3><span class="tag">'+list.length+'건</span></div><div class="grid3" style="margin-top:8px"><div class="kpi"><b>'+cnt('접수')+'</b><small>접수</small></div><div class="kpi"><b>'+cnt('검토중')+'</b><small>검토중</small></div><div class="kpi"><b style="color:var(--g)">'+cnt('답변완료')+'</b><small>답변완료</small></div></div>'+
   '<p class="xs mut" style="margin:8px 0 0">고객 이름·지번은 마스킹되어 보여요. 상세 열람은 사유가 기록돼요.</p></div>';
- if(!list.length)return h+'<div class="card" style="text-align:center"><p class="sm mut">아직 접수된 건이 없어요.<br>농가 계정에서 '+(kind==='u'?'추천 상품 "상담 요청"':'사고 접수·민원')+'을 남기면 여기에 쌓여요.</p></div>';
+ if(!list.length)return h+'<div class="card" style="text-align:center"><p class="sm mut">아직 접수된 건이 없어요.<br>농가 계정에서 '+(kind==='u'?'추천 상품 "상담 요청"':kind==='m'?'민원':'사고 접수')+'를 남기면 여기에 쌓여요.</p></div>';
  var QN=6,sh=SEL.qmore?list:list.slice(0,QN);if(cur&&sh.indexOf(cur)<0)sh=sh.concat([cur]);
  h+='<div class="card"><ul class="list">'+sh.map(function(c){return '<li data-qc="'+c.id+'" style="'+(cur&&c.id===cur.id?'background:var(--bg)':'')+'"><div><b class="sm">'+CATS[c.cat][0]+' '+c.id+'</b><div class="xs mut">'+maskN(c.who)+' · '+c.sigun+' · '+fmtS(c.at)+'</div></div><span class="tag '+(c.status==='답변완료'?'':c.status==='검토중'?'y':'o')+'">'+c.status+'</span></li>'}).join('')+'</ul>'+(list.length>QN?'<button class="btn sm ghost full" id="qMore" style="margin-top:8px">'+(SEL.qmore?'접기':'더 보기 ('+(list.length-QN)+'건)')+'</button>':'')+'</div>';
  var A=aiCase(cur),rv=S.cases._rv===cur.id;
@@ -680,19 +681,19 @@ function qPage(kind){ensureVoice();
   '<label class="sm" style="display:flex;gap:8px;align-items:center;margin-top:8px"><input type="checkbox" id="qRule" '+(ruleOn(cur.cat)?'checked disabled':'')+(S.user.role==='u'?' disabled':'')+'> 재발 방지 개선 룰로 활용'+(S.user.role==='u'?' <span class="xs mut">(보상팀·정책팀 승인)</span>':ruleOn(cur.cat)?' <span class="xs mut">(반영됨)</span>':'')+'</label><div class="xs mut">→ '+A.prev+'</div>'+
   '<div class="row" style="margin-top:10px;gap:8px">'+(cur.status==='접수'?'<button class="btn sm ghost" id="qStart">검토 시작</button>':'')+'<button class="btn sm" id="qSend" style="flex:1">답변 발송</button></div>')+'</div>';
  return h}
-function qKind(){var r=route();return((r[0]==='u'&&r[1]==='queue')||(r[0]==='h'&&r[1]==='uqueue'))?'u':'c'}
+function qKind(){var r=route();if(r[1]==='cmin')return 'm';return((r[0]==='u'&&r[1]==='queue')||(r[0]==='h'&&r[1]==='uqueue'))?'u':'c'}
 function bindQueue(){
  var sm=$('#qSample');if(sm)sm.onclick=function(){sampleCases();render()};
  $$('[data-qc]').forEach(function(li){li.onclick=function(){SEL.case=li.getAttribute('data-qc');S.cases._rv=null;render();var d=$('#qDetail');if(d)try{d.scrollIntoView({block:'start'})}catch(e){}}});
- var cur=null;S.cases.forEach(function(c){if(c.id===SEL.case)cur=c});if(!cur){var u=qKind()==='u'?['uw']:['claim','complaint'];cur=S.cases.filter(function(c){return u.indexOf(c.type)>=0})[0]}
+ var cur=null;S.cases.forEach(function(c){if(c.id===SEL.case)cur=c});if(!cur){var u=qTypes(qKind());cur=S.cases.filter(function(c){return u.indexOf(c.type)>=0})[0]}
  if(!cur)return;
  var rv=$('#qReveal');if(rv)rv.onclick=function(){S.cases._rs=cur.id;render()};$$('[data-rs]').forEach(function(b){b.onclick=function(){audit('개인정보 열람 '+cur.id+' · '+b.getAttribute('data-rs'));S.cases._rv=cur.id;S.cases._rs=null;SEL.case=cur.id;render()}});
  var qm=$('#qMore');if(qm)qm.onclick=function(){SEL.qmore=!SEL.qmore;render()};
  $$('[data-qs]').forEach(function(b){b.onchange=function(){var a=stepsOf(cur),i=+b.getAttribute('data-qs');a[i]=b.checked;cur.steps=a;var m=a.slice(0,a.length-1).filter(Boolean).length;if(cur.status!=='답변완료')cur.status=m?'검토중':'접수';audit('처리 단계 '+cur.id+' '+(i+1));save();render()}});
  var st=$('#qStart');if(st)st.onclick=function(){cur.status='검토중';audit('검토 시작 '+cur.id);save();render()};
  var sd=$('#qSend');if(sd)sd.onclick=function(){var t=$('#qReply').value.trim();if(!t){toast('답변을 입력해 주세요');return}cur.reply=t;cur.status='답변완료';cur.handledAt=Date.now();var rl=$('#qRule');if(rl&&rl.checked&&!rl.disabled&&S.user.role!=='u')applyRule(cur.cat);audit('답변 발송 '+cur.id);save();toast('답변을 보냈어요 · 농가 알림함에 도착');render()}}
-PAGES['u-queue']=function(){return qPage('u')};PAGES['c-queue']=function(){return qPage('c')};
-BIND['u-queue']=BIND['c-queue']=bindQueue;
+PAGES['u-queue']=function(){return qPage('u')};PAGES['c-queue']=function(){return qPage('c')};PAGES['c-cmin']=function(){return qPage('m')};
+BIND['u-queue']=BIND['c-queue']=BIND['c-cmin']=bindQueue;
 
 PAGES['u-loop']=PAGES['c-loop']=PAGES['g-loop']=function(){
  var role=S.user.role,cs=S.cases,n=cs.length,done=cs.filter(function(c){return c.status==='답변완료'}),mx=Math.max(1,Math.max.apply(null,Object.keys(CATS).map(function(k){return cs.filter(function(c){return c.cat===k}).length})));
