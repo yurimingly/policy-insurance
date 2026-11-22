@@ -1552,6 +1552,30 @@ BIND['g-micro']=function(){mapInit('mapMicro',function(L,m){var la0=35.675,ln0=1
   var s=la0+(5.5-y)*dl,w=ln0+(x-6)*dn,r=L.rectangle([[s-dl/2,w-dn/2],[s+dl/2,w+dn/2]],{color:i===88?'#111':hexOf(v),weight:i===88?3:1,fillColor:hexOf(v),fillOpacity:.55}).addTo(m);r.bindTooltip('위험지수 '+v);b.push([s,w])}
  m.fitBounds([[la0-6*dl,ln0-6*dn],[la0+6*dl,ln0+6*dn]])})};
 ['u','c','h'].forEach(function(r){['macro','meso','micro'].forEach(function(k){if(PAGES[r+'-'+k]){PAGES[r+'-'+k]=PAGES['g-'+k];BIND[r+'-'+k]=BIND['g-'+k]}})});
+/* ===== AI 엔진·API: 지급사례 학습 → 임계치표 → 9일 예보 적용 → API 응답 ===== */
+S.sel.en=S.sel.en||{q:'장수',k:23,txt:'0.5 N\n0.2 N\n0.1 Y 2\n-0.3 N\n-0.6 Y 8\n-0.8 Y 12\n-0.9 N\n-1.2 Y 20\n-1.4 Y 26\n-1.5 N\n-1.8 Y 25\n-1.9 Y 30\n-2.2 Y 41\n-2.6 Y 48\n-3.0 Y 52\n-3.5 Y 49\n1.2 N\n0.8 N',res:null,busy:0,err:''};
+var ENB=[['0℃ 이상',function(t){return t>=0},'관심','',2,3],['0 ~ −1℃',function(t){return t<0&&t>=-1},'주의','y',18,11],['−1 ~ −2℃',function(t){return t<-1&&t>=-2},'경계','o',47,24],['−2℃ 이하',function(t){return t<-2},'심각','r',81,46]];
+function enLearn(txt){var rows=[];String(txt).split(/\n/).forEach(function(l){var m=l.trim().match(/^(-?\d+(?:\.\d+)?)[\s,]+([YyNn])(?:[\s,]+(\d+(?:\.\d+)?))?/);if(m)rows.push({t:+m[1],y:/y/i.test(m[2]),d:m[3]!=null?+m[3]:null})});
+ return{n:rows.length,b:ENB.map(function(B){var r=rows.filter(function(x){return B[1](x.t)}),y=r.filter(function(x){return x.y}),dm=y.filter(function(x){return x.d!=null});
+  return{n:r.length,rate:r.length?Math.round(y.length/r.length*100):null,dmg:dm.length?Math.round(dm.reduce(function(a,x){return a+x.d},0)/dm.length):null}})}}
+function enRow(L,t){for(var i=0;i<ENB.length;i++)if(ENB[i][1](t)){var b=L.b[i];return{i:i,g:ENB[i][2],c:ENB[i][3],rate:b.rate!=null?b.rate:ENB[i][4],dmg:b.dmg!=null?b.dmg:ENB[i][5],learned:b.rate!=null}}}
+function enRun(){var E=S.sel.en;E.busy=1;E.err='';render();lvGeo(E.q.trim()).then(function(g){return lvWx(g).then(function(j){return{g:g,j:j}})}).then(function(o){E.res={g:o.g,d:o.j.daily};E.busy=0;render()}).catch(function(){E.busy=0;E.err='기상 조회에 실패했어요. 지역 이름이나 인터넷 연결을 확인해 주세요';render()})}
+PAGES['g-engine']=function(){var E=S.sel.en,L=enLearn(E.txt),h='';
+ h+='<div class="card"><h3>⚙️ AI 재해피해 예측 엔진</h3><p class="xs mut" style="margin:0 0 8px">① 과거 지급 사례로 기온별 임계치를 학습하고 → ② 실제 9일 예보에 적용해 → ③ 외부에는 위험지수만 API로 내보내요.</p>'+
+  '<div class="xs mut">① 과거 지급 사례 (한 줄에 「최저기온 지급여부(Y/N) 피해율%」)</div><textarea id="enT" rows="6" style="width:100%;box-sizing:border-box;font-size:13px">'+esc(E.txt)+'</textarea><div class="xs mut">예시 데이터가 들어 있어요. 사과 개화기 사례를 직접 고치거나 붙여 넣으면 임계치가 다시 학습돼요.</div></div>'+
+  '<div class="card"><h3>학습된 임계치 (사례 '+L.n+'건)</h3><table><tr><th>최저기온</th><th>지급률</th><th>평균 피해율</th><th>경보</th></tr>'+ENB.map(function(B,i){var b=L.b[i];return '<tr><td>'+B[0]+'</td><td>'+(b.rate!=null?b.rate+'%':'<span class="mut">–</span>')+'<span class="xs mut"> ('+b.n+'건)</span></td><td>'+(b.dmg!=null?b.dmg+'%':'<span class="mut">–</span>')+'</td><td><span class="tag '+B[3]+'">'+B[2]+'</span></td></tr>'}).join('')+'</table><div class="note">사례가 없는 구간은 PPT 기준값(가정)으로 대신해요.</div></div>'+
+  '<div class="card"><h3>② 실제 예보에 적용</h3><div class="chips" style="margin:6px 0">'+['장수','나주','홍성','안동','이천','예산'].map(function(k){return '<button class="chip '+(E.q===k?'on':'')+'" data-en="'+k+'">'+k+'</button>'}).join('')+'</div><div class="grid2"><div><div class="xs mut">지역</div><input type="text" id="enQ" value="'+esc(E.q)+'"></div><div><div class="xs mut">집계 농가 수(500m 격자)</div><input type="text" inputmode="numeric" id="enK" value="'+E.k+'"></div></div><button class="btn full" id="enGo" style="margin-top:10px"'+(E.busy?' disabled':'')+'>'+(E.busy?'⏳ 예보 불러오는 중…':'🔎 엔진 실행')+'</button>'+(E.err?'<div class="callout warn" style="margin-top:8px">'+E.err+'</div>':'')+'</div>';
+ if(E.res){var days=ewDays(E.res.d),rs=days.map(function(x){return enRow(L,x.mn)}),mx=0,mi=0;rs.forEach(function(r,i){var v=Math.min(100,Math.round(r.rate*.6+r.dmg*.8));r.v=v;if(v>mx){mx=v;mi=i}});
+  h+='<div class="card"><h3>📍 '+E.res.g.name+' 9일 예측</h3><table><tr><th>날짜</th><th>최저</th><th>지급확률</th><th>피해율</th><th>경보</th></tr>'+days.map(function(x,i){var r=rs[i];return '<tr><td>'+(i===0?'오늘':lvDay(x.d))+'</td><td>'+Math.round(x.mn*10)/10+'℃</td><td>'+r.rate+'%</td><td>'+r.dmg+'%</td><td><span class="tag '+ENB[r.i][3]+'">'+r.g+'</span></td></tr>'}).join('')+'</table><div class="note">위험지수 = 지급확률×0.6 + 피해율×0.8 (시연용 가정식, 100점 상한)</div></div>';
+  var K=+E.k||0,ok=K>=5,gr=wtGrade(mx);
+  h+='<div class="card"><h3>③ 외부 제공 API 응답 (이 결과로 생성)</h3><p class="xs mut" style="margin:0">지자체·중앙회 앱에는 아래 수치만 나가요. 집계 농가가 5곳 미만이면 응답을 막아요.</p>'+(ok?'<pre>GET /v1/risk-index?grid=500m&amp;area='+esc(E.res.g.name)+'\n{\n  "area": "'+esc(E.res.g.name)+'",\n  "hazard": "저온·서리",\n  "date": "'+lvDay(days[mi].d)+'",\n  "min_temp": '+Math.round(days[mi].mn*10)/10+',\n  "risk_index": '+mx+',\n  "grade": "'+rs[mi].g+'",\n  "farms_aggregated": '+K+',   // ≥ 5 (k-익명)\n  "personal_data": null\n}</pre>':'<div class="callout bad" style="margin-top:8px">집계 농가가 '+K+'곳이라 k-익명(5곳 이상) 기준 미달 → 응답 차단 (HTTP 403)</div>')+'</div>'}
+ return h};
+BIND['g-engine']=function(){var E=S.sel.en;var t=$('#enT');if(t)t.onchange=function(){E.txt=t.value;render()};
+ $$('[data-en]').forEach(function(b){b.onclick=function(){var tt=$('#enT');if(tt)E.txt=tt.value;E.q=b.getAttribute('data-en');enRun()}});
+ var go=$('#enGo');if(go)go.onclick=function(){var tt=$('#enT');if(tt)E.txt=tt.value;var q=$('#enQ');if(q)E.q=q.value;var k=$('#enK');if(k)E.k=+k.value||0;enRun()};
+ var k=$('#enK');if(k)k.onchange=function(){E.k=+k.value||0;render()}};
+['u','c','h'].forEach(function(r){if(PAGES[r+'-engine']){PAGES[r+'-engine']=PAGES['g-engine'];BIND[r+'-engine']=BIND['g-engine']}});
+
 
 
 
