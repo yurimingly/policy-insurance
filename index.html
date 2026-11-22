@@ -1526,12 +1526,24 @@ var _LL=null;
 function llLoad(){if(_LL)return _LL;_LL=new Promise(function(ok,no){if(window.L)return ok(window.L);
  var c=document.createElement('link');c.rel='stylesheet';c.href='https://unpkg.com/leaflet@1.9.4/dist/leaflet.css';document.head.appendChild(c);
  var j=document.createElement('script');j.src='https://unpkg.com/leaflet@1.9.4/dist/leaflet.js';j.onload=function(){ok(window.L)};j.onerror=function(){_LL=null;no()};document.head.appendChild(j)});return _LL}
-function mapDiv(id,h){return '<div id="'+id+'" style="height:'+h+'px;border-radius:12px;overflow:hidden;background:#e8efe9;display:flex;align-items:center;justify-content:center" class="xs mut">지도를 불러오는 중…</div>'}
-function mapInit(id,fn){var el=document.getElementById(id);if(!el)return;
+function mapDiv(id,h){return '<div id="'+id+'" style="height:'+h+'px;border-radius:12px;overflow:hidden;background:#e8efe9;display:flex;align-items:center;justify-content:center" class="xs mut">지도를 불러오는 중…</div><div class="xs mut" id="'+id+'T" style="margin-top:6px"></div>'}
+function mapInit(id,fn){liveEnsure().then(function(){mapInit0(id,fn);liveTag(id)})}
+function mapInit0(id,fn){var el=document.getElementById(id);if(!el)return;
  llLoad().then(function(L){el=document.getElementById(id);if(!el)return;el.innerHTML='';el.style.display='block';
   var m=L.map(el,{zoomControl:true,attributionControl:true,scrollWheelZoom:false});
   L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{maxZoom:18,attribution:'© OpenStreetMap'}).addTo(m);
   fn(L,m);setTimeout(function(){m.invalidateSize()},200)},function(){var e=document.getElementById(id);if(e)e.textContent='지도를 불러오지 못했어요. 인터넷 연결을 확인해 주세요.'})}
+
+/* ===== 실시간 예보 연동 (Open-Meteo 일괄 조회 → 지도 위험지수) ===== */
+var _LW=null,_LWp=null;
+function liveEnsure(){if(_LW)return Promise.resolve(_LW);if(_LWp)return _LWp;
+ var P=DOLL.concat(SGLL),u='https://api.open-meteo.com/v1/forecast?latitude='+P.map(function(x){return x[0]}).join(',')+'&longitude='+P.map(function(x){return x[1]}).join(',')+'&daily=temperature_2m_min,temperature_2m_max,wind_gusts_10m_max,precipitation_sum&forecast_days=9&timezone=Asia%2FSeoul';
+ _LWp=fetch(u).then(function(r){if(!r.ok)throw 0;return r.json()}).then(function(j){var a=Array.isArray(j)?j:[j],cl=function(v){return Math.max(8,Math.min(98,Math.round(v)))},o={at:Date.now(),cold:[],heat:[],wind:[],dailySG:[]};
+  a.forEach(function(x,i){var d=x.daily,mn=Math.min.apply(null,d.temperature_2m_min),mx=Math.max.apply(null,d.temperature_2m_max),gu=Math.max.apply(null,d.wind_gusts_10m_max),c=cl(50-mn*15),h=cl((mx-20)*6+10),w=cl(gu*1.1);
+   if(i<DOLL.length){DO[i][1]=Math.max(c,h,w);o.macro=o.macro||[];o.macro[i]={c:c,h:h,w:w,mn:mn,mx:mx,gu:gu}}
+   else{var k=i-DOLL.length;HZ.cold[k]=c;HZ.heat[k]=h;HZ.wind[k]=w;o.cold[k]=c;o.heat[k]=h;o.wind[k]=w;o.dailySG[k]={t:d.time,mn:d.temperature_2m_min}}});
+  _LW=o;return o}).catch(function(){_LW={fail:1};return _LW});return _LWp}
+function liveTag(id){var e=document.getElementById(id+'T');if(!e)return;e.textContent=_LW&&!_LW.fail?'🟢 실시간 예보 기준 (Open-Meteo, 향후 9일 · '+new Date(_LW.at).toLocaleTimeString('ko-KR',{hour:'2-digit',minute:'2-digit'})+' 조회) · 위험지수=기온·강풍 임계 환산(시연용 가정식)':'⚪ 예보를 불러오지 못해 샘플 값으로 표시 중이에요'}
 var HEATRE=/<div class="heat"[^>]*>(?:<div class="cell[\s\S]*?<\/div>)+<\/div>/;
 var DOLL=[[37.55,127.17],[37.8,128.3],[36.75,127.75],[36.55,126.85],[35.72,127.15],[34.9,126.95],[36.35,128.7],[35.35,128.25],[33.4,126.55]];
 var SGLL=[[35.824,127.148],[35.967,126.737],[35.948,126.958],[35.570,126.856],[35.416,127.390],[35.803,126.881],[35.904,127.162],[35.792,127.425],[36.007,127.661],[35.647,127.521],[35.617,127.289],[35.374,127.137],[35.435,126.702],[35.732,126.733]];
@@ -1546,9 +1558,9 @@ BIND['g-meso']=function(){_gsb();mapInit('mapMeso',function(L,m){var d=HZ[S.sel.
  var c=L.circleMarker(ll,{radius:i===S.sel.sigun?18:13,color:i===S.sel.sigun?'#111':'#fff',weight:i===S.sel.sigun?3:2,fillColor:hexOf(d[i]),fillOpacity:.85}).addTo(m);
  c.bindTooltip(SIGUN[i]+' '+d[i],{permanent:true,direction:'center',className:'mp-t'});c.on('click',function(){S.sel.sigun=i;render()})});
  m.fitBounds(SGLL,{padding:[20,20]})})};
-PAGES['g-micro']=function(){return _gu().replace(/<div class="px">(?:<i[^>]*><\/i>)+<\/div>/,mapDiv('mapMicro',380))};
+PAGES['g-micro']=function(){var out=_gu();if(_LW&&_LW.dailySG&&_LW.dailySG[9]){var d=_LW.dailySG[9],mi=0;d.mn.forEach(function(x,i){if(x<d.mn[mi])mi=i});var sc=_LW.cold[9],mnv=Math.round(d.mn[mi]*10)/10;out=out.replace(/🔔 \[D\+3 저온 주의\] 내 농장 위험지수 86/,'🔔 [D+'+mi+' 저온'+(sc>=65?' 주의':' 관찰')+'] 장수 최저 '+mnv+'℃ 예보 · 내 농장 위험지수 '+sc).replace('D+3 새벽 저온 위험','D+'+mi+' 새벽 저온 위험('+mnv+'℃)')}return out.replace(/<div class="px">(?:<i[^>]*><\/i>)+<\/div>/,mapDiv('mapMicro',380))};
 BIND['g-micro']=function(){mapInit('mapMicro',function(L,m){var la0=35.675,ln0=127.60,dl=0.0045,dn=0.0055,b=[];
- for(var i=0;i<144;i++){var x=i%12,y=Math.floor(i/12),v=Math.round(40+30*Math.exp(-((x-4)*(x-4)+(y-7)*(y-7))/14)+18*Math.sin(x*.7+y*.4));v=Math.max(20,Math.min(95,v));
+ for(var i=0;i<144;i++){var x=i%12,y=Math.floor(i/12),v=Math.round(40+30*Math.exp(-((x-4)*(x-4)+(y-7)*(y-7))/14)+18*Math.sin(x*.7+y*.4));v=v+(_LW&&_LW.cold&&_LW.cold[9]!=null?Math.round((_LW.cold[9]-60)*.4):0);v=Math.max(10,Math.min(98,v));
   var s=la0+(5.5-y)*dl,w=ln0+(x-6)*dn,r=L.rectangle([[s-dl/2,w-dn/2],[s+dl/2,w+dn/2]],{color:i===88?'#111':hexOf(v),weight:i===88?3:1,fillColor:hexOf(v),fillOpacity:.55}).addTo(m);r.bindTooltip('위험지수 '+v);b.push([s,w])}
  m.fitBounds([[la0-6*dl,ln0-6*dn],[la0+6*dl,ln0+6*dn]])})};
 ['u','c','h'].forEach(function(r){['macro','meso','micro'].forEach(function(k){if(PAGES[r+'-'+k]){PAGES[r+'-'+k]=PAGES['g-'+k];BIND[r+'-'+k]=BIND['g-'+k]}})});
