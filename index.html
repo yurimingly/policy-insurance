@@ -1587,6 +1587,24 @@ BIND['g-engine']=function(){var E=S.sel.en;var t=$('#enT');if(t)t.onchange=funct
  var go=$('#enGo');if(go)go.onclick=function(){var tt=$('#enT');if(tt)E.txt=tt.value;var q=$('#enQ');if(q)E.q=q.value;var k=$('#enK');if(k)E.k=+k.value||0;enRun()};
  var k=$('#enK');if(k)k.onchange=function(){E.k=+k.value||0;render()}};
 ['u','c','h'].forEach(function(r){if(PAGES[r+'-engine']){PAGES[r+'-engine']=PAGES['g-engine'];BIND[r+'-engine']=BIND['g-engine']}});
+/* ===== 기상청 서리발생 가능성 예측 API (공공데이터포털) ===== */
+var KMAK='0c7650d4754e73ffcb363096ae32bff601f7e400a44b83261be09fb13a6765aa',FR={st:'idle',rows:[],msg:'',at:0};
+function frKst(off){var d=new Date(Date.now()+9*36e5-off*864e5),z=function(n){return(n<10?'0':'')+n};return d.getUTCFullYear()+z(d.getUTCMonth()+1)+z(d.getUTCDate())}
+function frGet(off){var u='https://apis.data.go.kr/1360000/FrstFcstInfoServiceV2/getFrstOcurFcstV2?serviceKey='+KMAK+'&pageNo=1&numOfRows=30&dataType=JSON&BASE_DATE='+frKst(off)+'&BASE_TIME=0500&LAT=35.647&LON=127.521&VAR=frost_occurrence_rate';
+ return fetch(u).then(function(r){return r.text()}).then(function(t){var j;try{j=JSON.parse(t)}catch(e){throw{m:'응답 형식 오류: '+t.slice(0,80)}}var h=j.response&&j.response.header;if(!h)throw{m:'응답 구조를 알 수 없어요'};
+  if(h.resultCode==='03'||h.resultCode==='3')return{no:1};if(h.resultCode!=='00')throw{m:h.resultCode+' '+h.resultMsg};var it=j.response.body.items&&j.response.body.items.item;return{rows:Array.isArray(it)?it:it?[it]:[]}})}
+function frRun(){FR.st='load';frGet(0).then(function(r){return r.no?frGet(1):r}).then(function(r){if(r.no){FR.st='err';FR.msg='오늘·어제 기준 데이터가 아직 없어요(NO_DATA). 기상청 발표 시각 이후 다시 시도해 주세요.'}else{FR.st='ok';FR.rows=r.rows;FR.at=Date.now()}render()}).catch(function(e){FR.st='err';FR.msg=(e&&e.m)||'호출에 실패했어요 (브라우저 CORS 제한일 수 있어요. APK에서는 될 수 있어요)';render()})}
+function frCard(){var b='<div class="card"><div class="hd"><h3 style="margin:0">🧊 기상청 서리발생 가능성 (장수)</h3><span class="tag b">공공데이터포털</span></div>';
+ if(FR.st==='load')return b+'<p class="sm mut">불러오는 중…</p></div>';
+ if(FR.st==='err')return b+'<div class="callout warn" style="margin-top:8px">'+esc(FR.msg)+'</div><button class="btn ghost sm" id="frRe" style="margin-top:8px">다시 조회</button></div>';
+ if(FR.st==='ok'){if(!FR.rows.length)return b+'<p class="sm mut">조회 결과가 비어 있어요.</p></div>';
+  return b+'<div class="xs mut" style="margin:4px 0 6px">기상청 API 원본 응답 '+FR.rows.length+'건 · '+new Date(FR.at).toLocaleTimeString('ko-KR',{hour:'2-digit',minute:'2-digit'})+' 조회</div>'+FR.rows.slice(0,10).map(function(r){return '<div class="sm" style="padding:5px 0;border-top:1px solid var(--line);word-break:break-all">'+Object.keys(r).map(function(k){return '<span class="mut">'+esc(k)+'</span> '+esc(r[k])}).join(' · ')+'</div>'}).join('')+'</div>'}
+ return ''}
+var _gu2=PAGES['g-micro'],_gub=BIND['g-micro'];
+PAGES['g-micro']=function(){var o=_gu2(),c=frCard(),k='<div class="card"><div class="hd"><h3 style="margin:0">LEVEL 3';return c?o.replace(k,c+k):o};
+BIND['g-micro']=function(){_gub();if(FR.st==='idle')frRun();var b=$('#frRe');if(b)b.onclick=frRun};
+['u','c','h'].forEach(function(r){if(PAGES[r+'-micro']){PAGES[r+'-micro']=PAGES['g-micro'];BIND[r+'-micro']=BIND['g-micro']}});
+
 
 
 
