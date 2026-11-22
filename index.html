@@ -168,7 +168,7 @@ pre{background:#1e2622;color:#cde8d6;border-radius:10px;padding:10px;font-size:1
 .vbox b{font-size:19px;display:block}
 .vbox .vtx{min-height:44px;margin:10px 0 14px;font-size:15px;color:var(--ink)}
 .vheard{background:#eef6f1;border-radius:12px;padding:12px;font-size:15px;margin-bottom:8px}
-.nmap2{position:relative;aspect-ratio:10/7;overflow:hidden;border-radius:10px;background:#dfe8d8;margin:8px 0}.nmap2 img{position:absolute;max-width:none;display:block}.nmap2 .bub{position:absolute;left:50%;top:50%;transform:translate(-50%,-175%);background:#fff;border:2px solid var(--g);border-radius:12px;padding:6px 10px;font-size:12px;font-weight:700;text-align:center;line-height:1.4;box-shadow:0 2px 8px rgba(0,0,0,.3);z-index:4;white-space:nowrap}.nmap2 .pin.hq{cursor:pointer}.nmap2 .pin{position:absolute;left:50%;top:50%;transform:translate(-50%,-100%);font-size:28px;z-index:3;filter:drop-shadow(0 1px 2px rgba(0,0,0,.4))}.nmap2 .nmap{position:absolute;inset:0;margin:0;gap:2px;grid-template-rows:repeat(7,1fr)}.nmap2 .nmap i{aspect-ratio:auto;opacity:.8}.nmap2 .nmap i.na{opacity:.55}.nmap2 .attr{position:absolute;right:4px;bottom:2px;font-size:9px;background:rgba(255,255,255,.8);padding:0 4px;border-radius:3px;color:#444;z-index:2}</style>
+.nmap2{position:relative;aspect-ratio:10/7;overflow:hidden;border-radius:10px;background:#dfe8d8;margin:8px 0}.nmap2 img{position:absolute;max-width:none;display:block}.nmap2 .bub{position:absolute;left:50%;top:50%;transform:translate(-50%,-175%);background:#fff;border:2px solid var(--g);border-radius:12px;padding:6px 10px;font-size:12px;font-weight:700;text-align:center;line-height:1.4;box-shadow:0 2px 8px rgba(0,0,0,.3);z-index:4;white-space:nowrap}.nmap2 .pin.hq{cursor:pointer}.nmap2 .pin{position:absolute;left:50%;top:50%;transform:translate(-50%,-100%);font-size:28px;z-index:3;filter:drop-shadow(0 1px 2px rgba(0,0,0,.4))}.nmap2 .nmap{position:absolute;inset:0;margin:0;gap:2px;grid-template-rows:repeat(7,1fr)}.nmap2 .nmap i{aspect-ratio:auto;opacity:.8}.nmap2 .nmap i.na{opacity:.55}.nmap2 .attr{position:absolute;right:4px;bottom:2px;font-size:9px;background:rgba(255,255,255,.8);padding:0 4px;border-radius:3px;color:#444;z-index:2}.mp-t{background:transparent;border:0;box-shadow:none;color:#fff;font-weight:700;font-size:11px;text-shadow:0 0 3px #000}.leaflet-tooltip.mp-t:before{display:none}</style>
 </head>
 <body>
 <div id="app"></div>
@@ -1519,6 +1519,40 @@ PAGES['d-kpi']=function(){var K=S.sel.kp,n=+K.n||0,hs=n*(K.m1-K.m2)/60,cost=hs*(
  return '<div class="card"><h3>📈 AI 도입 효과 계산기</h3><p class="xs mut" style="margin:0 0 8px">우리 업무량을 넣으면 인수 심사 시간·보완 요청·인건비 절감을 바로 계산해요. 현행·AI 수치는 PPT 목표치를 기본값(가정)으로 넣었고 직접 고칠 수 있어요.</p><div class="grid2">'+inp('n','연간 인수심사 건수','건')+inp('w','시간당 인건비','원')+inp('m1','현행 건당 심사','분')+inp('m2','AI 적용 후','분')+inp('r1','현행 서류보완율','%')+inp('r2','AI 적용 후','%')+'</div></div>'+
  '<div class="card"><h3>절감 효과</h3><div class="grid3"><div class="kpi"><b style="color:var(--g)">'+Math.round(hs).toLocaleString()+'시간</b><small>연 심사시간 절감</small></div><div class="kpi"><b style="color:var(--g)">'+won(cost)+'</b><small>연 인건비 절감</small></div><div class="kpi"><b>'+(r0-r1)+'건</b><small>서류보완 요청 감소</small></div></div><div class="sm" style="margin-top:8px">심사시간 '+Math.round((1-K.m2/K.m1)*100)+'% 단축 · 보완 요청 '+r0+'건 → '+r1+'건</div><div class="note">시간 절감 = 건수 × (현행−AI) 분 ÷ 60, 인건비 = 시간 × 시급. 모두 입력값 기반 단순 계산이에요.</div></div>'};
 BIND['d-kpi']=function(){$$('[data-k]').forEach(function(i){i.onchange=function(){S.sel.kp[i.getAttribute('data-k')]=+i.value.replace(/[^\d.]/g,'')||0;render()}})};
+/* ===== 통계 화면: 실제 지도(Leaflet + OpenStreetMap) ===== */
+var RHEX={'var(--r1)':'#2e9e5b','var(--r2)':'#e0b11f','var(--r3)':'#ef7d22','var(--r4)':'#d43c33'};
+function hexOf(v){return RHEX[col(v)]}
+var _LL=null;
+function llLoad(){if(_LL)return _LL;_LL=new Promise(function(ok,no){if(window.L)return ok(window.L);
+ var c=document.createElement('link');c.rel='stylesheet';c.href='https://unpkg.com/leaflet@1.9.4/dist/leaflet.css';document.head.appendChild(c);
+ var j=document.createElement('script');j.src='https://unpkg.com/leaflet@1.9.4/dist/leaflet.js';j.onload=function(){ok(window.L)};j.onerror=function(){_LL=null;no()};document.head.appendChild(j)});return _LL}
+function mapDiv(id,h){return '<div id="'+id+'" style="height:'+h+'px;border-radius:12px;overflow:hidden;background:#e8efe9;display:flex;align-items:center;justify-content:center" class="xs mut">지도를 불러오는 중…</div>'}
+function mapInit(id,fn){var el=document.getElementById(id);if(!el)return;
+ llLoad().then(function(L){el=document.getElementById(id);if(!el)return;el.innerHTML='';el.style.display='block';
+  var m=L.map(el,{zoomControl:true,attributionControl:true,scrollWheelZoom:false});
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{maxZoom:18,attribution:'© OpenStreetMap'}).addTo(m);
+  fn(L,m);setTimeout(function(){m.invalidateSize()},200)},function(){var e=document.getElementById(id);if(e)e.textContent='지도를 불러오지 못했어요. 인터넷 연결을 확인해 주세요.'})}
+var HEATRE=/<div class="heat"[^>]*>(?:<div class="cell[\s\S]*?<\/div>)+<\/div>/;
+var DOLL=[[37.55,127.17],[37.8,128.3],[36.75,127.75],[36.55,126.85],[35.72,127.15],[34.9,126.95],[36.35,128.7],[35.35,128.25],[33.4,126.55]];
+var SGLL=[[35.824,127.148],[35.967,126.737],[35.948,126.958],[35.570,126.856],[35.416,127.390],[35.803,126.881],[35.904,127.162],[35.792,127.425],[36.007,127.661],[35.647,127.521],[35.617,127.289],[35.374,127.137],[35.435,126.702],[35.732,126.733]];
+var _gm=PAGES['g-macro'],_gmb=BIND['g-macro'],_gs=PAGES['g-meso'],_gsb=BIND['g-meso'],_gu=PAGES['g-micro'];
+PAGES['g-macro']=function(){return _gm().replace(HEATRE,mapDiv('mapMacro',340))};
+BIND['g-macro']=function(){_gmb();mapInit('mapMacro',function(L,m){var pts=[];DO.forEach(function(d,i){var ll=DOLL[i];pts.push(ll);
+ var c=L.circleMarker(ll,{radius:i===S.sel.region?22:16,color:i===S.sel.region?'#111':'#fff',weight:i===S.sel.region?3:2,fillColor:hexOf(d[1]),fillOpacity:.85}).addTo(m);
+ c.bindTooltip(d[0]+' '+d[1],{permanent:true,direction:'center',className:'mp-t'});c.on('click',function(){S.sel.region=i;render()})});
+ m.fitBounds(pts,{padding:[20,20]})})};
+PAGES['g-meso']=function(){return _gs().replace(HEATRE,mapDiv('mapMeso',340))};
+BIND['g-meso']=function(){_gsb();mapInit('mapMeso',function(L,m){var d=HZ[S.sel.hz];SGLL.forEach(function(ll,i){
+ var c=L.circleMarker(ll,{radius:i===S.sel.sigun?18:13,color:i===S.sel.sigun?'#111':'#fff',weight:i===S.sel.sigun?3:2,fillColor:hexOf(d[i]),fillOpacity:.85}).addTo(m);
+ c.bindTooltip(SIGUN[i]+' '+d[i],{permanent:true,direction:'center',className:'mp-t'});c.on('click',function(){S.sel.sigun=i;render()})});
+ m.fitBounds(SGLL,{padding:[20,20]})})};
+PAGES['g-micro']=function(){return _gu().replace(/<div class="px">(?:<i[^>]*><\/i>)+<\/div>/,mapDiv('mapMicro',380))};
+BIND['g-micro']=function(){mapInit('mapMicro',function(L,m){var la0=35.675,ln0=127.60,dl=0.0045,dn=0.0055,b=[];
+ for(var i=0;i<144;i++){var x=i%12,y=Math.floor(i/12),v=Math.round(40+30*Math.exp(-((x-4)*(x-4)+(y-7)*(y-7))/14)+18*Math.sin(x*.7+y*.4));v=Math.max(20,Math.min(95,v));
+  var s=la0+(5.5-y)*dl,w=ln0+(x-6)*dn,r=L.rectangle([[s-dl/2,w-dn/2],[s+dl/2,w+dn/2]],{color:i===88?'#111':hexOf(v),weight:i===88?3:1,fillColor:hexOf(v),fillOpacity:.55}).addTo(m);r.bindTooltip('위험지수 '+v);b.push([s,w])}
+ m.fitBounds([[la0-6*dl,ln0-6*dn],[la0+6*dl,ln0+6*dn]])})};
+['u','c','h'].forEach(function(r){['macro','meso','micro'].forEach(function(k){if(PAGES[r+'-'+k]){PAGES[r+'-'+k]=PAGES['g-'+k];BIND[r+'-'+k]=BIND['g-'+k]}})});
+
 
 
 ['meso','micro','matrix','engine'].forEach(function(k){PAGES['h-'+k]=PAGES['g-'+k];BIND['h-'+k]=BIND['g-'+k]});
