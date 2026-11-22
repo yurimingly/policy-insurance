@@ -657,18 +657,24 @@ function seedCases(){
  S.cases.sort(function(a,b){return b.at-a.at});save()}
 
 var SEL={case:null};
-function qPage(kind){
+var QSTEPS={uw:['접수 확인','고객 정보·보장 현황 확인','AI 보장분석 검토','상품 안내·답변'],claim:['접수 확인','사진·서류 확인','현장조사 배정','손해사정·지급 심사','답변 발송'],complaint:['접수 확인','민원 원문 검토','관련 지급 내역 확인','답변 발송']};
+function stepsOf(c){var n=QSTEPS[c.type].length,a=c.steps;if(a&&a.length===n)return a.map(function(x){return c.status==='답변완료'||!!x});var k=c.status==='답변완료'?n:c.status==='검토중'?Math.max(1,Math.ceil((n-1)/2)):0;return QSTEPS[c.type].map(function(_,i){return i<k})}
+function ensureVoice(){S.cases.forEach(function(c){if(c.type==='claim'&&c.farm==='seed'&&!c.voice){var ci=S.cases.filter(function(x){return x.type==='claim'&&x.farm==='seed'}).indexOf(c);c.voice={ch:ci%3===2?'콜센터 접수':'농축협 유선접수',raw:c.text,when:fmtDT(c.at).slice(0,10),item:c.item,cause:CATS[c.cat][0].replace(/^\S+\s/,'')||'기타',size:'현장 확인 후 산정'}}})}
+function qPage(kind){ensureVoice();
  var types=kind==='u'?['uw']:['claim','complaint'],list=S.cases.filter(function(c){return types.indexOf(c.type)>=0}),cur=list.filter(function(c){return c.id===SEL.case})[0]||list[0];
  var cnt=function(st){return list.filter(function(c){return c.status===st}).length};
  var h='<div class="card"><div class="hd"><h3 style="margin:0">'+(kind==='u'?'📝 가입 상담함':'🧾 사고·민원 접수함')+'</h3><span class="tag">'+list.length+'건</span></div><div class="grid3" style="margin-top:8px"><div class="kpi"><b>'+cnt('접수')+'</b><small>접수</small></div><div class="kpi"><b>'+cnt('검토중')+'</b><small>검토중</small></div><div class="kpi"><b style="color:var(--g)">'+cnt('답변완료')+'</b><small>답변완료</small></div></div>'+
   '<p class="xs mut" style="margin:8px 0 0">고객 이름·지번은 마스킹되어 보여요. 상세 열람은 사유가 기록돼요.</p></div>';
  if(!list.length)return h+'<div class="card" style="text-align:center"><p class="sm mut">아직 접수된 건이 없어요.<br>농가 계정에서 '+(kind==='u'?'추천 상품 "상담 요청"':'사고 접수·민원')+'을 남기면 여기에 쌓여요.</p></div>';
- h+='<div class="card"><ul class="list">'+list.map(function(c){return '<li data-qc="'+c.id+'" style="'+(cur&&c.id===cur.id?'background:var(--bg)':'')+'"><div><b class="sm">'+CATS[c.cat][0]+' '+c.id+'</b><div class="xs mut">'+maskN(c.who)+' · '+c.sigun+' · '+fmtS(c.at)+'</div></div><span class="tag '+(c.status==='답변완료'?'':c.status==='검토중'?'y':'o')+'">'+c.status+'</span></li>'}).join('')+'</ul></div>';
+ var QN=6,sh=SEL.qmore?list:list.slice(0,QN);if(cur&&sh.indexOf(cur)<0)sh=sh.concat([cur]);
+ h+='<div class="card"><ul class="list">'+sh.map(function(c){return '<li data-qc="'+c.id+'" style="'+(cur&&c.id===cur.id?'background:var(--bg)':'')+'"><div><b class="sm">'+CATS[c.cat][0]+' '+c.id+'</b><div class="xs mut">'+maskN(c.who)+' · '+c.sigun+' · '+fmtS(c.at)+'</div></div><span class="tag '+(c.status==='답변완료'?'':c.status==='검토중'?'y':'o')+'">'+c.status+'</span></li>'}).join('')+'</ul>'+(list.length>QN?'<button class="btn sm ghost full" id="qMore" style="margin-top:8px">'+(SEL.qmore?'접기':'더 보기 ('+(list.length-QN)+'건)')+'</button>':'')+'</div>';
  var A=aiCase(cur),rv=S.cases._rv===cur.id;
- h+='<div class="card"><div class="hd"><h3 style="margin:0">'+cur.id+' 상세</h3><span class="tag gr">'+CATS[cur.cat][1]+'</span></div>'+
+ var QS=stepsOf(cur);h+='<div class="card" id="qDetail"><div class="hd"><h3 style="margin:0">'+cur.id+' 상세</h3><span class="tag gr">'+CATS[cur.cat][1]+'</span></div>'+
   '<ul class="list" style="margin-top:6px"><li><span class="sm">고객</span><span class="sm b">'+(rv?esc(cur.who)+' · '+esc(cur.region||cur.sigun):maskN(cur.who)+' · '+cur.sigun.charAt(0)+'○○')+'</span></li><li><span class="sm">대상</span><span class="sm">'+esc(cur.item)+'</span></li><li><span class="sm">'+(cur.type==='uw'?'상담번호':'접수번호')+'</span><span class="sm b">'+cur.id+'</span></li><li><span class="sm">접수일시</span><span class="sm">'+fmtDT(cur.at)+' <span class="xs mut">('+ago(cur.at)+')</span></span></li>'+(cur.handledAt?'<li><span class="sm">처리일시</span><span class="sm">'+fmtDT(cur.handledAt)+'</span></li>':'')+'</ul>'+
   (rv?'':S.cases._rs===cur.id?'<div class="xs mut" style="margin-top:6px">열람 사유를 선택하세요 (기록돼요)</div><div class="chips">'+['민원 처리','지급 심사','현장 확인','고객 통화'].map(function(x){return '<button class="chip" data-rs="'+x+'">'+x+'</button>'}).join('')+'</div>':'<button class="btn sm ghost" id="qReveal" style="margin-top:6px">🔓 개인정보 열람 (사유 기록)</button>')+
   '<div class="callout" style="margin-top:8px">'+esc(cur.text||'(가입 상담 요청: '+cur.extra+')')+'</div>'+
+  (cur.voice?'<h4>🎙 음성 접수 기록 <span class="tag gr">'+esc(cur.voice.ch||'앱 음성접수')+'</span></h4><div class="xs mut">접수 원문 (음성 인식)</div><div class="callout">“'+esc(cur.voice.raw)+'”</div><div class="xs mut" style="margin-top:6px">AI 요약본</div><table style="width:100%"><tr><th align="left">사고일시</th><td>'+esc(cur.voice.when)+'</td></tr><tr><th align="left">피해</th><td>'+esc(cur.voice.item)+'</td></tr><tr><th align="left">원인</th><td>'+esc(cur.voice.cause)+'</td></tr><tr><th align="left">규모</th><td>'+esc(cur.voice.size)+'</td></tr></table><div class="xs mut" style="margin-top:4px">접수 원문과 요약본이 이 접수 건에 함께 저장돼요.</div>':'')+
+  '<h4>✅ 단계별 처리 <span class="xs mut">('+QS.filter(Boolean).length+'/'+QS.length+')</span></h4><div>'+QSTEPS[cur.type].map(function(t,i){var last=i===QS.length-1;return '<label class="chk"><input type="checkbox" data-qs="'+i+'" '+(QS[i]?'checked':'')+(last||cur.status==='답변완료'?' disabled':'')+'><span class="sm">'+(i+1)+'. '+t+(last?' <span class="xs mut">(답변 발송 시 자동)</span>':'')+'</span></label>'}).join('')+'</div>'+
   '<h4>🤖 AI 분석</h4><ul class="list">'+A.why.map(function(w){return '<li><span class="sm">· '+w+'</span></li>'}).join('')+'</ul>'+
   (cur.status==='답변완료'?'<h4>✅ 발송한 답변</h4><div class="callout">'+esc(cur.reply)+'</div>':'<h4>✏️ 답변 초안 (수정 가능)</h4><textarea id="qReply" rows="5" style="width:100%;border:1px solid var(--line);border-radius:10px;padding:8px;font:inherit;font-size:13px">'+esc(A.reply)+'</textarea>'+
   '<label class="sm" style="display:flex;gap:8px;align-items:center;margin-top:8px"><input type="checkbox" id="qRule" '+(ruleOn(cur.cat)?'checked disabled':'')+(S.user.role==='u'?' disabled':'')+'> 재발 방지 개선 룰로 활용'+(S.user.role==='u'?' <span class="xs mut">(보상팀·정책팀 승인)</span>':ruleOn(cur.cat)?' <span class="xs mut">(반영됨)</span>':'')+'</label><div class="xs mut">→ '+A.prev+'</div>'+
@@ -677,10 +683,12 @@ function qPage(kind){
 function qKind(){var r=route();return((r[0]==='u'&&r[1]==='queue')||(r[0]==='h'&&r[1]==='uqueue'))?'u':'c'}
 function bindQueue(){
  var sm=$('#qSample');if(sm)sm.onclick=function(){sampleCases();render()};
- $$('[data-qc]').forEach(function(li){li.onclick=function(){SEL.case=li.getAttribute('data-qc');S.cases._rv=null;render()}});
+ $$('[data-qc]').forEach(function(li){li.onclick=function(){SEL.case=li.getAttribute('data-qc');S.cases._rv=null;render();var d=$('#qDetail');if(d)try{d.scrollIntoView({block:'start'})}catch(e){}}});
  var cur=null;S.cases.forEach(function(c){if(c.id===SEL.case)cur=c});if(!cur){var u=qKind()==='u'?['uw']:['claim','complaint'];cur=S.cases.filter(function(c){return u.indexOf(c.type)>=0})[0]}
  if(!cur)return;
  var rv=$('#qReveal');if(rv)rv.onclick=function(){S.cases._rs=cur.id;render()};$$('[data-rs]').forEach(function(b){b.onclick=function(){audit('개인정보 열람 '+cur.id+' · '+b.getAttribute('data-rs'));S.cases._rv=cur.id;S.cases._rs=null;SEL.case=cur.id;render()}});
+ var qm=$('#qMore');if(qm)qm.onclick=function(){SEL.qmore=!SEL.qmore;render()};
+ $$('[data-qs]').forEach(function(b){b.onchange=function(){var a=stepsOf(cur),i=+b.getAttribute('data-qs');a[i]=b.checked;cur.steps=a;var m=a.slice(0,a.length-1).filter(Boolean).length;if(cur.status!=='답변완료')cur.status=m?'검토중':'접수';audit('처리 단계 '+cur.id+' '+(i+1));save();render()}});
  var st=$('#qStart');if(st)st.onclick=function(){cur.status='검토중';audit('검토 시작 '+cur.id);save();render()};
  var sd=$('#qSend');if(sd)sd.onclick=function(){var t=$('#qReply').value.trim();if(!t){toast('답변을 입력해 주세요');return}cur.reply=t;cur.status='답변완료';cur.handledAt=Date.now();var rl=$('#qRule');if(rl&&rl.checked&&!rl.disabled&&S.user.role!=='u')applyRule(cur.cat);audit('답변 발송 '+cur.id);save();toast('답변을 보냈어요 · 농가 알림함에 도착');render()}}
 PAGES['u-queue']=function(){return qPage('u')};PAGES['c-queue']=function(){return qPage('c')};
@@ -1105,7 +1113,7 @@ function claimCalc(){var f=F(),c=f.claim;
 var VI={text:'',res:null};
 function bindVI(){var m=$('#viMic');if(!m)return;m.onclick=function(){startVoice(function(t){VI.text=t;VI.res=aiIntake(t,F());render()},'#viText')};
  $('#viGo').onclick=function(){var t=$('#viText').value.trim();if(!t){toast('내용을 말하거나 입력해 주세요');return}VI.text=t;VI.res=aiIntake(t,F());render()};
- var sd=$('#viSend');if(sd)sd.onclick=function(){var r=VI.res,c=newCase({type:'claim',cat:'etc',text:'[음성 사고접수] '+r.raw+' → 일시 '+r.when+' · 원인 '+r.cause+' · 규모 '+r.size});audit('음성 사고접수 '+c.id);S.claimStep[S.farm]=1;VI={text:'',res:null};save();toast('접수했어요 · '+c.id);render()}}
+ var sd=$('#viSend');if(sd)sd.onclick=function(){var r=VI.res,c=newCase({type:'claim',cat:'etc',text:'[음성 사고접수] '+r.raw+' → 일시 '+r.when+' · 원인 '+r.cause+' · 규모 '+r.size});c.voice={ch:'앱 음성접수',raw:r.raw,when:r.when,item:r.item,cause:r.cause,size:r.size};audit('음성 사고접수 '+c.id);S.claimStep[S.farm]=1;VI={text:'',res:null};save();toast('접수했어요 · '+c.id);render()}}
 function aiIntake(t,f){var cause=[[/냉해|서리|저온|얼었|동해|한파/,'저온·냉해'],[/태풍|강풍|바람/,'강풍'],[/호우|비가|침수|물에|잠겼/,'호우·침수'],[/폭염|더위|더워|일소/,'폭염'],[/병|깨씨|도열|방제/,'병해충'],[/폐사|죽었|쓰러/,'폐사'],[/화재|불이|불났/,'화재'],[/우박/,'우박']],when=[[/그저께|그제/,'그저께'],[/어제|어저께/,'어제'],[/오늘|아까|방금/,'오늘'],[/지난주/,'지난주'],[/(\d+)\s*일\s*전/,null]],cs='확인 필요',wh='확인 필요';
  cause.forEach(function(x){if(cs==='확인 필요'&&x[0].test(t))cs=x[1]});
  when.forEach(function(x){if(wh!=='확인 필요')return;var m=t.match(x[0]);if(m)wh=x[1]||(m[1]+'일 전')});
@@ -1288,6 +1296,7 @@ function uwDetail(){var c=uwCur(),ls=c.prod==='livestock',ck=UWCHK[c.prod],wait=
  return h+cs+'</div><button class="btn full ghost" id="uwBack">← 인수심사 목록</button>'};
 function uwDetailBind(){var b=$('#uwBack');if(b)b.onclick=function(){SEL.uwv=0;render()};var q=$('#uwReq');if(q)q.onclick=function(){var c=uwCur();audit('보완 요청 알림톡 '+c.no);toast('보완 요청 알림톡을 발송했어요')}}
 
+var _r0=render,LASTR='';render=function(){var k=location.hash+'|'+(S.user&&S.user.role),sy=window.pageYOffset||document.documentElement.scrollTop||0,same=k===LASTR;LASTR=k;_r0();if(same&&sy>0)window.scrollTo(0,sy)};
 render();
 if(S.mine&&Date.now()-S.mine.at>3*3600*1000)refreshMine();
 
