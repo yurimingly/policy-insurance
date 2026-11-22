@@ -775,7 +775,7 @@ function myIns(f){var ok=f.pol.filter(function(x){return x.st==='ok'}),rd=myRide
  (ok.length?ok.map(function(x,i){return '<div class="pol"><div class="pi">'+x.ic+'</div><div style="flex:1"><b class="sm">'+x.p+'</b><div class="xs mut">'+x.sub+(x.until?' · 만기 '+x.until:'')+'</div>'+(i===0&&rd.length?'<div style="margin-top:4px">'+rd.map(function(n){return '<span class="tag gr" style="margin:2px 4px 0 0">'+n+'</span>'}).join('')+'</div>':'')+'</div></div>'}).join('')+(f.mine?'<p class="xs mut" style="margin:8px 0 0">※ 등록하신 품목 기준으로 기본 보험 가입 상태를 보여드려요.</p>':''):'<p class="sm mut" style="margin:8px 0 0">아직 가입이 확인된 보험이 없어요. 아래 추천을 확인해 보세요.</p>')+'</div>'}
 function heroAlert(f){
  var ks=f.fc.map(function(x){return x.k}),pi=ks.indexOf(Math.max.apply(null,ks)),pk=f.fc[pi],al=f.alerts[pi]||f.alerts[Object.keys(f.alerts)[0]],pr=prodRecs(f),top=pr.prods.slice(0,2);
- return '<div class="card" style="border:2px solid '+col(pk.k)+'"><div class="hd"><h3 style="margin:0">🔔 보장 알림</h3><span class="tag '+tcls(pk.k)+'">D+'+(pi+1)+' '+lvl(pk.k)+'</span></div>'+
+ return '<div class="card" style="border:2px solid '+col(pk.k)+'"><div class="hd"><h3 style="margin:0">📊 기후 데이터 분석 및 손실액 추정 안내</h3><span class="tag '+tcls(pk.k)+'">D+'+(pi+1)+' '+lvl(pk.k)+'</span></div>'+
   '<p class="b" style="margin:8px 0 2px">'+al.t+'</p>'+
   (top.length?'<div class="callout warn" style="margin:8px 0">❗ 이 위험에 대비할 <b>보험이 부족해요 ('+pr.prods.length+'건)</b>. 아래 보험을 추가하면 도움이 돼요.</div>'+top.map(prodRow).join('')+addonLine(pr.addons)+
    '<button class="btn full" id="reqBtn" style="margin-top:10px">'+(REQ[S.farm]?'✅ 상담 요청 접수됨':'📞 추가 가입 상담 요청 (농축협)')+'</button>'+(pr.prods.length>2||pr.addons.length?'<button class="btn full ghost" data-go="f-cover" style="margin-top:6px">추천 보험 전체 보기</button>':'')
