@@ -458,7 +458,7 @@ function addrTiles(g,z){var n=Math.pow(2,z),la=g.lat*Math.PI/180,px=(g.lon+180)/
  return h+'<span class="pin">📍</span><span class="attr">© OpenStreetMap</span>'}
 function deskByAddr(a){var M=[[/홍성|광천|예산|충남/,'pig'],[/나주|남평|전남/,'rice'],[/해남/,'mach'],[/장수|안동|영주|청송|상주|경북|무주|거창/,'apple'],[/이천|평택|경기|횡성|홍천|강원/,'hanwoo'],[/김제|전북|완주|익산/,'farm']];for(var i=0;i<M.length;i++)if(M[i][0].test(a))return M[i][1];return 'rice'}
 function deskMap(){var g=S.sel.dgeo,z=S.sel.dz||15,o=$('#dMap');if(!g||!o)return;
- o.innerHTML='<div class="card"><div class="row sp"><b>📍 고객 농장 위치</b><span class="tag '+(g.coarse?'o':'')+'">'+(g.coarse?'시·군 단위':'주소 확인')+'</span></div><div class="xs mut" style="margin-top:4px">'+esc(g.name)+'</div><div class="nmap2" style="aspect-ratio:3/2">'+addrTiles(g,z)+'</div><div class="row" style="gap:8px"><button class="btn sm ghost" id="dZm">－ 축소</button><button class="btn sm ghost" id="dZp">＋ 확대</button></div>'+(g.coarse?'<div class="xs mut" style="margin-top:6px">상세 주소를 찾지 못해 시·군 중심으로 표시했어요. 읍·면·리까지 입력하면 더 정확해요.</div>':'')+'</div>';
+ o.innerHTML='<div class="card"><div class="row sp"><b>📍 고객 농장 위치</b><span class="tag '+(g.coarse?'o':'')+'">'+(g.coarse?'시·군 단위':'주소 확인')+'</span></div><div class="xs" style="margin-top:4px">정제 주소 · <b>'+esc(S.sel.daddr||'')+'</b> <span class="tag gr">'+((S.sel.dnorm||{}).ty||'')+'</span></div><div class="xs mut">지도 검색 결과 · '+esc(g.name)+'</div><div class="nmap2" style="aspect-ratio:3/2">'+addrTiles(g,z)+'</div><div class="row" style="gap:8px"><button class="btn sm ghost" id="dZm">－ 축소</button><button class="btn sm ghost" id="dZp">＋ 확대</button></div>'+(g.coarse?'<div class="xs mut" style="margin-top:6px">상세 주소를 찾지 못해 시·군 중심으로 표시했어요. 읍·면·리까지 입력하면 더 정확해요.</div>':'')+'</div>';
  $('#dZm').onclick=function(){S.sel.dz=Math.max(9,z-1);deskMap()};$('#dZp').onclick=function(){S.sel.dz=Math.min(18,z+1);deskMap()}}
 function deskReco(k){var fk=FARMS[k]?k:(k==='farm'?'farm':'apple'),f=FARMS[fk],P=[];try{P=prodRecs(f).prods.slice(0,3)}catch(e){}
  if(!P.length)return '<div class="card"><h3>🛍 추천 상품</h3><p class="sm mut" style="margin:0">이 고객 농장에 추가로 권할 일반 상품이 없어요. 가입 상품이 충분해요.</p></div>';
@@ -477,9 +477,11 @@ function deskShow(){var k=S.sel.dk,o=$('#dOut');if(!k||!o)return;var p=DESK[k],a
   '<div class="row" style="margin-top:10px"><button class="btn sm" id="dCopy">상담 요약 복사</button><button class="btn sm ghost" data-go="u-uwlist">인수심사 목록 →</button></div></div>'+deskReco(k);
  bindTop();$$('[data-dk]').forEach(function(b){b.onclick=function(){S.sel.dk=b.getAttribute('data-dk');deskShow()}});
  $('#dCopy').onclick=function(){var s='[AI 보장분석] '+(S.sel.daddr||'')+'\n'+ti+'\n위험도 '+p.score+'점\n'+deskSteps(p).map(function(st){return '· '+st[0]+': '+st[1][1].replace(/<[^>]+>/g,'').replace(/^→ ?/,'')}).join('\n');try{navigator.clipboard.writeText(s).then(function(){toast('복사했어요')},function(){toast('복사 실패')})}catch(e){toast('복사 실패')}}}
-function runDesk(){var a=($('#dAddr').value||'').trim();if(!a){toast('고객 주소를 입력하세요');return}
+function normAddr(a){var M={'충남':'충청남도','충북':'충청북도','전남':'전라남도','전북':'전북특별자치도','전라북도':'전북특별자치도','경남':'경상남도','경북':'경상북도','강원':'강원특별자치도','강원도':'강원특별자치도','경기':'경기도','제주':'제주특별자치도'},t=String(a||'').replace(/[(),]/g,' ').replace(/\s+/g,' ').trim().split(' ');if(M[t[0]])t[0]=M[t[0]];var n=t.join(' ');return{n:n,ty:/(로|길)\s*\d+(-\d+)?(\s|$)/.test(n)?'도로명주소':/(동|리|가)\s*\d+(-\d+)?(\s|$)/.test(n)?'지번주소':'행정구역'}}
+function runDesk(){var a0=($('#dAddr').value||'').trim();if(!a0){toast('고객 주소를 입력하세요');return}
+ var nm=normAddr(a0),a=nm.n,tok=S.sel.dtok=(S.sel.dtok||0)+1;$('#dAddr').value=a;S.sel.dnorm=nm;
  S.sel.daddr=a;S.sel.dgeo=null;$('#dOut').innerHTML='';$('#dMap').innerHTML='<div class="card lock">📍 주소를 확인하고 있어요…</div>';
- geoAddr(a,function(g){var m=$('#dMap');if(!m||!document.body.contains(m))return;if(!g){m.innerHTML='<div class="card lock">주소를 찾지 못했어요.<br>시·군·읍면까지 입력해 주세요 (예: 충남 홍성군 광천읍)</div>';return}
+ geoAddr(a,function(g){var m=$('#dMap');if(tok!==S.sel.dtok||!m||!document.body.contains(m))return;if(!g){m.innerHTML='<div class="card lock">주소를 찾지 못했어요.<br>시·군·읍면까지 입력해 주세요 (예: 충남 홍성군 광천읍)</div>';return}
   S.sel.dgeo=g;S.sel.dz=g.coarse?12:15;var pr=DADR.filter(function(x){return x.a===a})[0];S.sel.dk=pr?pr.k:deskByAddr(a);audit('AI 보장분석 · 주소 조회');deskMap();deskShow()})}
 BIND['d-analyze']=function(){$('#dRun').onclick=runDesk;$$('[data-ad]').forEach(function(b){b.onclick=function(){$('#dAddr').value=DADR[+b.getAttribute('data-ad')].a;runDesk()}});if(S.sel.dgeo){deskMap();deskShow()}};
 
