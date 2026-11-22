@@ -168,7 +168,7 @@ pre{background:#1e2622;color:#cde8d6;border-radius:10px;padding:10px;font-size:1
 .vbox b{font-size:19px;display:block}
 .vbox .vtx{min-height:44px;margin:10px 0 14px;font-size:15px;color:var(--ink)}
 .vheard{background:#eef6f1;border-radius:12px;padding:12px;font-size:15px;margin-bottom:8px}
-.nmap2{position:relative;aspect-ratio:10/7;overflow:hidden;border-radius:10px;background:#dfe8d8;margin:8px 0}.nmap2 img{position:absolute;max-width:none;display:block}.nmap2 .nmap{position:absolute;inset:0;margin:0;gap:2px;grid-template-rows:repeat(7,1fr)}.nmap2 .nmap i{aspect-ratio:auto;opacity:.8}.nmap2 .nmap i.na{opacity:.55}.nmap2 .attr{position:absolute;right:4px;bottom:2px;font-size:9px;background:rgba(255,255,255,.8);padding:0 4px;border-radius:3px;color:#444;z-index:2}</style>
+.nmap2{position:relative;aspect-ratio:10/7;overflow:hidden;border-radius:10px;background:#dfe8d8;margin:8px 0}.nmap2 img{position:absolute;max-width:none;display:block}.nmap2 .pin{position:absolute;left:50%;top:50%;transform:translate(-50%,-100%);font-size:28px;z-index:3;filter:drop-shadow(0 1px 2px rgba(0,0,0,.4))}.nmap2 .nmap{position:absolute;inset:0;margin:0;gap:2px;grid-template-rows:repeat(7,1fr)}.nmap2 .nmap i{aspect-ratio:auto;opacity:.8}.nmap2 .nmap i.na{opacity:.55}.nmap2 .attr{position:absolute;right:4px;bottom:2px;font-size:9px;background:rgba(255,255,255,.8);padding:0 4px;border-radius:3px;color:#444;z-index:2}</style>
 </head>
 <body>
 <div id="app"></div>
@@ -435,34 +435,47 @@ var DESK={
   s1:['집중호우 시 저지대 창고 침수 지급 반복 지역','→ <b>침수 손해</b> 보장 확인 + 고지대 보관 안내'],s2:['고령 1인 운전 · 농로 전복 사고 빈발','→ <b>대인·자기신체(자손)</b> + 농업인안전보험 결합'],
   s3:[['농기계 등록(형식·연식) 자동 조회','ok'],['운전자 연령 · 안전교육 이수','pd'],['보관 장소 침수 이력 지역','ng']],src:['해남군 농기계 침수 지급','농기계 등록 DB','도로·농로 사고 통계']}
 };
+var DADR=['충남 홍성군 광천읍','전남 나주시 남평읍','전북 장수군 장계면','경기 이천시 부발읍','경북 안동시 풍산읍','충남 예산군 삽교읍'];
+var DKL={rice:'벼',hanwoo:'한우',apple:'사과',pig:'양돈',farm:'스마트팜',mach:'농기계'};
 PAGES['d-analyze']=function(){
- return '<div class="card"><h3>핵심 키워드 입력만으로 AI 인수·보장분석</h3><p class="xs mut" style="margin:0 0 10px">고객이 말한 지역·품목·시설 키워드만 입력하면 AI가 위험과 보장 공백을 분석해요.</p>'+
- '<div class="chips" style="margin-bottom:8px">'+Object.keys(DESK).map(function(k){return '<button class="chip" data-pre="'+k+'">'+DESK[k].kw.split(' ').slice(0,2).join(' ')+'</button>'}).join('')+'</div>'+
- '<input type="text" id="dkw" placeholder="예) 전남 나주 벼 병충해 침수우려" value="'+S.sel.dkw+'"><button class="btn full" id="dRun" style="margin-top:8px">AI 분석 실행</button></div>'+
- '<div class="card"><div class="row sp xs mut"><span>① 최소 키워드 입력</span><span>② 위험 매칭</span><span>③ 리포트</span></div></div><div id="dOut"></div>';
+ return '<div class="card"><h3>고객 주소 입력만으로 AI 인수·보장분석</h3><p class="xs mut" style="margin:0 0 10px">고객 농장 주소를 입력하면 지도로 위치를 확인하고, 지역 위험과 보장 공백을 분석해요.</p>'+
+ '<div class="chips" style="margin-bottom:8px">'+DADR.map(function(x){return '<button class="chip" data-ad="'+x+'">'+x.split(' ').slice(1).join(' ')+'</button>'}).join('')+'</div>'+
+ '<input type="text" id="dAddr" placeholder="고객 농장 주소 (예: 충남 홍성군 광천읍 …)" value="'+esc(S.sel.daddr||'')+'"><button class="btn full" id="dRun" style="margin-top:8px">🔎 주소 확인 · AI 분석</button></div>'+
+ '<div class="card"><div class="row sp xs mut"><span>① 주소 입력</span><span>② 위치·위험 매칭</span><span>③ 리포트</span></div></div><div id="dMap"></div><div id="dOut"></div>';
 };
 function deskSteps(p){return p.steps||[['AI 위험 진단 · 보장 공백 포착',p.s1],['적정 가입조건 · 한도 제안',p.s2]]}
 function distBars(d){var mx=Math.max.apply(null,d.map(function(x){return x[1]}));return d.map(function(x,i){return '<div class="hbar"><span>'+x[0]+'</span><div class="bar"><i style="width:'+(x[1]/mx*100)+'%;background:'+(i?'#9bbfaa':'var(--g7)')+'"></i></div><span>'+x[1]+'%</span></div>'}).join('')}
 function pickDesk(t){var C=[['rice',/벼|논농사|쌀농사|일반답|깨씨무늬|도열병|논작물/g],['hanwoo',/한우|번식우|비육우|육우|젖소|송아지|긴급 ?도축|절박 ?도살/g],['apple',/사과|홍로|부사|과수|복숭아|신고배|배 ?(농사|과수원|나무)|#배\b/g],['pig',/돼지|양돈|돈사|비육돈/g],['farm',/스마트팜|온실|딸기|하우스|시설_온실/g],['mach',/트랙터|콤바인|농기계|이앙기/g]];
  var best=null,bs=0;C.forEach(function(c){var n=(t.match(c[1])||[]).length;if(c[0]==='mach'&&best)n=0;if(n>bs){bs=n;best=c[0]}});return best}
-function runDesk(){
- var t=$('#dkw').value;S.sel.dkw=t;var kw=speechToKw(t),k=pickDesk(t+' '+kw.join(' ')),o=$('#dOut');
- var heard=isSpeechLike(t)?'<div class="card"><div class="xs mut">🎙 말씀하신 내용</div><div class="vheard">“'+esc(t)+'”</div><div class="xs mut">AI가 뽑은 키워드</div><div class="chips" style="margin-top:6px">'+(kw.length?kw.map(function(x){return '<span class="tag">'+x+'</span>'}).join(''):'<span class="tag gr">인식된 키워드 없음</span>')+'</div></div>':'';
- if(!k){o.innerHTML=heard+'<div class="card lock">어떤 작목·가축인지 알아듣지 못했어요.<br>“벼”, “한우”, “사과”, “돼지”, “딸기 하우스”, “트랙터”처럼 품목을 함께 말씀해 주세요</div>';return}
- var p=DESK[k];o.innerHTML='<div class="card lock">🤖 공공데이터 · 기상 · 지급이력 교차 분석 중…</div>';
- setTimeout(function(){
-  if(!document.body.contains(o))return;
-  o.innerHTML=heard+'<div class="card"><div class="hd"><div><div class="b">'+p.title+'</div><div class="xs mut">'+p.prod+'</div></div>'+gauge(p.score,90)+'</div>'+
+function geoAddr(a,cb){var done=0,fin=function(r){if(done)return;done=1;clearTimeout(tm);cb(r)},tk=a.split(/\s+/),
+ local=function(){var k;for(k in LIVE_PLACES){if(a.indexOf(k)>=0){var q=LIVE_PLACES[k];return{lat:q[0],lon:q[1],name:q[2]+' 일대',coarse:1}}}return null},
+ tries=[[a,0]];if(tk.length>3)tries.push([tk.slice(0,3).join(' '),1]);if(tk.length>2)tries.push([tk.slice(0,2).join(' '),1]);
+ var tm=setTimeout(function(){fin(local())},9000);
+ (function nx(i){if(i>=tries.length){fin(local());return}
+  try{fetch('https://nominatim.openstreetmap.org/search?format=jsonv2&limit=1&countrycodes=kr&accept-language=ko&q='+encodeURIComponent(tries[i][0]),{cache:'no-store'}).then(function(r){return r.json()}).then(function(j){if(j&&j[0])fin({lat:+j[0].lat,lon:+j[0].lon,name:j[0].display_name,coarse:tries[i][1]});else nx(i+1)}).catch(function(){nx(i+1)})}catch(e){nx(i+1)}})(0)}
+function addrTiles(g,z){var n=Math.pow(2,z),la=g.lat*Math.PI/180,px=(g.lon+180)/360*n*256,py=(1-Math.log(Math.tan(la)+1/Math.cos(la))/Math.PI)/2*n*256,W=768,H=512,ox=px-W/2,oy=py-H/2,h='';
+ for(var tx=Math.floor(ox/256);tx<=Math.floor((ox+W)/256);tx++)for(var ty=Math.floor(oy/256);ty<=Math.floor((oy+H)/256);ty++)h+='<img loading="lazy" alt="" src="https://tile.openstreetmap.org/'+z+'/'+tx+'/'+ty+'.png" style="left:'+((tx*256-ox)/W*100).toFixed(3)+'%;top:'+((ty*256-oy)/H*100).toFixed(3)+'%;width:'+(256/W*100).toFixed(3)+'%">';
+ return h+'<span class="pin">📍</span><span class="attr">© OpenStreetMap</span>'}
+function deskByAddr(a){var M=[[/홍성|광천|예산|충남/,'pig'],[/나주|남평|전남/,'rice'],[/해남/,'mach'],[/장수|안동|영주|청송|상주|경북|무주|거창/,'apple'],[/이천|평택|경기|횡성|홍천|강원/,'hanwoo'],[/김제|전북|완주|익산/,'farm']];for(var i=0;i<M.length;i++)if(M[i][0].test(a))return M[i][1];return 'rice'}
+function deskMap(){var g=S.sel.dgeo,z=S.sel.dz||15,o=$('#dMap');if(!g||!o)return;
+ o.innerHTML='<div class="card"><div class="row sp"><b>📍 고객 농장 위치</b><span class="tag '+(g.coarse?'o':'')+'">'+(g.coarse?'시·군 단위':'주소 확인')+'</span></div><div class="xs mut" style="margin-top:4px">'+esc(g.name)+'</div><div class="nmap2" style="aspect-ratio:3/2">'+addrTiles(g,z)+'</div><div class="row" style="gap:8px"><button class="btn sm ghost" id="dZm">－ 축소</button><button class="btn sm ghost" id="dZp">＋ 확대</button></div>'+(g.coarse?'<div class="xs mut" style="margin-top:6px">상세 주소를 찾지 못해 시·군 중심으로 표시했어요. 읍·면·리까지 입력하면 더 정확해요.</div>':'')+'</div>';
+ $('#dZm').onclick=function(){S.sel.dz=Math.max(9,z-1);deskMap()};$('#dZp').onclick=function(){S.sel.dz=Math.min(18,z+1);deskMap()}}
+function deskShow(){var k=S.sel.dk,o=$('#dOut');if(!k||!o)return;var p=DESK[k],a=(S.sel.daddr||'').split(/\s+/).slice(0,2).join(' '),ti=p.title.indexOf(' · ')>0?(a?a+' · ':'')+p.title.split(' · ').slice(1).join(' · '):p.title;
+ o.innerHTML='<div class="card"><div class="xs mut">분석 품목 (지역 주력 품목 기준 · 바꿔서 볼 수 있어요)</div><div class="chips" style="margin-top:6px">'+Object.keys(DKL).map(function(x){return '<button class="chip'+(x===k?' on':'')+'" data-dk="'+x+'">'+DKL[x]+'</button>'}).join('')+'</div></div>'+
+  '<div class="card"><div class="hd"><div><div class="b">'+ti+'</div><div class="xs mut">'+p.prod+'</div></div>'+gauge(p.score,90)+'</div>'+
   '<div class="chips" style="margin:6px 0">'+p.tags.map(function(x){return '<span class="tag gr">'+x+'</span>'}).join('')+'</div>'+
   (p.dist?'<div class="xs mut" style="margin-top:4px">지역 지급데이터 · 사고원인 비중</div>'+distBars(p.dist):'')+
   deskSteps(p).map(function(st,i){return '<div class="step"><div class="num">'+(i+1)+'</div><div><b class="sm">'+st[0]+'</b>'+st[1].map(function(l){return '<div class="sm">'+l+'</div>'}).join('')+'</div></div>'}).join('')+
   '<div class="step"><div class="num">'+(deskSteps(p).length+1)+'</div><div style="flex:1"><b class="sm">인수 심사 자동 체크포인트</b><ul class="list">'+p.s3.map(function(c){return '<li><span class="sm">'+c[0]+'</span><span class="'+c[1]+'">'+(c[1]==='ok'?'적합':c[1]==='ng'?'부적합':'확인필요')+'</span></li>'}).join('')+'</ul></div></div>'+
   '<div class="note">분석 근거: '+p.src.join(' · ')+'</div>'+
   '<div class="row" style="margin-top:10px"><button class="btn sm" id="dCopy">상담 요약 복사</button><button class="btn sm ghost" data-go="u-uwlist">인수심사 목록 →</button></div></div>';
-  bindTop();o.querySelector('#dCopy').onclick=function(){var s='[AI 보장분석] '+p.title+'\n위험도 '+p.score+'점\n'+deskSteps(p).map(function(st){return '· '+st[0]+': '+st[1][1].replace(/<[^>]+>/g,'').replace(/^→ ?/,'')}).join('\n');try{navigator.clipboard.writeText(s).then(function(){toast('복사했어요')},function(){toast('복사 실패')})}catch(e){toast('복사 실패')}};
- },800);
-}
-BIND['d-analyze']=function(){$('#dRun').onclick=runDesk;$$('[data-pre]').forEach(function(b){b.onclick=function(){$('#dkw').value=DESK[b.getAttribute('data-pre')].kw;runDesk()}});if(S.sel.dkw)runDesk()};
+ bindTop();$$('[data-dk]').forEach(function(b){b.onclick=function(){S.sel.dk=b.getAttribute('data-dk');deskShow()}});
+ $('#dCopy').onclick=function(){var s='[AI 보장분석] '+(S.sel.daddr||'')+'\n'+ti+'\n위험도 '+p.score+'점\n'+deskSteps(p).map(function(st){return '· '+st[0]+': '+st[1][1].replace(/<[^>]+>/g,'').replace(/^→ ?/,'')}).join('\n');try{navigator.clipboard.writeText(s).then(function(){toast('복사했어요')},function(){toast('복사 실패')})}catch(e){toast('복사 실패')}}}
+function runDesk(){var a=($('#dAddr').value||'').trim();if(!a){toast('고객 주소를 입력하세요');return}
+ S.sel.daddr=a;S.sel.dgeo=null;$('#dOut').innerHTML='';$('#dMap').innerHTML='<div class="card lock">📍 주소를 확인하고 있어요…</div>';
+ geoAddr(a,function(g){var m=$('#dMap');if(!m||!document.body.contains(m))return;if(!g){m.innerHTML='<div class="card lock">주소를 찾지 못했어요.<br>시·군·읍면까지 입력해 주세요 (예: 충남 홍성군 광천읍)</div>';return}
+  S.sel.dgeo=g;S.sel.dz=g.coarse?12:15;S.sel.dk=deskByAddr(a);audit('AI 보장분석 · 주소 조회');deskMap();deskShow()})}
+BIND['d-analyze']=function(){$('#dRun').onclick=runDesk;$$('[data-ad]').forEach(function(b){b.onclick=function(){$('#dAddr').value=b.getAttribute('data-ad');runDesk()}});if(S.sel.dgeo){deskMap();deskShow()}};
 
 
 /* ================= 창구 · 지급데이터 분석 및 손해 대비 안내 (PPT 05 · AI 프로세스 혁신 II) ================= */
