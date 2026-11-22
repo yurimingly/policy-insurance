@@ -436,9 +436,8 @@ var DESK={
   s3:[['농기계 등록(형식·연식) 자동 조회','ok'],['운전자 연령 · 안전교육 이수','pd'],['보관 장소 침수 이력 지역','ng']],src:['해남군 농기계 침수 지급','농기계 등록 DB','도로·농로 사고 통계']}
 };
 PAGES['d-analyze']=function(){
- return '<div class="card"><h3>핵심 키워드 입력만으로 AI 인수·보장분석</h3><p class="xs mut" style="margin:0 0 10px">글자 입력이 어려우면 <b>말로</b> 하세요. 평소 말투 그대로 말해도 AI가 지역·품목·시설 키워드를 뽑아냅니다</p>'+
- '<button class="micbtn" id="dMic"><span>🎤</span>말로 입력하기</button><p class="xs mut" style="text-align:center;margin:6px 0 0">예) “나주에서 벼농사 짓는데 깨씨무늬병이 걱정되고 비 오면 논이 잠겨요”</p><div class="or">또는 직접 입력</div>'+
- '<div class="chips" style="margin-bottom:8px">'+Object.keys(DESK).map(function(k){return '<button class="chip" data-pre="'+k+'">'+DESK[k].kw.split(' ').slice(0,2).join(' ')+'</button>'}).join('')+'<button class="chip" id="dSay">🗣 말투 선택</button></div>'+
+ return '<div class="card"><h3>핵심 키워드 입력만으로 AI 인수·보장분석</h3><p class="xs mut" style="margin:0 0 10px">고객이 말한 지역·품목·시설 키워드만 입력하면 AI가 위험과 보장 공백을 분석해요.</p>'+
+ '<div class="chips" style="margin-bottom:8px">'+Object.keys(DESK).map(function(k){return '<button class="chip" data-pre="'+k+'">'+DESK[k].kw.split(' ').slice(0,2).join(' ')+'</button>'}).join('')+'</div>'+
  '<input type="text" id="dkw" placeholder="예) 전남 나주 벼 병충해 침수우려" value="'+S.sel.dkw+'"><button class="btn full" id="dRun" style="margin-top:8px">AI 분석 실행</button></div>'+
  '<div class="card"><div class="row sp xs mut"><span>① 최소 키워드 입력</span><span>② 위험 매칭</span><span>③ 리포트</span></div></div><div id="dOut"></div>';
 };
@@ -463,7 +462,7 @@ function runDesk(){
   bindTop();o.querySelector('#dCopy').onclick=function(){var s='[AI 보장분석] '+p.title+'\n위험도 '+p.score+'점\n'+deskSteps(p).map(function(st){return '· '+st[0]+': '+st[1][1].replace(/<[^>]+>/g,'').replace(/^→ ?/,'')}).join('\n');try{navigator.clipboard.writeText(s).then(function(){toast('복사했어요')},function(){toast('복사 실패')})}catch(e){toast('복사 실패')}};
  },800);
 }
-BIND['d-analyze']=function(){$('#dRun').onclick=runDesk;$('#dMic').onclick=function(){startVoice(function(t){$('#dkw').value=t;runDesk()},'#dkw')};$('#dSay').onclick=function(){$('#dkw').value=SAY[(SAY.i=(SAY.i||0)+1)%SAY.length];runDesk()};$$('[data-pre]').forEach(function(b){b.onclick=function(){$('#dkw').value=DESK[b.getAttribute('data-pre')].kw;runDesk()}});if(S.sel.dkw)runDesk()};
+BIND['d-analyze']=function(){$('#dRun').onclick=runDesk;$$('[data-pre]').forEach(function(b){b.onclick=function(){$('#dkw').value=DESK[b.getAttribute('data-pre')].kw;runDesk()}});if(S.sel.dkw)runDesk()};
 
 
 /* ================= 창구 · 지급데이터 분석 및 손해 대비 안내 (PPT 05 · AI 프로세스 혁신 II) ================= */
@@ -840,7 +839,7 @@ function lvAgo(t){var m=Math.round((Date.now()-t)/60000);return m<1?'방금':m<6
 function lvDay(s){var d=new Date(s);return(d.getMonth()+1)+'/'+d.getDate()}
 PAGES['f-live']=function(){
  var it=LIVE_ITEMS[LV.item],h='<div class="card"><h3>📡 '+(S.user&&S.user.role!=='f'?'고객':'내')+' 농장 실시간 위험 조회</h3><p class="xs mut" style="margin:0 0 8px">지역과 영농 정보를 입력하면 <b>실시간 기상예보</b>를 불러와 재해 위험·예상 손실·보험금·보험료를 계산해요.</p>'+
-  '<div class="xs mut">① 지역</div><div class="row" style="gap:6px"><input type="text" id="lvQ" value="'+LV.q.replace(/"/g,'')+'" placeholder="시·군 이름 (예: 나주)" style="flex:1"><button class="btn sm ghost" id="lvMic">🎤</button></div>'+
+  '<div class="xs mut">① 지역</div><div class="row" style="gap:6px"><input type="text" id="lvQ" value="'+LV.q.replace(/"/g,'')+'" placeholder="시·군 이름 (예: 나주)" style="flex:1">'+(S.user&&S.user.role!=='f'?'':'<button class="btn sm ghost" id="lvMic">🎤</button>')+'</div>'+
   '<div class="chips" style="margin:6px 0">'+['나주','홍천','안동','제주','예산','이천'].map(function(k){return '<button class="chip '+(LV.q===k?'on':'')+'" data-lq="'+k+'">'+k+'</button>'}).join('')+'</div>'+
   '<div class="xs mut">② 품목</div><div class="chips" style="margin:4px 0 8px">'+Object.keys(LIVE_ITEMS).map(function(k){return '<button class="chip '+(k===LV.item?'on':'')+'" data-li="'+k+'">'+LIVE_ITEMS[k].n+'</button>'}).join('')+'</div>'+
   '<div class="grid2"><div><div class="xs mut">③ 규모 ('+it.u+')</div><input type="text" inputmode="decimal" id="lvN" value="'+LV.qty+'"></div><div><div class="xs mut">④ '+it.u+'당 평가액(만 원)</div><input type="text" inputmode="decimal" id="lvV" value="'+LV.val+'"></div></div>'+
@@ -880,7 +879,7 @@ BIND['f-live']=function(){
  var rd=function(){LV.q=q.value;LV.qty=+($('#lvN').value.replace(/[^0-9.]/g,''))||0;LV.val=+($('#lvV').value.replace(/[^0-9.]/g,''))||0;LV.ins=$('#lvI').value;LV.self=+$('#lvS').value};
  ['#lvN','#lvV','#lvI','#lvS'].forEach(function(id){$(id).onchange=function(){rd();render()}});
  $('#lvGo').onclick=function(){rd();lvRun()};
- $('#lvMic').onclick=function(){startVoice(function(t){var k=Object.keys(LIVE_PLACES).filter(function(n){return t.indexOf(n)>=0})[0];LV.q=k||t.replace(/[^가-힣\s]/g,'').trim().split(/\s+/)[0]||t;rd();LV.q=k||LV.q;lvRun()},null)};
+ var _lm=$('#lvMic');if(_lm)_lm.onclick=function(){startVoice(function(t){var k=Object.keys(LIVE_PLACES).filter(function(n){return t.indexOf(n)>=0})[0];LV.q=k||t.replace(/[^가-힣\s]/g,'').trim().split(/\s+/)[0]||t;rd();LV.q=k||LV.q;lvRun()},null)};
  $$('[data-lh]').forEach(function(r){r.onclick=function(){var x=LV.hist[+r.getAttribute('data-lh')];LV.q=x.q;LV.item=x.item;lvRun()}});
  var cp=$('#lvCopy');if(cp){var R=lvRisk(LV.res.d),C=lvCalc(R),it=LIVE_ITEMS[LV.item];
   var txt='[농협손보 재해 대비 안내] '+LV.res.g.name+' · '+it.n+' '+LV.qty+(/^\d/.test(it.u)?' ('+it.u+')':it.u)+'\n· 최대 위험: '+LHZ[C.top][1]+' ('+R.h[C.top].why+')\n· 예상 피해율 '+Math.round(C.loss*100)+'% / 예상 손실 '+won(C.lossAmt)+'\n· '+(LV.ins==='y'?'예상 보험금 '+won(C.pay):'미가입 시 본인 부담 '+won(C.gap))+'\n'+lvAct(C.top,R,it).map(function(a){return '- '+a}).join('\n')+'\n(Open-Meteo 예보 기준 참고용 추정)';
