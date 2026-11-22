@@ -813,7 +813,7 @@ PAGES['f-live']=function(){
  if(LV.busy)return h+'<div class="card" style="text-align:center;padding:26px"><div style="font-size:30px">🛰</div><p class="sm mut">지오코딩 → 16일 예보 → 위험지수 계산 중…</p></div>';
  if(!LV.res)return h+lvSrc();
  var g=LV.res.g,R=lvRisk(LV.res.d),C=lvCalc(R),mxall=Math.max.apply(null,R.mx),i;
- h+='<div class="card"><div class="hd"><h3 style="margin:0">📍 '+g.name+'</h3><span class="tag '+(LV.res.live?'':'gr')+'">'+(LV.res.live?'실시간 '+lvAgo(LV.res.at):'저장본 '+lvAgo(LV.res.at))+'</span></div><p class="xs mut" style="margin:4px 0 8px">'+it.n+' '+LV.qty+it.u+' · 평가액 '+won(C.eval_)+'</p>'+
+ h+='<div class="card"><div class="hd"><h3 style="margin:0">📍 '+g.name+'</h3><span class="tag '+(LV.res.live?'':'gr')+'">'+(LV.res.live?'실시간 '+lvAgo(LV.res.at):'저장본 '+lvAgo(LV.res.at))+'</span></div><p class="xs mut" style="margin:4px 0 8px">'+it.n+' '+LV.qty+(/^\d/.test(it.u)?' ('+it.u+')':it.u)+' · 평가액 '+won(C.eval_)+'</p>'+
   Object.keys(LHZ).map(function(k){var r=R.h[k],w=LIVE_ITEMS[LV.item].w[k];return '<div style="margin-top:8px"><div class="row sp"><span class="sm">'+LHZ[k][0]+' <b>'+LHZ[k][1]+'</b> <span class="xs mut">'+r.why+'</span></span><span class="tag '+tcls(r.s)+'">'+r.s+'</span></div><div style="height:7px;border-radius:9px;background:#e6ebe8;margin-top:3px"><i style="display:block;height:7px;border-radius:9px;width:'+Math.max(2,r.s)+'%;background:'+col(r.s)+'"></i></div>'+(w===0?'<div class="xs mut">이 품목은 해당 위험 영향이 작아요</div>':'')+'</div>'}).join('')+'</div>'+
   '<div class="card"><h3>🌡 16일 최고기온 · 강수</h3><div class="vbars sc">'+R.days.map(function(d,i){var t=R.mx[i];return '<div title="'+d+'"><span>'+Math.round(t)+'</span><i style="height:'+Math.max(6,Math.round(t/Math.max(40,mxall)*100))+'%;background:'+(t>=33?'var(--r4)':t>=30?'var(--r3)':R.pr[i]>=30?'#3b82f6':'var(--r1)')+'"></i>'+(i===0?'오늘':lvDay(d))+'</div>'}).join('')+'</div><p class="xs mut">기준일 '+R.days[0]+' (오늘) ~ '+R.days[R.days.length-1]+' · 빨강 33℃↑ · 파랑 일강수 30mm↑ · 가로 스크롤</p></div>';
  var hz=LHZ[C.top];
@@ -847,7 +847,7 @@ BIND['f-live']=function(){
  $('#lvMic').onclick=function(){startVoice(function(t){var k=Object.keys(LIVE_PLACES).filter(function(n){return t.indexOf(n)>=0})[0];LV.q=k||t.replace(/[^가-힣\s]/g,'').trim().split(/\s+/)[0]||t;rd();LV.q=k||LV.q;lvRun()},null)};
  $$('[data-lh]').forEach(function(r){r.onclick=function(){var x=LV.hist[+r.getAttribute('data-lh')];LV.q=x.q;LV.item=x.item;lvRun()}});
  var cp=$('#lvCopy');if(cp){var R=lvRisk(LV.res.d),C=lvCalc(R),it=LIVE_ITEMS[LV.item];
-  var txt='[농협손보 재해 대비 안내] '+LV.res.g.name+' · '+it.n+' '+LV.qty+it.u+'\n· 최대 위험: '+LHZ[C.top][1]+' ('+R.h[C.top].why+')\n· 예상 피해율 '+Math.round(C.loss*100)+'% / 예상 손실 '+won(C.lossAmt)+'\n· '+(LV.ins==='y'?'예상 보험금 '+won(C.pay):'미가입 시 본인 부담 '+won(C.gap))+'\n'+lvAct(C.top,R,it).map(function(a){return '- '+a}).join('\n')+'\n(Open-Meteo 예보 기준 참고용 추정)';
+  var txt='[농협손보 재해 대비 안내] '+LV.res.g.name+' · '+it.n+' '+LV.qty+(/^\d/.test(it.u)?' ('+it.u+')':it.u)+'\n· 최대 위험: '+LHZ[C.top][1]+' ('+R.h[C.top].why+')\n· 예상 피해율 '+Math.round(C.loss*100)+'% / 예상 손실 '+won(C.lossAmt)+'\n· '+(LV.ins==='y'?'예상 보험금 '+won(C.pay):'미가입 시 본인 부담 '+won(C.gap))+'\n'+lvAct(C.top,R,it).map(function(a){return '- '+a}).join('\n')+'\n(Open-Meteo 예보 기준 참고용 추정)';
   cp.onclick=function(){try{navigator.clipboard.writeText(txt)}catch(e){}toast('안내문을 복사했어요')};
   $('#lvAlert').onclick=function(){LV.alerts=LV.alerts||[];LV.alerts.unshift({t:LHZ[C.top][1]+' 위험 '+Math.round(C.topv)+' · '+LV.res.g.name,at:Date.now()});toast('알림함에 추가했어요')}}
 };
