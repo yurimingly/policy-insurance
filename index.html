@@ -238,9 +238,9 @@ var TRENDS=[
 
 /* ---------------- 라우팅 ---------------- */
 var ROLES={f:{n:'👨‍🌾 농가',sc:'본인 계약·농장',tabs:[['home','🏠','홈'],['live','📡','위험'],['cover','🛡','보험'],['claim','📸','접수·민원']]},
- u:{n:'📝 인수팀',sc:'인수 + 지자체 통계',tabs:[['queue','가입 상담함'],['analyze','AI 보장분석'],['ocr','OCR 인수심사'],['spec','특이점 심사'],['grade','점검 등급 DB'],['reco','AI 추천'],['live','실시간 조회'],['macro','전국 관제'],['meso','시군·읍면'],['micro','격자(500m)'],['matrix','연계 매트릭스'],['engine','AI 엔진·API'],['loop','환류']]},
- c:{n:'🧾 보상팀',sc:'보상 + 지자체 통계',tabs:[['queue','접수함'],['claim','AI 지급심사'],['paydata','지급데이터'],['loss','미가입 손실'],['kpi','기대효과'],['perm','권한·감사'],['macro','전국 관제'],['meso','시군·읍면'],['micro','격자(500m)'],['matrix','연계 매트릭스'],['engine','AI 엔진·API'],['loop','환류']]},
- h:{n:'📊 정책팀',sc:'상품개발·위험관제',tabs:[['qlog','질의 로그 환류'],['nh','NH오늘농사 연계'],['weights','위험도 구성'],['loop','환류·개선'],['macro','전국 관제'],['meso','시군·읍면'],['micro','격자(500m)'],['matrix','연계 매트릭스'],['engine','AI 엔진·API'],['kpi','기대효과'],['perm','권한·감사']]},
+ u:{n:'📝 인수팀',sc:'인수 + 지자체 통계',tabs:[['queue','가입 상담함'],['analyze','AI 보장분석'],['ocr','OCR 인수심사'],['spec','특이점 심사'],['grade','점검 등급 DB'],['reco','AI 추천'],['live','실시간 조회'],['macro','전국 관제'],['meso','시군·읍면'],['micro','격자(500m)'],['matrix','연계 매트릭스'],['engine','AI 엔진·API'],['loop','활용']]},
+ c:{n:'🧾 보상팀',sc:'보상 + 지자체 통계',tabs:[['queue','접수함'],['claim','AI 지급심사'],['paydata','지급데이터'],['loss','미가입 손실'],['kpi','기대효과'],['perm','권한·감사'],['macro','전국 관제'],['meso','시군·읍면'],['micro','격자(500m)'],['matrix','연계 매트릭스'],['engine','AI 엔진·API'],['loop','활용']]},
+ h:{n:'📊 정책팀',sc:'상품개발·위험관제',tabs:[['qlog','질의 로그 활용'],['nh','NH오늘농사 연계'],['weights','위험도 구성'],['loop','활용·개선'],['macro','전국 관제'],['meso','시군·읍면'],['micro','격자(500m)'],['matrix','연계 매트릭스'],['engine','AI 엔진·API'],['kpi','기대효과'],['perm','권한·감사']]},
  g:{n:'🏛 지자체',sc:'집계 통계·위험지수',tabs:[['macro','전국'],['meso','시군·읍면'],['micro','격자(500m)'],['matrix','연계 매트릭스'],['engine','AI 엔진·API'],['loop','민원 통계']]}};
 var DMAP={analyze:'u',ocr:'u',reco:'u',live:'u',claim:'c',paydata:'c',loss:'c',kpi:'h'};
 var RPERM={f:'본인 계약·농장 · 동의한 범위만',u:'가입 심사·OCR·보장분석 + 지자체 통계 · 보상 화면은 잠금 · 이름·지번 마스킹',c:'사고·지급·민원 처리 + 지자체 통계 · 인수 화면은 잠금 · 상세 열람 시 사유 기록',h:'상품개발·정책 담당 · 질의 로그·위험도·연계 과제 · 원천 개인정보는 열람 불가(집계만)',g:'외부 기관 · 집계 통계(5농가 이상·500m 격자)·위험지수만 · 개인정보 열람 불가'};
@@ -265,7 +265,7 @@ function render(){
  if(role==='set'||role==='about'){a.innerHTML=topBar(null)+'<div class="page">'+(role==='set'?setPage():aboutPage())+'</div>';bindTop();bindSet();return}
  if(!ROLES[role])role=S.user.role;var R=ROLES[role];if(!tab)tab=R.tabs[0][0];
  var html=topBar(role),ok=(role===S.user.role)&&(role==='f'||R.tabs.some(function(t){return t[0]===tab}));
- if(role!=='f'&&role===S.user.role){var SEC={uqueue:'인수',analyze:'인수',ocr:'인수',reco:'인수',live:'인수',cqueue:'보상',claim:'보상',paydata:'보상',loss:'보상',kpi:'정책',perm:'정책',spec:'인수',grade:'인수',qlog:'정책',nh:'정책',weights:'정책',macro:'통계',meso:'통계',micro:'통계',matrix:'통계',engine:'통계',loop:'환류'},ORD=['인수','보상','정책','통계','환류'],gp={};R.tabs.forEach(function(t){var sc=SEC[t[0]]||(t[0]==='queue'?(role==='u'?'인수':'보상'):'기타');(gp[sc]=gp[sc]||[]).push(t)});
+ if(role!=='f'&&role===S.user.role){var SEC={uqueue:'인수',analyze:'인수',ocr:'인수',reco:'인수',live:'인수',cqueue:'보상',claim:'보상',paydata:'보상',loss:'보상',kpi:'정책',perm:'정책',spec:'인수',grade:'인수',qlog:'정책',nh:'정책',weights:'정책',macro:'통계',meso:'통계',micro:'통계',matrix:'통계',engine:'통계',loop:'활용'},ORD=['인수','보상','정책','통계','활용'],gp={};R.tabs.forEach(function(t){var sc=SEC[t[0]]||(t[0]==='queue'?(role==='u'?'인수':'보상'):'기타');(gp[sc]=gp[sc]||[]).push(t)});
   var LK={u:['보상','c','보상팀',['접수함','AI 지급심사','지급데이터','미가입 손실']],c:['인수','u','인수팀',['가입 상담함','AI 보장분석','OCR 인수심사','AI 추천','실시간 조회']]}[role],curN='';R.tabs.forEach(function(t){if(t[0]===tab)curN=t[1]});
   html+='<div class="subw"><button class="navtog" id="navTog"><span>📂 '+curN+'</span><span>메뉴 접기/펼치기 ▴</span></button><div class="sub" id="subBody" style="display:block">'+ORD.concat(['보상','인수']).filter(function(k,i,a){return a.indexOf(k)===i&&(gp[k]||(LK&&LK[0]===k))}).map(function(k){var op=true,cnt=(gp[k]||[]).length+(LK&&LK[0]===k?LK[3].length:0);return '<div class="tsec"><button class="tsh" data-ts="'+k+'"><span class="car">'+(op?'▾':'▸')+'</span> '+k+' <small>'+cnt+'</small></button><div class="tch" style="display:'+(op?'flex':'none')+'">'+(gp[k]||[]).map(function(t){return '<button data-go="'+role+'-'+t[0]+'" class="'+(t[0]===tab?'on':'')+'">'+t[1]+'</button>'}).join('')+(LK&&LK[0]===k?LK[3].map(function(n){return '<button class="lk" data-lock="'+LK[1]+'">🔒 '+n+'</button>'}).join(''):'')+'</div></div>'}).join('')+'</div></div>'}
  var fn=PAGES[role+'-'+tab]||PAGES['f-home'];
@@ -568,7 +568,7 @@ function buildMine(m){
 function mineAge(){return S.mine?lvAgo(S.mine.at):''}
 
 
-/* ================= v2.0 · 역할별 로그인 · 권한 · 민원 환류 ================= */
+/* ================= v2.0 · 역할별 로그인 · 권한 · 민원 활용 ================= */
 var LG={role:null,id:''};
 function loginPage(){
  var one=function(k){var r=ROLES[k],on=LG.role===k;return '<div class="card" data-lr="'+k+'" style="cursor:pointer;margin-bottom:8px;'+(on?'border:2px solid var(--g)':'')+'"><div class="row sp"><b>'+r.n+'</b>'+(on?'<span class="tag">선택됨</span>':'')+'</div><div class="xs mut" style="margin-top:3px">'+RPERM[k]+'</div>'+(on&&k!=='f'?'<input type="text" inputmode="numeric" id="lgId" value="'+esc(LG.id)+'" placeholder="사번 4자리 이상 (시연용: 아무 숫자)" style="margin-top:8px">':'')+'</div>'};
@@ -613,7 +613,7 @@ function qPage(kind){
   '<div class="callout" style="margin-top:8px">'+esc(cur.text||'(가입 상담 요청: '+cur.extra+')')+'</div>'+
   '<h4>🤖 AI 분석</h4><ul class="list">'+A.why.map(function(w){return '<li><span class="sm">· '+w+'</span></li>'}).join('')+'</ul>'+
   (cur.status==='답변완료'?'<h4>✅ 발송한 답변</h4><div class="callout">'+esc(cur.reply)+'</div>':'<h4>✏️ 답변 초안 (수정 가능)</h4><textarea id="qReply" rows="5" style="width:100%;border:1px solid var(--line);border-radius:10px;padding:8px;font:inherit;font-size:13px">'+esc(A.reply)+'</textarea>'+
-  '<label class="sm" style="display:flex;gap:8px;align-items:center;margin-top:8px"><input type="checkbox" id="qRule" '+(ruleOn(cur.cat)?'checked disabled':'')+(S.user.role==='u'?' disabled':'')+'> 재발 방지 개선 룰로 환류'+(S.user.role==='u'?' <span class="xs mut">(보상팀·정책팀 승인)</span>':ruleOn(cur.cat)?' <span class="xs mut">(반영됨)</span>':'')+'</label><div class="xs mut">→ '+A.prev+'</div>'+
+  '<label class="sm" style="display:flex;gap:8px;align-items:center;margin-top:8px"><input type="checkbox" id="qRule" '+(ruleOn(cur.cat)?'checked disabled':'')+(S.user.role==='u'?' disabled':'')+'> 재발 방지 개선 룰로 활용'+(S.user.role==='u'?' <span class="xs mut">(보상팀·정책팀 승인)</span>':ruleOn(cur.cat)?' <span class="xs mut">(반영됨)</span>':'')+'</label><div class="xs mut">→ '+A.prev+'</div>'+
   '<div class="row" style="margin-top:10px;gap:8px">'+(cur.status==='접수'?'<button class="btn sm ghost" id="qStart">검토 시작</button>':'')+'<button class="btn sm" id="qSend" style="flex:1">답변 발송</button></div>')+'</div>';
  return h}
 function qKind(){var r=route();return((r[0]==='u'&&r[1]==='queue')||(r[0]==='h'&&r[1]==='uqueue'))?'u':'c'}
@@ -631,7 +631,7 @@ BIND['u-queue']=BIND['c-queue']=bindQueue;
 PAGES['u-loop']=PAGES['c-loop']=PAGES['g-loop']=function(){
  var role=S.user.role,cs=S.cases,n=cs.length,done=cs.filter(function(c){return c.status==='답변완료'}),mx=Math.max(1,Math.max.apply(null,Object.keys(CATS).map(function(k){return cs.filter(function(c){return c.cat===k}).length})));
  var avg=done.length?Math.round(done.reduce(function(a,c){return a+(c.handledAt-c.at)},0)/done.length/3600000):0;
- var h='<div class="card"><h3>🔄 민원 → 개선 환류</h3><div class="flow">'+['민원·사고 접수','AI 분류','처리·답변','개선 룰 환류','농가 앱 반영'].map(function(x,i,a){return '<div class="n"><b class="sm">'+x+'</b></div>'+(i<a.length-1?'<div class="ar">→</div>':'')}).join('')+'</div><p class="xs mut" style="margin:8px 0 0">쌓인 민원을 유형별로 분류하고, 반복되는 유형은 안내 방식을 바꿔 같은 민원이 다시 생기지 않게 해요.</p></div>'+
+ var h='<div class="card"><h3>🔄 민원 → 개선 활용</h3><div class="flow">'+['민원·사고 접수','AI 분류','처리·답변','개선 룰 활용','농가 앱 반영'].map(function(x,i,a){return '<div class="n"><b class="sm">'+x+'</b></div>'+(i<a.length-1?'<div class="ar">→</div>':'')}).join('')+'</div><p class="xs mut" style="margin:8px 0 0">쌓인 민원을 유형별로 분류하고, 반복되는 유형은 안내 방식을 바꿔 같은 민원이 다시 생기지 않게 해요.</p></div>'+
  '<div class="card"><h3>유형별 누적 ('+n+'건)</h3>'+(n?Object.keys(CATS).map(function(k){var v=cs.filter(function(c){return c.cat===k}).length;return '<div class="hbar"><span style="width:96px">'+CATS[k][0]+' '+CATS[k][1]+'</span><div class="bar"><i style="width:'+Math.round(v/mx*100)+'%;background:var(--g7)"></i></div><span>'+v+'</span></div>'}).join(''):'<p class="sm mut">아직 접수된 민원이 없어요.</p>')+
  '<div class="grid3" style="margin-top:8px"><div class="kpi"><b>'+n+'</b><small>누적 접수</small></div><div class="kpi"><b>'+done.length+'</b><small>답변 완료</small></div><div class="kpi"><b>'+(avg?avg+'h':'-')+'</b><small>평균 처리</small></div></div>'+(role==='g'?'<p class="xs mut">🔒 지자체는 건수·유형 통계만 볼 수 있고, 민원 원문과 고객 정보는 열람할 수 없어요.</p>':'')+'</div>';
  var sug=Object.keys(CATS).filter(function(k){return k!=='etc'&&cs.some(function(c){return c.cat===k})&&!ruleOn(k)});
@@ -1213,7 +1213,7 @@ var QB=[['prod','🧩 상품개발 (신담보 발굴)',/전염병|돼지열병|A
  ['claim','🧾 손해사정·지급 (클레임)',/자기부담|공제|산식|얼마.*(받|나오)|지급액|보험금/,'지급 단계 오해 질의 → 사고접수 시 예상 지급액 시뮬레이션 자동 발송','자기부담비율은 어떻게 빼는 건가요?']];
 function qLogs(){var out={prod:[],uw:[],claim:[]};Object.keys(S.chat||{}).forEach(function(k){(S.chat[k]||[]).forEach(function(m){if(m.a||!m.t)return;QB.forEach(function(b){if(b[2].test(m.t))out[b[0]].push(m.t)})})});return out}
 PAGES['h-qlog']=function(){var L=qLogs(),n=L.prod.length+L.uw.length+L.claim.length;
- return '<div class="card"><h3>💬 AI 상담·문의 데이터 환류</h3><p class="xs mut" style="margin:0">농가와 창구 직원의 AI 질의를 유형별로 모아 상품개발·인수·지급 업무에 되돌려요.</p><div class="grid2" style="margin-top:8px"><div class="kpi"><b>'+n+'건</b><small>이 앱에서 수집된 질의</small></div><div class="kpi"><b>'+Object.keys(X().q).filter(function(k){return X().q[k]}).length+'건</b><small>개선과제 등록</small></div></div></div>'+
+ return '<div class="card"><h3>💬 AI 상담·문의 데이터 활용</h3><p class="xs mut" style="margin:0">농가와 창구 직원의 AI 질의를 유형별로 모아 상품개발·인수·지급 업무에 활용해요.</p><div class="grid2" style="margin-top:8px"><div class="kpi"><b>'+n+'건</b><small>이 앱에서 수집된 질의</small></div><div class="kpi"><b>'+Object.keys(X().q).filter(function(k){return X().q[k]}).length+'건</b><small>개선과제 등록</small></div></div></div>'+
  QB.map(function(b){var real=L[b[0]],reg=X().q[b[0]];return '<div class="card"><div class="row sp"><b>'+b[1]+'</b><span class="tag '+(real.length?'':'gr')+'">실제 '+real.length+'건</span></div><div class="sm" style="margin:6px 0;color:var(--mut)">'+b[3]+'</div><ul class="list">'+real.slice(0,3).map(function(t){return '<li><span class="sm">“'+esc(t)+'”</span></li>'}).join('')+'<li><span class="sm" style="color:var(--mut)">예) “'+b[4]+'” <span class="tag gr">시연 예시</span></span></li></ul>'+
   '<button class="btn '+(reg?'ghost':'')+' full" data-ql="'+b[0]+'" style="margin-top:6px">'+(reg?'✅ 개선과제 등록됨 (취소)':'개선과제로 등록')+'</button></div>'}).join('')+'<div class="note">농가용 AI 상담(채팅)에서 질문하면 이곳 “실제”에 쌓여요. 개인 식별정보 없이 질의 문구만 집계해요.</div>'};
 BIND['h-qlog']=function(){$$('[data-ql]').forEach(function(b){b.onclick=function(){var k=b.getAttribute('data-ql');X().q[k]=X().q[k]?0:1;audit('개선과제 '+k);save();render()}})};
