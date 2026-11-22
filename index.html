@@ -238,7 +238,7 @@ var TRENDS=[
 
 /* ---------------- 라우팅 ---------------- */
 var ROLES={f:{n:'👨‍🌾 농가',sc:'본인 계약·농장',tabs:[['home','🏠','홈'],['live','📡','위험'],['cover','🛡','보험'],['claim','📸','접수·민원']]},
- u:{n:'📝 인수팀',sc:'인수 + 지자체 통계',tabs:[['queue','가입 상담함'],['analyze','AI 보장분석'],['ocr','OCR 인수심사'],['spec','특이점 심사'],['grade','점검 등급 DB'],['reco','AI 추천'],['live','실시간 조회'],['macro','전국 관제'],['meso','시군·읍면'],['micro','격자(500m)'],['matrix','연계 매트릭스'],['engine','AI 엔진·API'],['loop','활용']]},
+ u:{n:'📝 인수팀',sc:'인수 + 지자체 통계',tabs:[['ocr','OCR 인수심사'],['uwlist','인수심사 목록'],['spec','특이점 심사'],['grade','점검 등급 DB'],['queue','가입 상담함'],['analyze','AI 보장분석'],['reco','AI 추천'],['live','실시간 조회'],['macro','전국 관제'],['meso','시군·읍면'],['micro','격자(500m)'],['matrix','연계 매트릭스'],['engine','AI 엔진·API'],['loop','활용']]},
  c:{n:'🧾 보상팀',sc:'보상 + 지자체 통계',tabs:[['queue','접수함'],['claim','AI 지급심사'],['paydata','지급데이터'],['loss','미가입 손실'],['kpi','기대효과'],['perm','권한·감사'],['macro','전국 관제'],['meso','시군·읍면'],['micro','격자(500m)'],['matrix','연계 매트릭스'],['engine','AI 엔진·API'],['loop','활용']]},
  h:{n:'📊 정책팀',sc:'상품개발·위험관제',tabs:[['qlog','질의 로그 활용'],['nh','NH오늘농사 연계'],['weights','위험도 구성'],['loop','활용·개선'],['macro','전국 관제'],['meso','시군·읍면'],['micro','격자(500m)'],['matrix','연계 매트릭스'],['engine','AI 엔진·API'],['kpi','기대효과'],['perm','권한·감사']]},
  g:{n:'🏛 지자체',sc:'집계 통계·위험지수',tabs:[['macro','전국'],['meso','시군·읍면'],['micro','격자(500m)'],['matrix','연계 매트릭스'],['engine','AI 엔진·API'],['loop','민원 통계']]}};
@@ -265,8 +265,8 @@ function render(){
  if(role==='set'||role==='about'){a.innerHTML=topBar(null)+'<div class="page">'+(role==='set'?setPage():aboutPage())+'</div>';bindTop();bindSet();return}
  if(!ROLES[role])role=S.user.role;var R=ROLES[role];if(!tab)tab=R.tabs[0][0];
  var html=topBar(role),ok=(role===S.user.role)&&(role==='f'||R.tabs.some(function(t){return t[0]===tab}));
- if(role!=='f'&&role===S.user.role){var SEC={uqueue:'인수',analyze:'인수',ocr:'인수',reco:'인수',live:'인수',cqueue:'보상',claim:'보상',paydata:'보상',loss:'보상',kpi:'정책',perm:'정책',spec:'인수',grade:'인수',qlog:'정책',nh:'정책',weights:'정책',macro:'통계',meso:'통계',micro:'통계',matrix:'통계',engine:'통계',loop:'활용'},ORD=['인수','보상','정책','통계','활용'],gp={};R.tabs.forEach(function(t){var sc=SEC[t[0]]||(t[0]==='queue'?(role==='u'?'인수':'보상'):'기타');(gp[sc]=gp[sc]||[]).push(t)});
-  var LK={u:['보상','c','보상팀',['접수함','AI 지급심사','지급데이터','미가입 손실']],c:['인수','u','인수팀',['가입 상담함','AI 보장분석','OCR 인수심사','AI 추천','실시간 조회']]}[role],curN='';R.tabs.forEach(function(t){if(t[0]===tab)curN=t[1]});
+ if(role!=='f'&&role===S.user.role){var SEC={uqueue:'인수',analyze:'인수',ocr:'인수',uwlist:'인수',reco:'인수',live:'인수',cqueue:'보상',claim:'보상',paydata:'보상',loss:'보상',kpi:'정책',perm:'정책',spec:'인수',grade:'인수',qlog:'정책',nh:'정책',weights:'정책',macro:'통계',meso:'통계',micro:'통계',matrix:'통계',engine:'통계',loop:'활용'},ORD=['인수','보상','정책','통계','활용'],gp={};R.tabs.forEach(function(t){var sc=SEC[t[0]]||(t[0]==='queue'?(role==='u'?'인수':'보상'):'기타');(gp[sc]=gp[sc]||[]).push(t)});
+  var LK={u:['보상','c','보상팀',['접수함','AI 지급심사','지급데이터','미가입 손실']],c:['인수','u','인수팀',['OCR 인수심사','인수심사 목록','가입 상담함','AI 보장분석','AI 추천','실시간 조회']]}[role],curN='';R.tabs.forEach(function(t){if(t[0]===tab)curN=t[1]});
   html+='<div class="subw"><button class="navtog" id="navTog"><span>📂 '+curN+'</span><span>메뉴 접기/펼치기 ▴</span></button><div class="sub" id="subBody" style="display:block">'+ORD.concat(['보상','인수']).filter(function(k,i,a){return a.indexOf(k)===i&&(gp[k]||(LK&&LK[0]===k))}).map(function(k){var op=true,cnt=(gp[k]||[]).length+(LK&&LK[0]===k?LK[3].length:0);return '<div class="tsec"><button class="tsh" data-ts="'+k+'"><span class="car">'+(op?'▾':'▸')+'</span> '+k+' <small>'+cnt+'</small></button><div class="tch" style="display:'+(op?'flex':'none')+'">'+(gp[k]||[]).map(function(t){return '<button data-go="'+role+'-'+t[0]+'" class="'+(t[0]===tab?'on':'')+'">'+t[1]+'</button>'}).join('')+(LK&&LK[0]===k?LK[3].map(function(n){return '<button class="lk" data-lock="'+LK[1]+'">🔒 '+n+'</button>'}).join(''):'')+'</div></div>'}).join('')+'</div></div>'}
  var fn=PAGES[role+'-'+tab]||PAGES['f-home'];
  html+='<div class="page">'+(ok?fn():deny(role,tab))+'</div>';
@@ -389,11 +389,11 @@ PAGES['f-reco']=function(){
  '<div class="card" style="border:2px solid var(--g)"><div class="hd"><h3 style="margin:0">'+f.icon+' '+f.name+' 추천 패키지</h3><span class="tag">적합도 '+(88-(S.farm==='farm'?4:0))+'%</span></div>'+
  '<ul class="list" style="margin-top:6px">'+gaps.map(function(g){return '<li><div><div class="sm b">＋ '+g[0]+'</div><div class="xs mut">'+g[2]+'</div></div><span class="tag o">특약</span></li>'}).join('')+
  ag.map(function(a){return '<li><div><div class="sm b">＋ '+(a.k==='인적'?'농업인안전보험':a.k==='농기계'?'농기계종합보험 (기종 추가)':a.k==='설비'?'부대설비 보장 특약':'농업용시설물 보험')+'</div><div class="xs mut">미가입 자산: '+a.n+'</div></div><span class="tag b">'+a.k+'</span></li>'}).join('')+'</ul>'+
- '<button class="btn full" id="bookBtn" style="margin-top:10px">농축협 상담 예약 (데모)</button></div>'+
+ '<button class="btn full" id="bookBtn" style="margin-top:10px">농축협 상담 예약</button></div>'+
  '<h3 style="margin:16px 2px 8px;font-size:15px">최신 농업 트렌드별 추천 사례</h3>'+
  TRENDS.map(function(t,i){var mine=f.trend.indexOf(i)>=0;return '<div class="card" '+(mine?'style="border:1px solid var(--g)"':'')+'><div class="hd"><div class="b">'+t.ic+' 트렌드 '+(i+1)+' · '+t.t+'</div>'+(mine?'<span class="tag">내 농장 해당</span>':'')+'</div><div class="sm mut" style="margin-top:4px">대상: '+t.w+'</div><div class="sm">'+t.why+'</div><div class="callout" style="margin-top:8px">추천: <b>'+t.rec+'</b></div></div>'}).join('');
 };
-BIND['f-reco']=function(){bindFarm();$('#bookBtn').onclick=function(){toast('상담 예약 요청을 보냈어요 (데모)')}};
+BIND['f-reco']=function(){bindFarm();$('#bookBtn').onclick=function(){toast('상담 예약 요청을 보냈어요')}};
 
 /* ================= 농가 · 우리동네 (슬라이드 15) ================= */
 PAGES['f-local']=function(){
@@ -497,7 +497,7 @@ PAGES['d-paydata']=function(){
    (v<avg*0.9?'<div class="callout warn" style="margin-top:8px">지역 평균보다 <b>'+(avg-v)+'만 원</b> 낮아요 → 시세 대비 일부보험 우려, 한도 상향 권장</div>':'<div class="callout" style="margin-top:8px">지역 평균 수준으로 적정해요</div>')+'</div>'}
  h+='<div class="card" style="background:#0f291e;color:#fff"><div class="xs" style="color:#fde68a;font-weight:700">지급 데이터 활용 전략</div><div class="b" style="font-size:16px;margin:4px 0 10px">'+st[0]+'</div>'+
   st[1].map(function(x,i){return '<div style="background:rgba(255,255,255,.08);border-radius:10px;padding:10px;margin-top:6px"><div class="sm b" style="color:#fde68a">'+(i+1)+'. '+x[0]+'</div><div class="xs" style="color:#cbd5e1">'+x[1]+'</div></div>'}).join('')+'</div>'+
-  '<button class="btn full" id="pdCopy">고객 안내문 복사</button><p class="xs mut" style="text-align:center">PPT 05 · AI 프로세스 혁신 II 자료 기준</p>';
+  '<button class="btn full" id="pdCopy">고객 안내문 복사</button>';
  return h};
 BIND['d-paydata']=function(){$$('[data-pd]').forEach(function(b){b.onclick=function(){S.sel.pd=b.getAttribute('data-pd');render()}});
  var r=$('#hwA');if(r)r.onchange=function(){S.sel.hw=+r.value;render()};if(r)r.oninput=function(){r.previousElementSibling.lastChild.textContent=r.value+'만 원'};
@@ -839,7 +839,7 @@ function lvRun(){
 function lvAgo(t){var m=Math.round((Date.now()-t)/60000);return m<1?'방금':m<60?m+'분 전':Math.round(m/60)+'시간 전'}
 function lvDay(s){var d=new Date(s);return(d.getMonth()+1)+'/'+d.getDate()}
 PAGES['f-live']=function(){
- var it=LIVE_ITEMS[LV.item],h='<div class="card"><h3>📡 내 농장 실시간 위험 조회</h3><p class="xs mut" style="margin:0 0 8px">지역과 영농 정보를 입력하면 <b>실시간 기상예보</b>를 불러와 재해 위험·예상 손실·보험금·보험료를 계산해요.</p>'+
+ var it=LIVE_ITEMS[LV.item],h='<div class="card"><h3>📡 '+(S.user&&S.user.role!=='f'?'고객':'내')+' 농장 실시간 위험 조회</h3><p class="xs mut" style="margin:0 0 8px">지역과 영농 정보를 입력하면 <b>실시간 기상예보</b>를 불러와 재해 위험·예상 손실·보험금·보험료를 계산해요.</p>'+
   '<div class="xs mut">① 지역</div><div class="row" style="gap:6px"><input type="text" id="lvQ" value="'+LV.q.replace(/"/g,'')+'" placeholder="시·군 이름 (예: 나주)" style="flex:1"><button class="btn sm ghost" id="lvMic">🎤</button></div>'+
   '<div class="chips" style="margin:6px 0">'+['나주','홍천','안동','제주','예산','이천'].map(function(k){return '<button class="chip '+(LV.q===k?'on':'')+'" data-lq="'+k+'">'+k+'</button>'}).join('')+'</div>'+
   '<div class="xs mut">② 품목</div><div class="chips" style="margin:4px 0 8px">'+Object.keys(LIVE_ITEMS).map(function(k){return '<button class="chip '+(k===LV.item?'on':'')+'" data-li="'+k+'">'+LIVE_ITEMS[k].n+'</button>'}).join('')+'</div>'+
@@ -871,7 +871,7 @@ function lvAct(top,R,it){
 }
 function lvSrc(){
  var rows=[['Open-Meteo 일별 예보(16일)+과거 14일','기온·강수·순간풍속','<span class="tag">실시간</span>'],['Open-Meteo 지오코딩','지역명 → 좌표','<span class="tag">실시간</span>'],['위험지수·피해율·보험료 산식','품목 민감도·순보험료율·보조율','<span class="tag y">내장·가정치</span>'],['농협손보 지급통계(2025 등)','다발 사고·평균 가입액','<span class="tag y">내장</span>'],['기상청 단기예보 / 농진청 농업기상','필지(30×30m) 경보','<span class="tag gr">연동 예정</span>'],['농업경영체·마이데이터','경영체 면적·품목 자동입력','<span class="tag gr">연동 예정</span>']];
- return '<div class="card"><h3>🔌 데이터 출처</h3>'+rows.map(function(r){return '<div class="row sp sm" style="padding:7px 0;border-top:1px solid var(--line);gap:8px"><span><b>'+r[0]+'</b><br><span class="xs mut">'+r[1]+'</span></span>'+r[2]+'</div>'}).join('')+'<p class="xs mut">실시간 기상은 앱이 직접 호출합니다(키 불필요). 나머지는 PPT의 연동 구조를 가정한 내장 데이터예요.</p></div>'}
+ return '<div class="card"><h3>🔌 데이터 출처</h3>'+rows.map(function(r){return '<div class="row sp sm" style="padding:7px 0;border-top:1px solid var(--line);gap:8px"><span><b>'+r[0]+'</b><br><span class="xs mut">'+r[1]+'</span></span>'+r[2]+'</div>'}).join('')+'<p class="xs mut">실시간 기상은 앱이 직접 호출합니다(키 불필요). 나머지는 연동 예정 항목의 기본 데이터로 계산해요.</p></div>'}
 PAGES['d-live']=function(){return '<div class="callout" style="margin-bottom:10px">🏢 창구 활용: 고객이 말한 지역·품목·규모를 입력하면 <b>가입 전 위험·보험료 안내</b>를 바로 보여줄 수 있어요.</div>'+PAGES['f-live']()};
 BIND['f-live']=function(){
  var q=$('#lvQ');q.oninput=function(){LV.q=q.value};q.onkeydown=function(e){if(e.key==='Enter')lvRun()};
@@ -895,7 +895,7 @@ PAGES['d-ocr']=function(){
  var steps=[['OCR 서류 요건 검증','정부·지자체 지원 서류 자동 판독'],['공공마이데이터 대조','가축사육업허가증·경영체 정보 연동'],['인수 체크리스트 표준화','농축협·본사 인수 심사 비용 절감']];
  var h='<div class="card"><h3>OCR·공공마이데이터 기반 인수 심사 자동화</h3><p class="xs mut" style="margin:0">예: 가축재해보험 가입 시 가축사육업허가(등록)증 및 농업경영체등록확인서 내 가축정보 자동 검증</p>'+
  steps.map(function(s,i){return '<div class="step"><div class="num '+(i<st?'':'dim')+'">'+(i<st?'✓':i+1)+'</div><div><b class="sm">'+s[0]+'</b><div class="xs mut">'+s[1]+'</div></div></div>'}).join('')+'</div>';
- if(st===0)h+='<div class="card"><div class="drop" id="ocrDrop">📄 서류 사진 올리기<br><span class="xs">탭하면 데모 서류(가축사육업허가증 · 농업경영체등록확인서)로 진행</span></div><input type="file" id="ocrFile" accept="image/*" style="display:none"></div>';
+ if(st===0)h+='<div class="card"><div class="drop" id="ocrDrop">📄 서류 사진 올리기<br><span class="xs">탭하면 접수된 서류(가축사육업허가증 · 농업경영체등록확인서)로 진행</span></div><input type="file" id="ocrFile" accept="image/*" style="display:none"></div>';
  if(st>=1)h+='<div class="card"><h3>① OCR 판독 결과</h3><table><tr><th>항목</th><th>판독값</th><th>신뢰도</th></tr><tr><td>서류</td><td>가축사육업 허가증</td><td>99%</td></tr><tr><td>허가번호</td><td>제2019-○○○호</td><td>97%</td></tr><tr><td>사업장</td><td>충남 홍성군 은하면 ○○리</td><td>96%</td></tr><tr><td>축종 / 규모</td><td>돼지 · 2,400두</td><td>98%</td></tr><tr><td>서류</td><td>농업경영체등록확인서</td><td>99%</td></tr><tr><td>경영주</td><td>이○○</td><td>99%</td></tr></table></div>';
  if(st>=2)h+='<div class="card"><h3>② 공공마이데이터 대조</h3><ul class="list"><li><span class="sm">허가 유효 여부 (가축사육업 DB)</span><span class="ok">유효</span></li><li><span class="sm">허가 두수 2,400 / 청약 두수 2,350</span><span class="ok">일치</span></li><li><span class="sm">경영체 등록 축종·주소</span><span class="ok">일치</span></li><li><span class="sm">축사 면적 (경영체 1,980㎡ / 청약 2,200㎡)</span><span class="pd">차이 11%</span></li></ul></div>';
  if(st>=3)h+='<div class="card"><h3>③ 표준 인수 체크리스트</h3><ul class="list"><li><span class="sm">필수 서류 2종 완비</span><span class="ok">✓</span></li><li><span class="sm">가입 두수 ≤ 허가 두수</span><span class="ok">✓</span></li><li><span class="sm">축사 면적 차이 10% 초과</span><span class="pd">보완요청</span></li><li><span class="sm">비상발전기·경보장치 (무창돈사)</span><span class="pd">사진 요청</span></li><li><span class="sm">최근 3년 손해율 할증</span><span class="ok">해당없음</span></li></ul>'+
@@ -906,7 +906,7 @@ PAGES['d-ocr']=function(){
 BIND['d-ocr']=function(){
  var d=$('#ocrDrop');if(d){d.onclick=function(){$('#ocrFile').click();setTimeout(function(){if(S.sel.ocrStep===0){S.sel.ocrStep=1;render()}},400)};$('#ocrFile').onchange=function(){S.sel.ocrStep=1;render()}}
  var n=$('#ocrNext');if(n)n.onclick=function(){S.sel.ocrStep++;render()};
- var q=$('#ocrReq');if(q)q.onclick=function(){toast('보완 요청 알림톡 발송 (데모)')};
+ var q=$('#ocrReq');if(q)q.onclick=function(){toast('보완 요청 알림톡 발송')};
  var rs=$('#ocrReset');if(rs)rs.onclick=function(){S.sel.ocrStep=0;render()};
 };
 
@@ -982,7 +982,7 @@ PAGES['g-micro']=function(){
 PAGES['g-matrix']=function(){
  var M=[['농작물재해보험','저온·서리·폭염·강풍·호우','품목·생육기별 재해 손해율','방제·배수 대응법 및 특약 확인'],['가축재해보험','폭염(최고기온)·한파·대설','축종별 폐사율·축사 파손액','냉난방·환기 설비 사전 점검 알림'],['농기계종합보험','집중호우·침수·강우·짙은 안개','침수 수리비·농번기 사고 빈도','고지대 이동 보관 및 안전운행 경보'],['풍수해·지진재해','태풍·순간최대풍속·적설량','온실·하우스 구조별 파손율','하우스 결박·제설 대비 행동요령']];
  return '<div class="card"><h3>정책보험 전 상품 × 기상조기경보 통합 연계</h3>'+M.map(function(m){return '<div style="padding:10px 0;border-top:1px solid var(--line)"><div class="b">'+m[0]+'</div><div class="sm"><span class="tag b">경보요소</span> '+m[1]+'</div><div class="sm"><span class="tag">지급데이터</span> '+m[2]+'</div><div class="sm"><span class="tag o">사전안내</span> '+m[3]+'</div></div>'}).join('')+'</div>'+
- '<div class="card"><h3>고유 데이터 집적 현황 (데모)</h3><div class="grid2"><div class="kpi"><b>🐄</b><small>가축재해 · 축종별 사육·사고</small></div><div class="kpi"><b>🚜</b><small>농기계 · 기종별 운행·손해</small></div><div class="kpi"><b>🌪</b><small>풍수해·지진 · 지역별 피해</small></div><div class="kpi"><b>🌾</b><small>농작물 · 품목별 재배·재해</small></div></div></div>';
+ '<div class="card"><h3>고유 데이터 집적 현황</h3><div class="grid2"><div class="kpi"><b>🐄</b><small>가축재해 · 축종별 사육·사고</small></div><div class="kpi"><b>🚜</b><small>농기계 · 기종별 운행·손해</small></div><div class="kpi"><b>🌪</b><small>풍수해·지진 · 지역별 피해</small></div><div class="kpi"><b>🌾</b><small>농작물 · 품목별 재배·재해</small></div></div></div>';
 };
 
 /* ================= 지자체 · AI 엔진·API (슬라이드 10, 22-①) ================= */
@@ -1108,7 +1108,7 @@ PAGES['f-claim']=function(){
  if(st===2)h+='<div class="card"><h3>예상 보험금</h3><div style="text-align:center;padding:8px 0"><div class="xs mut">예상 지급액</div><div style="font-size:30px;font-weight:900;color:var(--g)">'+won(r.pay)+'</div><div class="xs mut">'+r.desc+'</div></div>'+
   '<div class="hbar"><span>추정 손해</span><div class="bar"><i style="width:100%;background:var(--r4)"></i></div><span style="width:70px">'+won(r.loss)+'</span></div><div class="hbar"><span>보험금</span><div class="bar"><i style="width:'+(r.pay/r.loss*100)+'%;background:var(--g7)"></i></div><span style="width:70px">'+won(r.pay)+'</span></div>'+
   '<div class="callout" style="margin-top:8px">🛰 기상 교차검증 일치 · 소액·고신뢰 건은 <b>현장조사 없이 신속 지급</b> 대상</div><p class="xs mut">최종 지급액은 손해평가 후 확정됩니다 (데모 계산)</p><button class="btn full" data-cs="3">접수하기</button></div>';
- if(st===3)h+='<div class="card"><h3>✅ 접수 완료 · 진행 현황</h3><div class="tl"><div class="done"><b class="sm">접수 완료</b><div class="xs mut">오늘 · 접수번호 C-2611-0'+(S.farm.length*317)+'</div></div><div class="done"><b class="sm">AI 1차 판독 · 기상 교차검증</b><div class="xs mut">'+c.wx+'</div></div><div class="now"><b class="sm">손해평가 일정 배정</b><div class="xs mut">'+f.sigun+' 손해평가인 · 2일 내 방문 예정</div></div><div><b class="sm">심사</b><div class="xs mut">본사 지급심사 (AI 이상징후 점검)</div></div><div><b class="sm">보험금 지급</b><div class="xs mut">예상 '+won(r.pay)+' · 등록 계좌</div></div></div><button class="btn ghost full" data-cs="0" id="csReset">처음으로 (데모)</button></div>';
+ if(st===3)h+='<div class="card"><h3>✅ 접수 완료 · 진행 현황</h3><div class="tl"><div class="done"><b class="sm">접수 완료</b><div class="xs mut">오늘 · 접수번호 C-2611-0'+(S.farm.length*317)+'</div></div><div class="done"><b class="sm">AI 1차 판독 · 기상 교차검증</b><div class="xs mut">'+c.wx+'</div></div><div class="now"><b class="sm">손해평가 일정 배정</b><div class="xs mut">'+f.sigun+' 손해평가인 · 2일 내 방문 예정</div></div><div><b class="sm">심사</b><div class="xs mut">본사 지급심사 (AI 이상징후 점검)</div></div><div><b class="sm">보험금 지급</b><div class="xs mut">예상 '+won(r.pay)+' · 등록 계좌</div></div></div><button class="btn ghost full" data-cs="0" id="csReset">처음으로</button></div>';
  if(!f.mine)h+='<div class="card"><h3>지난 사고 · 지급 내역</h3><table><tr><th>연도</th><th>원인</th><th>지급</th><th>소요</th></tr>'+f.hist.map(function(x,i){return '<tr><td>'+x.y+'</td><td>'+x.c+'</td><td class="b">'+won(x.p)+'</td><td>'+[34,27,19][i%3]+'일</td></tr>'}).join('')+'</table><div class="note">AI 지급 적용 시 평균 처리기간 27일 → 7일 목표 (가정)</div></div>';
  return h};
 BIND['f-claim']=function(){bindFarm();bindVI();$$('[data-cs]').forEach(function(b){b.onclick=function(){S.claimStep[S.farm]=+b.getAttribute('data-cs');render()}});var p=$('#clPick');if(p){var fi=$('#clFile');p.onclick=function(){fi.removeAttribute('capture');fi.click()};
@@ -1151,7 +1151,7 @@ PAGES['d-claim']=function(){var c=CLAIMS[S.sel.cl];
  (c.dec==='auto'?'<div class="callout">✅ <b>신속 지급 권고</b> — 기상·사진·이력 모두 정상. 손해평가 서면 대체 가능</div>':'<div class="callout bad">🚩 <b>현장조사 필요</b> — 기상 근거 불일치 및 사진 재사용 의심. 손해평가인 현장 확인 배정</div>')+
  '<div class="row" style="margin-top:10px"><button class="btn sm" id="clOk">'+(c.dec==='auto'?'지급 승인':'현장조사 배정')+'</button><button class="btn sm ghost" id="clHold">보류·메모</button></div></div>'+
  '<div class="note">기상 데이터와 지급 이력을 결합하면 보험사기 예방과 정상 건 신속 지급을 동시에 달성 (민원 예방)</div>'};
-BIND['d-claim']=function(){$$('[data-cl]').forEach(function(li){li.onclick=function(){S.sel.cl=+li.getAttribute('data-cl');render()}});$('#clOk').onclick=function(){toast(CLAIMS[S.sel.cl].dec==='auto'?'지급 승인 완료 (데모)':'현장조사 배정 완료 (데모)')};$('#clHold').onclick=function(){toast('보류 처리 (데모)')}};
+BIND['d-claim']=function(){$$('[data-cl]').forEach(function(li){li.onclick=function(){S.sel.cl=+li.getAttribute('data-cl');render()}});$('#clOk').onclick=function(){toast(CLAIMS[S.sel.cl].dec==='auto'?'지급 승인 완료':'현장조사 배정 완료')};$('#clHold').onclick=function(){toast('보류 처리')}};
 
 
 /* ================= 음성 입력 (APK: 안드로이드 음성인식 · 웹: 브라우저 음성인식 → 실패 시 키보드 🎤 안내) ================= */
@@ -1189,7 +1189,7 @@ function setPage(){
  return '<div class="card"><h3>🔐 내 역할·권한</h3><div class="b">'+ROLES[S.user.role].n+(S.user.role==='f'?'':' · '+S.user.name)+'</div><div class="xs mut" style="margin:4px 0 8px">'+RPERM[S.user.role]+'</div><div class="row" style="gap:8px"><button class="btn sm" data-go="login">역할 전환</button><button class="btn sm ghost" id="lgOut">로그아웃</button></div></div>'+'<div class="card"><h3>🔒 내 정보 제공 동의</h3>'+consRows()+'</div>'+
  '<div class="card"><h3>데이터 결합 시 예상 리스크</h3><ul class="list">'+[['이종 데이터 결합 규제','농진청 필지 좌표·경영체 정보와 보험계약 데이터 직접 결합 제한'],['농촌 특유의 재식별 위험','소규모 읍면·희귀작목은 비식별화해도 특정 농가 유추 가능'],['제3자 제공·목적 외 이용 제한','지자체·중앙회 앱 연동 시 계약·사고 원천데이터 반출 불가']].map(function(r){return '<li style="display:block"><div class="b sm">⚠️ '+r[0]+'</div><div class="xs mut">'+r[1]+'</div></li>'}).join('')+'</ul></div>'+
  '<div class="card"><h3>데이터 가공·제공 원칙</h3>'+[['원천데이터 반출 차단','내부망 분석 후 0~100점 위험지수 결과값만 API로 전달'],['k-익명성 확보','지자체 제공 시 법정동·500m 격자, 최소 5농가 이상 집계 통계만'],['본인 동의 기반 개인화','보장공백 안내는 이용자 본인의 명시적 동의(마이데이터 전송요구) 후 제공']].map(function(r,i){return '<div class="step"><div class="num">'+(i+1)+'</div><div><b class="sm">'+r[0]+'</b><div class="xs mut">'+r[1]+'</div></div></div>'}).join('')+'</div>'+
- '<button class="btn full ghost" id="resetAll">데모 초기화 (온보딩부터)</button>';
+ '<button class="btn full ghost" id="resetAll">초기화 (처음부터 다시 시작)</button>';
 }
 function bindOut(){var o=$('#topOut');if(o)o.onclick=function(){audit('로그아웃');S.user=null;save();location.hash='login';render();toast('로그아웃했어요')}}
 function bindSet(){bindCons();var lo=$('#lgOut');if(lo)lo.onclick=function(){audit('로그아웃');S.user=null;save();location.hash='login';render()};var r=$('#resetAll');if(r)r.onclick=function(){S.user=null;S.cases=[];S.rules=[];S.audit=[];seedCases();S.claimSent={};S.onb=0;S.checks={};S.consent={svc:true,pers:false,myd:false};save();location.hash='';render()}}
@@ -1222,6 +1222,50 @@ var _cv2=PAGES['f-cover'];PAGES['f-cover']=function(){var h=_cv2();if(F().mine||
 
 
 ['analyze','ocr','reco','live'].forEach(function(k){PAGES['u-'+k]=PAGES['d-'+k];BIND['u-'+k]=BIND['d-'+k]});['claim','paydata','loss'].forEach(function(k){PAGES['c-'+k]=PAGES['d-'+k];BIND['c-'+k]=BIND['d-'+k]});PAGES['g-kpi']=PAGES['d-kpi'];BIND['g-kpi']=BIND['d-kpi'];
+
+/* ===== 인수심사 목록 · OCR 인수심사(표준 체크리스트) ===== */
+var UWREQ=(function(){
+ var D=[['crop','한소영','안동시','풍산농협','사과(과수) 1.2ha','승인',4,10,15,['ok','ok','ok'],{},'2억 4,000만원'],
+ ['livestock','정대호','예산군','예산축협','한우 45두','승인',3,14,40,['ok','ok','ok','ok'],{},'3억 6,500만원'],
+ ['crop','오세훈','이천시','이천농협','시설원예(딸기) 6동','승인',3,16,5,['ok','ok','ok'],{},'1억 9,800만원'],
+ ['livestock','이상철','홍성군','홍성축협','양돈 1,200두','보완요청',2,11,30,['ok','ok','pd','ok'],{2:'건축물관리대장 면적 8% 차이 · 증빙 사진 요청'},'2억 7,400만원'],
+ ['crop','윤재석','나주시','남평농협','벼 30(10a)','보완요청',2,15,20,['ok','pd','ok'],{1:'계약인수 현지조사서 미제출'},'9,600만원'],
+ ['livestock','최영수','안동시','안동축협','한우 38두','심사중',1,9,10,['ok','ok','wt','wt'],{},'3억 800만원'],
+ ['crop','조은정','장수군','장계농협','사과(과수) 2.4ha','심사중',1,17,45,['ok','ok','wt'],{},'4억 6,200만원'],
+ ['livestock','임창호','홍성군','광천농협','한우 52두','접수',0,8,10,['wt','wt','wt','wt'],{},'4억 2,100만원'],
+ ['livestock','김철수','홍성군','광천농협','양돈 2,350두','특이점 심사',0,8,50,['ok','ok','sp','sp'],{2:'공부 1,980㎡ vs 청약 2,200㎡ (미등기 축사 220㎡)',3:'기준가액 대비 128%'},'4억 8,200만원']];
+ var L=D.map(function(x,i){var at=i===D.length-1?SPAT:tAgo(x[6],x[7],x[8]);while(i<D.length-1&&at>=SPAT-6e4)at-=864e5;return{prod:x[0],who:x[1],sigun:x[2],coop:x[3],item:x[4],st:x[5],at:at,res:x[9],note:x[10],amt:x[11]}});
+ L.sort(function(a,b){return a.at-b.at});
+ L.forEach(function(c,i){c.no='UW-'+ymd(c.at)+'-'+(3190+i);c.done=c.at+(3+i%4)*36e5});
+ SPNO=L[L.length-1].no;
+ return L.slice().reverse()})();
+var UWCHK={livestock:[['필수 등록정보 확인','축산업허가(등록)증 및 농업경영체 여부'],['가입내역 정합성 대조','서류상 축종·농장과 청약 내역 비교'],['축사 시설물 검증','건축물관리대장과 가입 축사 비교(면적·구조)'],['인수제한 목적물','기준가액 현저히 초과하는 가입 건 등']],
+ crop:[['기 전산 필터링 정합성 검증','가입자격·가입기준 준수 및 인수제한 목적물 정상 필터링 여부 재검증'],['제출서류 완비 여부 확인','계약인수 현지조사서 등 필수 제출서류 구비·요건 충족 검토'],['본부 인수심사 1차 검토·특이점 도출','본부 심사 대상 건 사전 분석 및 핵심 리스크 특이점 추출']]};
+var UWPN={livestock:'가축재해보험',crop:'농작물재해보험'},UWSG={'승인':'','보완요청':'o','심사중':'y','접수':'gr','특이점 심사':'r'},UWRL={ok:['통과',''],pd:['보완요청','o'],sp:['특이점','r'],wt:['검토 대기','gr']};
+function uwCur(){var c=UWREQ.filter(function(x){return x.no===SEL.uw})[0];return c||UWREQ[0]}
+PAGES['u-uwlist']=function(){var f=SEL.uwf||'',n=function(a){return UWREQ.filter(function(c){return a.indexOf(c.st)>=0}).length},rows=UWREQ.filter(function(c){return !f||c.st===f});
+ return '<div class="card"><div class="row sp"><h3 style="margin:0">📋 인수심사 목록</h3><span class="tag gr">'+UWREQ.length+'건</span></div><p class="xs mut" style="margin:4px 0 8px">농축협에서 올라온 청약 건이에요. 건을 누르면 서류 판독 결과와 표준 인수 체크리스트를 볼 수 있어요.</p><div class="grid3"><div class="kpi"><b>'+n(['접수','심사중'])+'</b><small>심사 대기</small></div><div class="kpi"><b>'+n(['보완요청','특이점 심사'])+'</b><small>보완·특이점</small></div><div class="kpi"><b>'+n(['승인'])+'</b><small>승인 완료</small></div></div></div>'+
+ '<div class="card"><div class="chips" style="margin-bottom:8px">'+['전체','접수','심사중','보완요청','특이점 심사','승인'].map(function(x){var v=x==='전체'?'':x;return '<button class="chip'+(f===v?' on':'')+'" data-uf="'+v+'">'+x+'</button>'}).join('')+'</div><ul class="list">'+
+ rows.map(function(c){return '<li data-uw="'+c.no+'" style="display:block;cursor:pointer"><div class="row sp"><b class="sm">📄 '+c.no+'</b><span class="tag '+UWSG[c.st]+'">'+c.st+'</span></div><div class="sm">'+maskN(c.who)+' 농가 · '+c.sigun+' '+c.coop+'</div><div class="xs mut">'+UWPN[c.prod]+' · '+c.item+' · 접수 '+fmtS(c.at)+'</div></li>'}).join('')+'</ul></div>'};
+BIND['u-uwlist']=function(){$$('[data-uf]').forEach(function(b){b.onclick=function(){SEL.uwf=b.getAttribute('data-uf');render()}});$$('[data-uw]').forEach(function(li){li.onclick=function(){SEL.uw=li.getAttribute('data-uw');audit('인수심사 열람 '+SEL.uw);go('u-ocr')}})};
+PAGES['u-ocr']=function(){var c=uwCur(),ls=c.prod==='livestock',ck=UWCHK[c.prod],wait=c.st==='접수',r=c.res,nt=c.note,
+ tg=function(k){return '<span class="tag '+UWRL[k][1]+'">'+UWRL[k][0]+'</span>'},
+ mt={ok:'일치',pd:'불일치',sp:'차이 큼',wt:'대기'},mg=function(k){return '<span class="tag '+UWRL[k][1]+'">'+mt[k]+'</span>'},
+ ocr=ls?[['서류','가축사육업 허가증','99%'],['허가번호','제2019-○○○호','97%'],['사업장','충남 '+c.sigun+' 일원','96%'],['축종 / 규모',c.item,'98%'],['서류','농업경영체등록확인서','99%'],['경영주',maskN(c.who),'99%']]:[['서류','농업경영체등록확인서','99%'],['경영주',maskN(c.who),'99%'],['소재지',c.sigun+' 일원','96%'],['품목 · 면적',c.item,'98%'],['서류','계약인수 현지조사서',r[1]==='pd'?'미제출':'97%']],
+ cmp=ls?[['허가 유효 여부 (가축사육업 DB)',r[0],''],['허가·경영체 축종·두수 vs 청약',r[1],''],['건축물관리대장 면적 vs 청약 면적',r[2],nt[2]],['기준가액 대비 가입금액',r[3],nt[3]]]:[['경영체 등록 품목·면적 vs 청약',r[0],''],['재해보험 가입이력·중복가입 여부',r[0],''],['제출서류 정합성',r[1],nt[1]]],
+ steps=[['OCR 서류 요건 검증','정부·지자체 증빙서류 자동 판독'],['공공마이데이터 대조','허가증·경영체·건축물대장 실시간 연동'],['인수 체크리스트 표준화','농축협·본사 인수 심사 비용 절감']],
+ h='<div class="card"><div class="row sp"><div><div class="xs mut">청약번호</div><b style="font-size:18px">'+c.no+'</b></div><span class="tag '+UWSG[c.st]+'">'+c.st+'</span></div><div style="margin-top:8px">'+
+ [['접수일시',fmtDT(c.at)],['계약자',maskN(c.who)+' 농가'],['접수 농축협',c.sigun+' '+c.coop],['상품',UWPN[c.prod]],['대상',c.item],['가입금액',c.amt]].map(function(x){return '<div class="row sp" style="padding:4px 0;border-top:1px solid var(--line,#eee)"><span class="xs mut">'+x[0]+'</span><span class="sm">'+x[1]+'</span></div>'}).join('')+'</div></div>'+
+ '<div class="card"><h3>OCR·공공마이데이터 기반 인수 심사 자동화</h3><p class="xs mut" style="margin:0">가축사육업허가(등록)증 및 농업경영체등록확인서 내 가축·재배정보를 자동으로 검증해요.</p>'+steps.map(function(x,i){var on=!wait||i===0;return '<div class="step"><div class="num '+(on?'':'dim')+'">'+(on?'✓':i+1)+'</div><div><b class="sm">'+x[0]+'</b><div class="xs mut">'+x[1]+'</div></div></div>'}).join('')+'</div>';
+ if(wait)return h+'<div class="card"><p class="sm mut" style="margin:0">접수된 서류의 자동 판독을 기다리고 있어요. 판독이 끝나면 대조 결과와 체크리스트가 채워져요.</p></div><button class="btn full ghost" data-go="u-uwlist">← 인수심사 목록</button>';
+ h+='<div class="card"><h3>① OCR 판독 결과</h3><table><tr><th>항목</th><th>판독값</th><th>신뢰도</th></tr>'+ocr.map(function(x){return '<tr><td>'+x[0]+'</td><td>'+x[1]+'</td><td>'+x[2]+'</td></tr>'}).join('')+'</table></div>'+
+ '<div class="card"><h3>② 공공마이데이터 대조</h3><ul class="list">'+cmp.map(function(x){return '<li style="display:block"><div class="row sp"><span class="sm">'+x[0]+'</span>'+mg(x[1])+'</div>'+(x[2]?'<div class="xs mut">'+x[2]+'</div>':'')+'</li>'}).join('')+'</ul></div>'+
+ '<div class="card"><div class="row sp"><h3 style="margin:0">③ 표준 인수 체크리스트</h3><span class="tag gr">'+UWPN[c.prod]+'</span></div><p class="xs mut" style="margin:4px 0 6px">당사 상품 약관·업무매뉴얼·내부 기안문 기준을 AI가 학습해 표준화한 항목이에요.</p><ul class="list">'+
+ ck.map(function(x,i){return '<li style="display:block"><div class="row sp"><b class="sm">'+(i+1)+'. '+x[0]+'</b>'+tg(r[i])+'</div><div class="xs mut">'+x[1]+'</div>'+(nt[i]?'<div class="xs" style="margin-top:2px">↳ '+nt[i]+'</div>':'')+'</li>'}).join('')+'</ul>';
+ var cs=c.st==='승인'?'<div class="callout">✅ 인수 승인 · 처리일시 '+fmtDT(c.done)+'</div>':c.st==='보완요청'?'<div class="callout warn">결과: <b>조건부 인수</b> — '+Object.keys(nt).map(function(k){return nt[k]}).join(' · ')+' 보완 시 승인</div><div class="row" style="margin-top:10px"><button class="btn sm" id="uwReq">보완 요청 알림톡 발송</button></div>':c.st==='특이점 심사'?'<div class="callout warn">결과: 특이점 <b>'+r.filter(function(k){return k==='sp'}).length+'건</b> — 본사 인수팀 특이점 심사에서 처리해요.</div><div class="row" style="margin-top:10px"><button class="btn sm" data-go="u-spec">특이점 심사로 이동 →</button></div>':'<div class="callout">본사 인수심사 1차 검토 중이에요.</div>';
+ return h+cs+'</div><button class="btn full ghost" data-go="u-uwlist">← 인수심사 목록</button>'};
+BIND['u-ocr']=function(){var q=$('#uwReq');if(q)q.onclick=function(){var c=uwCur();audit('보완 요청 알림톡 '+c.no);toast('보완 요청 알림톡을 발송했어요')}};
+
 render();
 if(S.mine&&Date.now()-S.mine.at>3*3600*1000)refreshMine();
 
@@ -1283,7 +1327,7 @@ BIND['h-nh']=function(){$$('[data-pv]').forEach(function(b){b.onclick=function()
 ['meso','micro','matrix','engine'].forEach(function(k){PAGES['h-'+k]=PAGES['g-'+k];BIND['h-'+k]=BIND['g-'+k]});
 /* 보상팀 접수 채널 · 지급데이터 지역 상세 */
 var _cq=PAGES['c-queue'];PAGES['c-queue']=function(){var n=S.cases.filter(function(c){return c.type==='claim'}).length;
- return '<div class="card"><h3>📞 사고접수 유입 채널 · 음성 AI 기록</h3><div class="grid3"><div class="kpi"><b>90%+</b><small>농축협 현장·유선</small></div><div class="kpi"><b>10%</b><small>콜센터</small></div><div class="kpi"><b>100%</b><small>AI 녹음·요약</small></div></div><div class="xs mut" style="margin-top:6px">접수 원문과 요약이 자동 첨부돼 구두 전달 누락·오기 분쟁을 줄여요. 이 앱에서 받은 사고접수: <b>'+n+'건</b> <span class="tag gr">채널 비중은 PPT 기준</span></div></div>'+_cq()};
+ return '<div class="card"><h3>📞 사고접수 유입 채널 · 음성 AI 기록</h3><div class="grid3"><div class="kpi"><b>90%+</b><small>농축협 현장·유선</small></div><div class="kpi"><b>10%</b><small>콜센터</small></div><div class="kpi"><b>100%</b><small>AI 녹음·요약</small></div></div><div class="xs mut" style="margin-top:6px">접수 원문과 요약이 자동 첨부돼 구두 전달 누락·오기 분쟁을 줄여요. 이 앱에서 받은 사고접수: <b>'+n+'건</b> </div></div>'+_cq()};
 PAGES['h-queue']=PAGES['c-queue'];
 function cropCard(){return '<div class="card"><h3>🌱 지급데이터 분석 · 지역·작목 상세</h3><table style="width:100%"><tr><th align="left">작목·지역</th><th align="left">사고 1·2위</th><th align="left">안내</th></tr>'+
  [['콩 · 문경시','호우 71% · 가뭄 26%','침수·배수 특화 대비'],['콩 · 상주시','가뭄 46% · 호우 44%','가뭄 집중 대비'],['벼 · 나주시','깨씨무늬병 67% · 호우 22%','기본 보장으로 병충해·수해 포괄 안내'],['벼 · 아산시','호우 44% · 목도열병 24%','배수로 정비 등 호우 대비'],['돼지 · 경기','폭염 85% · 화재 5%','가축+축사 동시 가입'],['돼지 · 경남','폭염 89% · 화재 3%','축사 건물 담보 필수']].map(function(r){return '<tr><td class="sm">'+r[0]+'</td><td class="xs">'+r[1]+'</td><td class="xs">'+r[2]+'</td></tr>'}).join('')+'</table><div class="note">콩 실제 자부담 보험료 평균 11% · 벼 16.3%(정부 83.7% 지원) → 자기부담 10~15%형 가입 유도. 한우는 사고 시 가입액의 약 50%(200만 원대) 실질 보상으로 보험료 불신 해소.</div></div>'}
