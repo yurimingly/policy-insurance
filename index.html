@@ -238,7 +238,7 @@ var TRENDS=[
 
 /* ---------------- 라우팅 ---------------- */
 var ROLES={f:{n:'👨‍🌾 농가',sc:'본인 계약·농장',tabs:[['home','🏠','홈'],['live','📡','위험'],['cover','🛡','보험'],['claim','📸','접수·민원']]},
- u:{n:'📝 인수팀',sc:'인수 + 지자체 통계',tabs:[['ocr','OCR 인수심사'],['uwlist','인수심사 목록'],['spec','특이점 심사'],['grade','점검 등급 DB'],['queue','가입 상담함'],['analyze','AI 보장분석'],['reco','AI 추천'],['live','실시간 위험'],['macro','전국 관제'],['meso','시군·읍면'],['micro','격자(500m)'],['matrix','연계 매트릭스'],['engine','AI 엔진·API'],['loop','활용']]},
+ u:{n:'📝 인수팀',sc:'인수 + 지자체 통계',tabs:[['uwlist','인수심사 목록'],['spec','특이점 심사'],['grade','점검 등급 DB'],['queue','가입 상담함'],['analyze','AI 보장분석'],['reco','AI 추천'],['live','실시간 위험'],['macro','전국 관제'],['meso','시군·읍면'],['micro','격자(500m)'],['matrix','연계 매트릭스'],['engine','AI 엔진·API'],['loop','활용']]},
  c:{n:'🧾 보상팀',sc:'보상 + 지자체 통계',tabs:[['queue','접수함'],['claim','AI 지급심사'],['paydata','지급데이터'],['loss','미가입 손실'],['kpi','기대효과'],['perm','권한·감사'],['macro','전국 관제'],['meso','시군·읍면'],['micro','격자(500m)'],['matrix','연계 매트릭스'],['engine','AI 엔진·API'],['loop','활용']]},
  h:{n:'📊 정책팀',sc:'상품개발·위험관제',tabs:[['qlog','질의 로그 활용'],['nh','NH오늘농사 연계'],['weights','위험도 구성'],['loop','활용·개선'],['macro','전국 관제'],['meso','시군·읍면'],['micro','격자(500m)'],['matrix','연계 매트릭스'],['engine','AI 엔진·API'],['kpi','기대효과'],['perm','권한·감사']]},
  g:{n:'🏛 지자체',sc:'집계 통계·위험지수',tabs:[['macro','전국'],['meso','시군·읍면'],['micro','격자(500m)'],['matrix','연계 매트릭스'],['engine','AI 엔진·API'],['loop','민원 통계']]}};
@@ -266,7 +266,7 @@ function render(){
  if(!ROLES[role])role=S.user.role;var R=ROLES[role];if(!tab)tab=R.tabs[0][0];
  var html=topBar(role),ok=(role===S.user.role)&&(role==='f'||R.tabs.some(function(t){return t[0]===tab}));
  if(role!=='f'&&role===S.user.role){var SEC={uqueue:'인수',analyze:'인수',ocr:'인수',uwlist:'인수',reco:'인수',live:'인수',cqueue:'보상',claim:'보상',paydata:'보상',loss:'보상',kpi:'정책',perm:'정책',spec:'인수',grade:'인수',qlog:'정책',nh:'정책',weights:'정책',macro:'통계',meso:'통계',micro:'통계',matrix:'통계',engine:'통계',loop:'활용'},ORD=['인수','보상','정책','통계','활용'],gp={};R.tabs.forEach(function(t){var sc=SEC[t[0]]||(t[0]==='queue'?(role==='u'?'인수':'보상'):'기타');(gp[sc]=gp[sc]||[]).push(t)});
-  var LK={u:['보상','c','보상팀',['접수함','AI 지급심사','지급데이터','미가입 손실']],c:['인수','u','인수팀',['OCR 인수심사','인수심사 목록','가입 상담함','AI 보장분석','AI 추천','실시간 위험']]}[role],curN='';R.tabs.forEach(function(t){if(t[0]===tab)curN=t[1]});
+  var LK={u:['보상','c','보상팀',['접수함','AI 지급심사','지급데이터','미가입 손실']],c:['인수','u','인수팀',['인수심사 목록','가입 상담함','AI 보장분석','AI 추천','실시간 위험']]}[role],curN='';R.tabs.forEach(function(t){if(t[0]===tab)curN=t[1]});
   html+='<div class="subw"><button class="navtog" id="navTog"><span>📂 '+curN+'</span><span>메뉴 접기/펼치기 ▴</span></button><div class="sub" id="subBody" style="display:block">'+ORD.concat(['보상','인수']).filter(function(k,i,a){return a.indexOf(k)===i&&(gp[k]||(LK&&LK[0]===k))}).map(function(k){var op=true,cnt=(gp[k]||[]).length+(LK&&LK[0]===k?LK[3].length:0);return '<div class="tsec"><button class="tsh" data-ts="'+k+'"><span class="car">'+(op?'▾':'▸')+'</span> '+k+' <small>'+cnt+'</small></button><div class="tch" style="display:'+(op?'flex':'none')+'">'+(gp[k]||[]).map(function(t){return '<button data-go="'+role+'-'+t[0]+'" class="'+(t[0]===tab?'on':'')+'">'+t[1]+'</button>'}).join('')+(LK&&LK[0]===k?LK[3].map(function(n){return '<button class="lk" data-lock="'+LK[1]+'">🔒 '+n+'</button>'}).join(''):'')+'</div></div>'}).join('')+'</div></div>'}
  var fn=PAGES[role+'-'+tab]||PAGES['f-home'];
  html+='<div class="page">'+(ok?fn():deny(role,tab))+'</div>';
@@ -458,7 +458,7 @@ function runDesk(){
   deskSteps(p).map(function(st,i){return '<div class="step"><div class="num">'+(i+1)+'</div><div><b class="sm">'+st[0]+'</b>'+st[1].map(function(l){return '<div class="sm">'+l+'</div>'}).join('')+'</div></div>'}).join('')+
   '<div class="step"><div class="num">'+(deskSteps(p).length+1)+'</div><div style="flex:1"><b class="sm">인수 심사 자동 체크포인트</b><ul class="list">'+p.s3.map(function(c){return '<li><span class="sm">'+c[0]+'</span><span class="'+c[1]+'">'+(c[1]==='ok'?'적합':c[1]==='ng'?'부적합':'확인필요')+'</span></li>'}).join('')+'</ul></div></div>'+
   '<div class="note">분석 근거: '+p.src.join(' · ')+'</div>'+
-  '<div class="row" style="margin-top:10px"><button class="btn sm" id="dCopy">상담 요약 복사</button><button class="btn sm ghost" data-go="d-ocr">서류 심사로 →</button></div></div>';
+  '<div class="row" style="margin-top:10px"><button class="btn sm" id="dCopy">상담 요약 복사</button><button class="btn sm ghost" data-go="u-uwlist">인수심사 목록 →</button></div></div>';
   bindTop();o.querySelector('#dCopy').onclick=function(){var s='[AI 보장분석] '+p.title+'\n위험도 '+p.score+'점\n'+deskSteps(p).map(function(st){return '· '+st[0]+': '+st[1][1].replace(/<[^>]+>/g,'').replace(/^→ ?/,'')}).join('\n');try{navigator.clipboard.writeText(s).then(function(){toast('복사했어요')},function(){toast('복사 실패')})}catch(e){toast('복사 실패')}};
  },800);
 }
@@ -1242,12 +1242,12 @@ var UWCHK={livestock:[['필수 등록정보 확인','축산업허가(등록)증 
  crop:[['기 전산 필터링 정합성 검증','가입자격·가입기준 준수 및 인수제한 목적물 정상 필터링 여부 재검증'],['제출서류 완비 여부 확인','계약인수 현지조사서 등 필수 제출서류 구비·요건 충족 검토'],['본부 인수심사 1차 검토·특이점 도출','본부 심사 대상 건 사전 분석 및 핵심 리스크 특이점 추출']]};
 var UWPN={livestock:'가축재해보험',crop:'농작물재해보험'},UWSG={'승인':'','보완요청':'o','심사중':'y','접수':'gr','특이점 심사':'r'},UWRL={ok:['통과',''],pd:['보완요청','o'],sp:['특이점','r'],wt:['검토 대기','gr']};
 function uwCur(){var c=UWREQ.filter(function(x){return x.no===SEL.uw})[0];return c||UWREQ[0]}
-PAGES['u-uwlist']=function(){var f=SEL.uwf||'',n=function(a){return UWREQ.filter(function(c){return a.indexOf(c.st)>=0}).length},rows=UWREQ.filter(function(c){return !f||c.st===f});
+PAGES['u-uwlist']=function(){if(SEL.uwv)return uwDetail();var f=SEL.uwf||'',n=function(a){return UWREQ.filter(function(c){return a.indexOf(c.st)>=0}).length},rows=UWREQ.filter(function(c){return !f||c.st===f});
  return '<div class="card"><div class="row sp"><h3 style="margin:0">📋 인수심사 목록</h3><span class="tag gr">'+UWREQ.length+'건</span></div><p class="xs mut" style="margin:4px 0 8px">농축협에서 올라온 청약 건이에요. 건을 누르면 서류 판독 결과와 표준 인수 체크리스트를 볼 수 있어요.</p><div class="grid3"><div class="kpi"><b>'+n(['접수','심사중'])+'</b><small>심사 대기</small></div><div class="kpi"><b>'+n(['보완요청','특이점 심사'])+'</b><small>보완·특이점</small></div><div class="kpi"><b>'+n(['승인'])+'</b><small>승인 완료</small></div></div></div>'+
  '<div class="card"><div class="chips" style="margin-bottom:8px">'+['전체','접수','심사중','보완요청','특이점 심사','승인'].map(function(x){var v=x==='전체'?'':x;return '<button class="chip'+(f===v?' on':'')+'" data-uf="'+v+'">'+x+'</button>'}).join('')+'</div><ul class="list">'+
  rows.map(function(c){return '<li data-uw="'+c.no+'" style="display:block;cursor:pointer"><div class="row sp"><b class="sm">📄 '+c.no+'</b><span class="tag '+UWSG[c.st]+'">'+c.st+'</span></div><div class="sm">'+maskN(c.who)+' 농가 · '+c.sigun+' '+c.coop+'</div><div class="xs mut">'+UWPN[c.prod]+' · '+c.item+' · 접수 '+fmtS(c.at)+'</div></li>'}).join('')+'</ul></div>'};
-BIND['u-uwlist']=function(){$$('[data-uf]').forEach(function(b){b.onclick=function(){SEL.uwf=b.getAttribute('data-uf');render()}});$$('[data-uw]').forEach(function(li){li.onclick=function(){SEL.uw=li.getAttribute('data-uw');audit('인수심사 열람 '+SEL.uw);go('u-ocr')}})};
-PAGES['u-ocr']=function(){var c=uwCur(),ls=c.prod==='livestock',ck=UWCHK[c.prod],wait=c.st==='접수',r=c.res,nt=c.note,
+BIND['u-uwlist']=function(){if(SEL.uwv){uwDetailBind();return}$$('[data-uf]').forEach(function(b){b.onclick=function(){SEL.uwf=b.getAttribute('data-uf');render()}});$$('[data-uw]').forEach(function(li){li.onclick=function(){SEL.uw=li.getAttribute('data-uw');audit('인수심사 열람 '+SEL.uw);SEL.uwv=1;render();window.scrollTo(0,0)}})};
+function uwDetail(){var c=uwCur(),ls=c.prod==='livestock',ck=UWCHK[c.prod],wait=c.st==='접수',r=c.res,nt=c.note,
  tg=function(k){return '<span class="tag '+UWRL[k][1]+'">'+UWRL[k][0]+'</span>'},
  mt={ok:'일치',pd:'불일치',sp:'차이 큼',wt:'대기'},mg=function(k){return '<span class="tag '+UWRL[k][1]+'">'+mt[k]+'</span>'},
  ocr=ls?[['서류','가축사육업 허가증','99%'],['허가번호','제2019-○○○호','97%'],['사업장','충남 '+c.sigun+' 일원','96%'],['축종 / 규모',c.item,'98%'],['서류','농업경영체등록확인서','99%'],['경영주',maskN(c.who),'99%']]:[['서류','농업경영체등록확인서','99%'],['경영주',maskN(c.who),'99%'],['소재지',c.sigun+' 일원','96%'],['품목 · 면적',c.item,'98%'],['서류','계약인수 현지조사서',r[1]==='pd'?'미제출':'97%']],
@@ -1256,14 +1256,14 @@ PAGES['u-ocr']=function(){var c=uwCur(),ls=c.prod==='livestock',ck=UWCHK[c.prod]
  h='<div class="card"><div class="row sp"><div><div class="xs mut">청약번호</div><b style="font-size:18px">'+c.no+'</b></div><span class="tag '+UWSG[c.st]+'">'+c.st+'</span></div><div style="margin-top:8px">'+
  [['접수일시',fmtDT(c.at)],['계약자',maskN(c.who)+' 농가'],['접수 농축협',c.sigun+' '+c.coop],['상품',UWPN[c.prod]],['대상',c.item],['가입금액',c.amt]].map(function(x){return '<div class="row sp" style="padding:4px 0;border-top:1px solid var(--line,#eee)"><span class="xs mut">'+x[0]+'</span><span class="sm">'+x[1]+'</span></div>'}).join('')+'</div></div>'+
  '<div class="card"><h3>OCR·공공마이데이터 기반 인수 심사 자동화</h3><p class="xs mut" style="margin:0">가축사육업허가(등록)증 및 농업경영체등록확인서 내 가축·재배정보를 자동으로 검증해요.</p>'+steps.map(function(x,i){var on=!wait||i===0;return '<div class="step"><div class="num '+(on?'':'dim')+'">'+(on?'✓':i+1)+'</div><div><b class="sm">'+x[0]+'</b><div class="xs mut">'+x[1]+'</div></div></div>'}).join('')+'</div>';
- if(wait)return h+'<div class="card"><p class="sm mut" style="margin:0">접수된 서류의 자동 판독을 기다리고 있어요. 판독이 끝나면 대조 결과와 체크리스트가 채워져요.</p></div><button class="btn full ghost" data-go="u-uwlist">← 인수심사 목록</button>';
+ if(wait)return h+'<div class="card"><p class="sm mut" style="margin:0">접수된 서류의 자동 판독을 기다리고 있어요. 판독이 끝나면 대조 결과와 체크리스트가 채워져요.</p></div><button class="btn full ghost" id="uwBack">← 인수심사 목록</button>';
  h+='<div class="card"><h3>① OCR 판독 결과</h3><table><tr><th>항목</th><th>판독값</th><th>신뢰도</th></tr>'+ocr.map(function(x){return '<tr><td>'+x[0]+'</td><td>'+x[1]+'</td><td>'+x[2]+'</td></tr>'}).join('')+'</table></div>'+
  '<div class="card"><h3>② 공공마이데이터 대조</h3><ul class="list">'+cmp.map(function(x){return '<li style="display:block"><div class="row sp"><span class="sm">'+x[0]+'</span>'+mg(x[1])+'</div>'+(x[2]?'<div class="xs mut">'+x[2]+'</div>':'')+'</li>'}).join('')+'</ul></div>'+
  '<div class="card"><div class="row sp"><h3 style="margin:0">③ 표준 인수 체크리스트</h3><span class="tag gr">'+UWPN[c.prod]+'</span></div><p class="xs mut" style="margin:4px 0 6px">당사 상품 약관·업무매뉴얼·내부 기안문 기준을 AI가 학습해 표준화한 항목이에요.</p><ul class="list">'+
  ck.map(function(x,i){return '<li style="display:block"><div class="row sp"><b class="sm">'+(i+1)+'. '+x[0]+'</b>'+tg(r[i])+'</div><div class="xs mut">'+x[1]+'</div>'+(nt[i]?'<div class="xs" style="margin-top:2px">↳ '+nt[i]+'</div>':'')+'</li>'}).join('')+'</ul>';
  var cs=c.st==='승인'?'<div class="callout">✅ 인수 승인 · 처리일시 '+fmtDT(c.done)+'</div>':c.st==='보완요청'?'<div class="callout warn">결과: <b>조건부 인수</b> — '+Object.keys(nt).map(function(k){return nt[k]}).join(' · ')+' 보완 시 승인</div><div class="row" style="margin-top:10px"><button class="btn sm" id="uwReq">보완 요청 알림톡 발송</button></div>':c.st==='특이점 심사'?'<div class="callout warn">결과: 특이점 <b>'+r.filter(function(k){return k==='sp'}).length+'건</b> — 본사 인수팀 특이점 심사에서 처리해요.</div><div class="row" style="margin-top:10px"><button class="btn sm" data-go="u-spec">특이점 심사로 이동 →</button></div>':'<div class="callout">본사 인수심사 1차 검토 중이에요.</div>';
- return h+cs+'</div><button class="btn full ghost" data-go="u-uwlist">← 인수심사 목록</button>'};
-BIND['u-ocr']=function(){var q=$('#uwReq');if(q)q.onclick=function(){var c=uwCur();audit('보완 요청 알림톡 '+c.no);toast('보완 요청 알림톡을 발송했어요')}};
+ return h+cs+'</div><button class="btn full ghost" id="uwBack">← 인수심사 목록</button>'};
+function uwDetailBind(){var b=$('#uwBack');if(b)b.onclick=function(){SEL.uwv=0;render()};var q=$('#uwReq');if(q)q.onclick=function(){var c=uwCur();audit('보완 요청 알림톡 '+c.no);toast('보완 요청 알림톡을 발송했어요')}}
 
 render();
 if(S.mine&&Date.now()-S.mine.at>3*3600*1000)refreshMine();
