@@ -297,6 +297,7 @@ function F(){if(S.farm==='mine'&&!FARMS.mine)rebuildMine();return FARMS[S.farm]|
 function farmPicker(){
  var pre='<div class="chips" style="margin-bottom:10px">';
  var dm=Object.keys(FARMS).filter(function(k){return k!=='mine'}).map(function(k){var f=FARMS[k];return '<button class="chip '+(k===S.farm?'on':'')+'" data-farm="'+k+'">'+f.icon+' '+f.sigun+' '+f.item.split(' ')[0]+'</button>'}).join('');
+ if(S.user&&S.user.role!=='f'){var all=Object.keys(FARMS).filter(function(k){return k!=='mine'}).map(function(k){var f=FARMS[k];return '<button class="chip '+(k===S.farm?'on':'')+'" data-farm="'+k+'">'+f.icon+' '+f.sigun+' '+f.item.split(' ')[0]+'</button>'}).join('');return pre+all+'</div>'}
  if(!S.mine)return pre+'<button class="chip on" data-go="reg">＋ 내 농장 등록</button>'+(S.demo?dm:'')+'<button class="chip" data-demo="1">'+(S.demo?'접기':'다른 농가 보기')+'</button></div>';
  return pre+'<button class="chip '+(S.farm==='mine'?'on':'')+'" data-farm="mine">🌱 '+S.mine.prof.owner+' 농가 · '+S.mine.prof.sigun+'</button><button class="chip" data-go="reg">✏️ 수정</button>'+(S.demo?dm:'')+'<button class="chip" data-demo="1">'+(S.demo?'접기':'다른 농가')+'</button></div>'}
 function bindFarm(){$$('[data-demo]').forEach(function(b){b.onclick=function(){S.demo=!S.demo;if(!S.demo&&S.mine)S.farm='mine';render()}});$$('[data-farm]').forEach(function(b){b.onclick=function(){S.farm=b.getAttribute('data-farm');S.sel.day=2;save();render()}})}
