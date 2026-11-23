@@ -1174,7 +1174,7 @@ PAGES['f-claim']=function(){
   (has?'<div class="grid2" style="margin-top:10px"><div class="kpi"><b style="color:var(--r4)">'+c.ai+(c.per?'두':'%')+'</b><small>AI 추정 '+c.unit+'</small></div><div class="kpi"><b>92%</b><small>판독 신뢰도</small></div></div>':'')+
   '<input type="file" accept="image/*" id="clFile" style="display:none"><div class="row" style="margin-top:10px;gap:8px"><button class="btn" id="clCam" style="flex:1">📷 카메라로 촬영</button><button class="btn ghost" id="clPick" style="flex:1">🖼 앨범에서 선택</button></div>'+
   (has?'<button class="btn full" data-cs="2" style="margin-top:8px">판독 결과 확인 →</button>':'<button class="btn full ghost" id="clDemo" style="margin-top:8px">사진 없이 바로 보기</button>')+
-  '<p class="xs mut">※ AI 판독 수치는 참고용이에요. 촬영한 사진은 이 기기 화면에만 표시되고 서버로 전송하지 않아요.</p></div>'}
+  '<p class="xs mut">※ AI 판독 수치는 참고용이에요. 시연 버전에서는 사진이 이 기기 화면에만 표시돼요. 실서비스에서는 접수 사진이 서버에 저장되어 보상팀 심사에 활용돼요.</p></div>'}
  if(st===2)h+='<div class="card"><h3>예상 보험금</h3><div style="text-align:center;padding:8px 0"><div class="xs mut">예상 지급액</div><div style="font-size:30px;font-weight:900;color:var(--g)">'+won(r.pay)+'</div><div class="xs mut">'+r.desc+'</div></div>'+
   '<div class="hbar"><span>추정 손해</span><div class="bar"><i style="width:100%;background:var(--r4)"></i></div><span style="width:70px">'+won(r.loss)+'</span></div><div class="hbar"><span>보험금</span><div class="bar"><i style="width:'+(r.pay/r.loss*100)+'%;background:var(--g7)"></i></div><span style="width:70px">'+won(r.pay)+'</span></div>'+
   '<div class="callout" style="margin-top:8px">🛰 기상 교차검증 일치 · 소액·고신뢰 건은 <b>현장조사 없이 신속 지급</b> 대상</div><p class="xs mut">최종 지급액은 손해평가 후 확정됩니다 (데모 계산)</p><button class="btn full" data-cs="3">접수하기</button></div>';
