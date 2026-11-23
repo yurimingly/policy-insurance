@@ -818,8 +818,7 @@ PAGES['f-home']=function(){
 BIND['f-home']=function(){bindFarm();bindChk();var b=$('#reqBtn');if(b)b.onclick=function(){REQ[S.farm]=1;b.textContent='✅ 상담 요청 접수됨';toast('농축협 담당자에게 상담 요청을 보냈어요')}};
 var _cov=PAGES['f-cover'],_covB=BIND['f-cover'];
 PAGES['f-cover']=function(){var f=F(),rc=recsFor(f),h=_cov(),pk=farmPicker();
- var pr=prodRecs(f);var card='<div class="card"><h3>✨ 추천 추가 가입 ('+pr.prods.length+'건)</h3>'+(pr.prods.length?pr.prods.map(prodRow).join('')+'<p class="xs mut">※ 보험료·보험금은 입력 정보와 실시간 예보 기반의 참고용 추정이에요.</p>':'<p class="sm mut">필요한 보험은 모두 가입돼 있어요 👍</p>')+'</div>'+
- (pr.addons.length?'<div class="card"><h3>➕ 가입한 보험에 더하면 좋은 특약 ('+pr.addons.length+'건)</h3>'+pr.addons.map(recRow).join('')+'</div>':'');
+ var pr=prodRecs(f);var card='<div class="card"><h3>✨ 추천 추가 가입 ('+pr.prods.length+'건)</h3>'+(pr.prods.length?pr.prods.map(prodRow).join('')+'<p class="xs mut">※ 보험료·보험금은 입력 정보와 실시간 예보 기반의 참고용 추정이에요.</p>':'<p class="sm mut">필요한 보험은 모두 가입돼 있어요 👍</p>')+'</div>';
  return h.indexOf(pk)===0?pk+card+h.slice(pk.length):card+h};
 BIND['f-cover']=function(){if(_covB)_covB();else bindFarm()};
 PAGES['d-reco']=function(){var f=F(),rc=recsFor(f),tp=rc.reduce(function(a,r){return a+r.prem},0),tpf=rc.reduce(function(a,r){return a+r.profit},0);
